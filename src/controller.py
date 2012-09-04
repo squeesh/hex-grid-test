@@ -1,5 +1,5 @@
 from ctypes import *
-controller_lib = cdll.LoadLibrary('./src/controller.so')
+controller_lib = cdll.LoadLibrary('./controller.so')
 
 from itertools import cycle, islice
 from random import random

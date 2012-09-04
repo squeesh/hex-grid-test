@@ -1,5 +1,5 @@
 from ctypes import *
-hexagon_lib = cdll.LoadLibrary('./src/controller.so')
+hexagon_lib = cdll.LoadLibrary('./controller.so')
 
 from util import RoundList
 
