@@ -299,19 +299,6 @@ void Controller::render(int render_mode) {
 		0, 1, 0
 	);
 
-	// draws red "cursor" to show center of screen
-	/*glPushMatrix();
-		glTranslatef(eye_x, eye_y, 0);
-		glBegin(GL_LINE_LOOP);
-			glColor3f(1, 0, 0);
-			glVertex3f( 0.05,  0.05, 0);
-			glVertex3f( 0.05, -0.05, 0);
-			glVertex3f(-0.05, -0.05, 0);
-			glVertex3f(-0.05,  0.05, 0);
-		glEnd();
-	glPopMatrix();*/
-
-
 	// set the rotation point... since our "origin" kinda changes... we need to go to it, rotate, then go back
 	glTranslatef(0.0, this->y_offset * this->SIN_60, 0.0);
 	glRotatef(this->rotation, 1.0, 0.0, 0.0);
@@ -321,29 +308,6 @@ void Controller::render(int render_mode) {
 	int pos_x_view = this->x_offset + this->view_range / 2.0;
 	int neg_y_view = this->y_offset - this->view_range / 2.0;
 	int pos_y_view = this->y_offset + this->view_range / 2.0;
-
-
-	/*
-	for(int i = neg_x_view; i <= pos_x_view; i++) {
-		for(int j = neg_y_view; j <= pos_y_view; j++) {
-			Hexagon* curr_hex = this->hexagon_list->at(i)->at(j);
-			glLoadName(curr_hex->name);
-
-			double x = i * 1.5 * this->COS_60;
-			double y = j * 1.0 * this->SIN_60;
-
-			if(i % 2 != 0) {
-				y += 0.5 * this->SIN_60;
-			}
-
-			if(render_mode == this->RENDER_LINES) {
-				curr_hex->render(x, y);
-			} else {
-				curr_hex->render_as_selected(x, y);
-			}
-		}
-	}
-	*/
 
 	if(render_mode == this->RENDER_TRIANGLES) {
         for(int i = neg_x_view; i <= pos_x_view; i++) {
@@ -363,51 +327,7 @@ void Controller::render(int render_mode) {
         }
 
     } else {
-
-        /*Vertex* curr_vert = NULL;
-
-        glBegin(GL_LINE_STRIP);
-        for(int j = neg_y_view; j <= pos_y_view; j++) {
-            for(int i = neg_x_view; i <= pos_x_view; i++) {
-                int curr_i = i;
-
-                if(j % 2 == 0) {
-                    curr_i = i;
-                } else {
-                    curr_i = pos_x_view - (i - neg_x_view);
-                }
-
-                Hexagon* curr_hex = this->hexagon_list->at(curr_i)->at(j);
-                glLoadName(curr_hex->name);
-
-                double x = curr_i * 1.5 * this->COS_60;
-                double y = j * 1.0 * this->SIN_60;
-
-                if(curr_i % 2 != 0) {
-                    y += 0.5 * this->SIN_60;
-                }
-
-                Vertex* curr_vert = NULL;
-
-                if(j % 2 == 0) {
-                    for(int k = 0; k < 4; k++) {
-                        curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(k)];
-
-                        glColor3dv(curr_vert->get_color().data());
-                        glVertex3f(x + Hexagon::ROT_COORDS->at(k)->at(0), y + Hexagon::ROT_COORDS->at(k)->at(1), curr_vert->get_height());
-                    }
-                } else {
-                    for(int k = 3; k >= 0; k--) {
-                        curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(k)];
-
-                        glColor3dv(curr_vert->get_color().data());
-                        glVertex3f(x + Hexagon::ROT_COORDS->at(k)->at(0), y + Hexagon::ROT_COORDS->at(k)->at(1), curr_vert->get_height());
-                    }
-                }
-            }
-        }
-        glEnd();*/
-
+	/*
         Vertex* curr_vert = NULL;
         int array_size = (pos_x_view+1 - neg_x_view) * (pos_y_view+1 - neg_y_view);
 
@@ -451,10 +371,6 @@ void Controller::render(int render_mode) {
                     y += 0.5 * this->SIN_60;
                 }
 
-                //curr_hex->last_x = x;
-                //curr_hex->last_y = y;
-
-
                 Vertex* curr_vert = NULL;
                 std::vector<double> curr_color;
 
@@ -476,9 +392,6 @@ void Controller::render(int render_mode) {
                     }
 
                     if(k > 1) {
-                        //glColor3dv(this->select_color->get_rgb().data());
-                        //glVertex3f(x + ROT_COORDS->at(i)->at(0) * 0.8, y + ROT_COORDS->at(i)->at(1) * 0.8, curr_vert->get_height());
-
                         if(curr_hex->select_color) {
                             curr_color = curr_hex->select_color->get_rgb();
 
@@ -524,7 +437,7 @@ void Controller::render(int render_mode) {
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
 
-        /*******/
+        //----------
 
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
@@ -542,6 +455,61 @@ void Controller::render(int render_mode) {
         delete triangle_vertex_data;
         delete triangle_color_data;
 
+	*/
+
+        int array_size = (pos_x_view+1 - neg_x_view) * (pos_y_view+1 - neg_y_view);
+
+        CoordinateVector* vertex_data = new CoordinateVector();
+	std::vector<int>* render_order = new std::vector<int>();
+
+	for(int i = neg_x_view; i <= pos_x_view; i++) {
+	    for(int j = neg_y_view; j <= pos_y_view; j++) {
+            
+                int curr_i = i;
+                int index;
+                int inc;
+
+                if(j % 2 == 0) {
+                    curr_i = i;
+                    index = 0;
+                    inc = 1;
+                } else {
+                    curr_i = pos_x_view - (i - neg_x_view);
+                    index = 3;
+                    inc = -1;
+                }
+
+                Hexagon* curr_hex = this->hexagon_list->at(curr_i)->at(j);
+                glLoadName(curr_hex->name);
+
+                double x = curr_i * 1.5 * this->COS_60;
+                double y = j * 1.0 * this->SIN_60;
+
+                if(curr_i % 2 != 0) {
+                    y += 0.5 * this->SIN_60;
+                }
+
+                Vertex* curr_vert = NULL;
+
+		glBegin(GL_LINE_LOOP);
+                for(int k = 0; k < 6; k++) {
+			curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(index)];
+			//std::vector<double> curr_color = curr_vert->get_color();
+
+			glColor3f(0, 1, 0);
+			glVertex3f(x + Hexagon::ROT_COORDS->at(k)->at(0), y + Hexagon::ROT_COORDS->at(k)->at(1), curr_vert->get_height());
+
+			int index = vertex_data->push_back(
+				x + Hexagon::ROT_COORDS->at(k)->at(0), 
+				y + Hexagon::ROT_COORDS->at(k)->at(1), 
+				curr_vert->get_height()
+			);
+
+			render_order->push_back(index);
+		}
+		glEnd();
+	    }
+	}
     }
 }
 

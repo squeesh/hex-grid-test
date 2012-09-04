@@ -74,23 +74,27 @@ double* CoordinateVector::at(int index) {
 	}
 }
 
-void CoordinateVector::push_back(double x, double y, double z) {
+int CoordinateVector::push_back(double x, double y, double z) {
 	std::vector<double>* curr_coords = new std::vector<double>();
 	curr_coords->push_back(x);
 	curr_coords->push_back(y);
 	curr_coords->push_back(z);
 
-	int count = this->index_data.count(curr_coords);
+	int index = 0;
 
-	if(count == 0) {
+	if(this->index_data.count(curr_coords) == 0) {
 		this->data.push_back(x);
 		this->data.push_back(y);
 		this->data.push_back(z);
 
-		this->index_data[curr_coords] = (this->data.size() / 3) - 1;
-	} else {
+		index = (this->data.size() / 3) - 1;
+		this->index_data[curr_coords] = index;
+	} else {	
+		index = this->get_index(curr_coords);
 		delete curr_coords;
 	}
+
+	return index;
 }
 
 /*void CoordinateVector::set(int index, double x, double y, double z) {
@@ -111,6 +115,13 @@ int CoordinateVector::get_index(double x, double y, double z) {
 
 	//std::cout << "count: " << this->index_data.count(curr_coords) << std::endl;
 
-	return this->index_data[curr_coords];
+	int output = this->get_index(curr_coords);
+	delete curr_coords;
+
+	return output;
+}
+
+int CoordinateVector::get_index(std::vector<double>* curr_coords) {
+	return this->index_data[curr_coords];;
 }
 

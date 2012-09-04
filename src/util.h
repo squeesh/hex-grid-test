@@ -155,10 +155,11 @@ class CoordinateVector {
 		CoordinateVector();
 
 		double* at(int);
-		void push_back(double, double, double);
+		int push_back(double, double, double);
 		//void set(int, double, double, double);
 		int size();
 		int get_index(double, double, double);
+		int get_index(std::vector<double>*);
 };
 
 #endif

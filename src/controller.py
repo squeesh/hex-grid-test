@@ -30,7 +30,7 @@ class Controller(object):
 
 
 
-    view_range = BOARD_WIDTH * 1.25 
+    view_range = BOARD_WIDTH * 1.25
 
     LEFT    = controller_lib.Controller_LEFT()
     RIGHT   = controller_lib.Controller_RIGHT()
@@ -82,7 +82,7 @@ class Controller(object):
         print "Linking Segments..."
         self.link_segments()
 
-        if True:
+        if False:
             print 'Generating hills',
             for i in range(int(20 * (self.BOARD_WIDTH / 100.0))):
                 print '.',
@@ -93,7 +93,7 @@ class Controller(object):
 
             print
 
-        if True:
+        if False:
             print 'Generating mountains',
             for i in range(int(7 * (self.BOARD_WIDTH / 100.0))):
                 print '.',
@@ -201,14 +201,14 @@ class Controller(object):
 ##                    print dist_between(curr_hex, neigh_hex)
 #                    if '%s' % dist_between(curr_hex, neigh_hex) != '0.866025403784':
 #                        curr_hex.set_select_color(0, 1, 0)
-#                   
+#
 ##            curr_hex = self.get_hexagon(0, 0)
 ##            curr_hex.clear_select_color()
 ##            neigh_hex = curr_hex.get_neighbor('SW')
 ###            for pos, neigh_hex in curr_hex.get_neighbors().iteritems():
 ###            print pos, dist_between(curr_hex, neigh_hex)
 ##            if '%s' % dist_between(curr_hex, neigh_hex) != '0.866025403784':
-##                curr_hex.set_select_color(0, 1, 0) 
+##                curr_hex.set_select_color(0, 1, 0)
 
     def key_up(self, key, x, y):
         if key == 'w':
