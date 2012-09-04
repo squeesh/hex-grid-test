@@ -56,6 +56,58 @@ Controller::Controller(void) {
 		this->old_mouse_pos[i]["x"] 	= 0;
 		this->old_mouse_pos[i]["y"] 	= 0;
 	}
+
+	/*int test_data[] = {10, 20, 30, 40, 50};
+	std::set<int> test_set = std::set<int>(test_data, test_data+5);
+
+	for (std::set<int>::iterator test_itr = test_set.begin(); test_itr != test_set.end(); test_itr++) {
+		std::cout << "itr: " << *test_itr << std::endl;
+	}
+
+	test_set.insert(60);
+
+	for (std::set<int>::iterator test_itr = test_set.begin(); test_itr != test_set.end(); test_itr++) {
+		std::cout << "itr: " << *test_itr << std::endl;
+	}
+
+	test_set.insert(30);
+
+	for (std::set<int>::iterator test_itr = test_set.begin(); test_itr != test_set.end(); test_itr++) {
+		std::cout << "itr: " << *test_itr << std::endl;
+	}
+
+	std::cout << "2 count: " << test_set.count(20) << std::endl;
+	std::cout << "3 count: " << test_set.count(3) << std::endl;
+
+	std::cout << "find: " << *(test_set.find(20)) << std::endl;*/
+
+	//int *int_ary = test_set.begin();
+
+	//std::cout << "int ary: " << int_ary << std::endl;
+
+
+	//exit(0);
+
+	CoordinateVector* cv_test = new CoordinateVector();
+	cv_test->push_back(2, 3, 2);
+	cv_test->push_back(5, 1, 4);
+	cv_test->push_back(2, 3, 2);
+	cv_test->push_back(7, 6, 2);
+	cv_test->push_back(2, 6, 2);
+	cv_test->push_back(5, 1, 4);
+	cv_test->push_back(1, 2, 3);
+	cv_test->push_back(2, 3, 2);
+
+	std::cout << "index: " << cv_test->get_index(5, 1, 4) << std::endl;
+	std::cout << "index: " << cv_test->get_index(2, 6, 2) << std::endl;
+
+	double* data = cv_test->at(cv_test->get_index(5, 1, 4));
+	std::cout << "cv: " << data[0] << " | " << data[1] << " | " << data[2] << std::endl;
+
+	std::cout << "size: " << cv_test->size() << std::endl;
+
+	//exit(0);
+
 }
 
 Controller* Controller::_get_controller() {
@@ -712,4 +764,5 @@ Hexagon* Controller::get_hex_by_name(long name) {
 
 	return NULL;
 }
+
 

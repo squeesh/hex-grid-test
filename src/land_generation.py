@@ -1,5 +1,6 @@
 from random import random
 
+
 def add_mountain(center_seg, height, radius):
     if radius > 1:
         for pos in center_seg.NEIGHBOR_DIRECTION:

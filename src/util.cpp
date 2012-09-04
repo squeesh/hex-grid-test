@@ -54,3 +54,63 @@ PyObject* py_call_func(PyObject *py_obj, char* func_name, PyObject* py_obj_1, Py
 
     return output;
 }
+
+/***************/
+
+CoordinateVector::CoordinateVector() {
+
+}
+
+double* CoordinateVector::at(int index) {
+	if(index < this->size()) {
+		// fun with pointers...
+		return (double*)((int)this->data.data() + (sizeof(double) * index * 3));
+	} else {
+		// throw whatever error at() throws... 
+		// TODO: QUIT BEING LAZY
+		double output = this->data.at(-1);
+
+		return &output;
+	}
+}
+
+void CoordinateVector::push_back(double x, double y, double z) {
+	std::vector<double>* curr_coords = new std::vector<double>();
+	curr_coords->push_back(x);
+	curr_coords->push_back(y);
+	curr_coords->push_back(z);
+
+	int count = this->index_data.count(curr_coords);
+
+	if(count == 0) {
+		this->data.push_back(x);
+		this->data.push_back(y);
+		this->data.push_back(z);
+
+		this->index_data[curr_coords] = (this->data.size() / 3) - 1;
+	} else {
+		delete curr_coords;
+	}
+}
+
+/*void CoordinateVector::set(int index, double x, double y, double z) {
+	this->data[index] = x;
+	this->data[index+1] = y;
+	this->data[index+2] = z;
+}*/
+
+int CoordinateVector::size() {
+	return this->index_data.size();
+}
+
+int CoordinateVector::get_index(double x, double y, double z) {
+	std::vector<double>* curr_coords = new std::vector<double>();
+	curr_coords->push_back(x);
+	curr_coords->push_back(y);
+	curr_coords->push_back(z);
+
+	//std::cout << "count: " << this->index_data.count(curr_coords) << std::endl;
+
+	return this->index_data[curr_coords];
+}
+
