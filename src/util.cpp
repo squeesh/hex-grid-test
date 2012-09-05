@@ -57,13 +57,13 @@ PyObject* py_call_func(PyObject *py_obj, char* func_name, PyObject* py_obj_1, Py
 
 /***************/
 
-CoordinateVector::CoordinateVector() {
+TightlyPackedVector::TightlyPackedVector() {
     this->vector_data = new std::vector<double>();
     this->index_data = new std::map< std::vector<double>*, int, cmp_coord>();
     this->index_data_keys = new std::vector< std::vector<double> *>();
 }
 
-CoordinateVector::~CoordinateVector() {
+TightlyPackedVector::~TightlyPackedVector() {
     delete this->vector_data;
     delete this->index_data;
 
@@ -74,7 +74,7 @@ CoordinateVector::~CoordinateVector() {
     delete this->index_data_keys;
 }
 
-double* CoordinateVector::at(int index) {
+double* TightlyPackedVector::at(int index) {
 	if(index < this->size()) {
 		// fun with pointers...
 		return (double*)((int)this->data() + (sizeof(double) * index * 3));
@@ -87,7 +87,7 @@ double* CoordinateVector::at(int index) {
 	}
 }
 
-int CoordinateVector::push_back(double x, double y, double z) {
+int TightlyPackedVector::push_back(double x, double y, double z) {
 	std::vector<double>* curr_coords = new std::vector<double>();
 	curr_coords->push_back(x);
 	curr_coords->push_back(y);
@@ -113,17 +113,17 @@ int CoordinateVector::push_back(double x, double y, double z) {
 	return index;
 }
 
-/*void CoordinateVector::set(int index, double x, double y, double z) {
+/*void TightlyPackedVector::set(int index, double x, double y, double z) {
 	this->data[index] = x;
 	this->data[index+1] = y;
 	this->data[index+2] = z;
 }*/
 
-int CoordinateVector::size() {
+int TightlyPackedVector::size() {
 	return this->index_data->size();
 }
 
-int CoordinateVector::get_index(double x, double y, double z) {
+int TightlyPackedVector::get_index(double x, double y, double z) {
 	std::vector<double>* curr_coords = new std::vector<double>();
 	curr_coords->push_back(x);
 	curr_coords->push_back(y);
@@ -137,16 +137,16 @@ int CoordinateVector::get_index(double x, double y, double z) {
 	return output;
 }
 
-int CoordinateVector::get_index(std::vector<double>* curr_coords) {
+int TightlyPackedVector::get_index(std::vector<double>* curr_coords) {
     std::map< std::vector<double>*, int, cmp_coord> &curr_index_data = *(this->index_data);
 	return curr_index_data[curr_coords];
 }
 
-double* CoordinateVector::data() {
+double* TightlyPackedVector::data() {
     return this->vector_data->data();
 }
 
-void CoordinateVector::reserve(int reserve) {
+void TightlyPackedVector::reserve(int reserve) {
     this->vector_data->reserve(reserve);
     this->vector_data->reserve(reserve / 3);
 }

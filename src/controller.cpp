@@ -88,7 +88,7 @@ Controller::Controller(void) {
 
 	//exit(0);
 
-	CoordinateVector* cv_test = new CoordinateVector();
+	/*TightlyPackedVector* cv_test = new TightlyPackedVector();
 	cv_test->push_back(2, 3, 2);
 	cv_test->push_back(5, 1, 4);
 	cv_test->push_back(2, 3, 2);
@@ -104,7 +104,7 @@ Controller::Controller(void) {
 	double* data = cv_test->at(cv_test->get_index(5, 1, 4));
 	std::cout << "cv: " << data[0] << " | " << data[1] << " | " << data[2] << std::endl;
 
-	std::cout << "size: " << cv_test->size() << std::endl;
+	std::cout << "size: " << cv_test->size() << std::endl;*/
 
 	//exit(0);
 
@@ -459,7 +459,7 @@ void Controller::render(int render_mode) {
 
         int array_size = (pos_x_view+1 - neg_x_view) * (pos_y_view+1 - neg_y_view);
 
-        CoordinateVector* vertex_data = new CoordinateVector();
+        TightlyPackedVector* vertex_data = new TightlyPackedVector();
         vertex_data->reserve(array_size);
         //std::vector<int>* render_order = new std::vector<int>();
 

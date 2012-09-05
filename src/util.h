@@ -147,18 +147,17 @@ PyObject* py_call_func(PyObject *py_obj, char* func_name, PyObject* py_obj_1, Py
 
 /***************/
 
-class CoordinateVector { 
+class TightlyPackedVector { 
 	private:
 		std::vector<double> *vector_data;
 		std::map< std::vector<double>*, int, cmp_coord> *index_data;
 		std::vector< std::vector<double> *> *index_data_keys;
 	public:
-		CoordinateVector();
-		~CoordinateVector();
+		TightlyPackedVector();
+		~TightlyPackedVector();
 
 		double* at(int);
 		int push_back(double, double, double);
-		//void set(int, double, double, double);
 		int size();
 		int get_index(double, double, double);
 		int get_index(std::vector<double>*);
