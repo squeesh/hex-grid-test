@@ -1,4 +1,6 @@
-
+# This file is loaded by main.exe
+#    Careful referencing things from here that reference Controller.
+#    You will get circular imports...
 
 class GlobalConsts(object):
     PATH_SHOW_SEARCH    = True

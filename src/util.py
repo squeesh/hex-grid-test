@@ -12,7 +12,6 @@ class RoundList(list):
 
 
 def a_star(start, goal):
-    from controller import Controller
     closedset  = []    # The set of nodes already evaluated.
     openset    = [start]    # The set of tentative nodes to be evaluated, initially containing the start node
     came_from  = {}    # The map of navigated nodes.
@@ -33,7 +32,7 @@ def a_star(start, goal):
                 curr_f_score = f_score[item]
                 current = item #the node in openset having the lowest f_score[] value
 
-        if Controller.PATH_SHOW_SEARCH and current.is_pathable():
+        if GlobalConsts.PATH_SHOW_SEARCH and current.is_pathable():
             current.set_select_color(1, 0, 0)
 
         if current == goal:

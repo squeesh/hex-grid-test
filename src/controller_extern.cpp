@@ -81,8 +81,8 @@ extern "C" {
 	}
 
 	void Controller_tick() {
-        Controller* curr_ctrl = Controller_get_controller();
-        curr_ctrl->tick();
+		Controller* curr_ctrl = Controller_get_controller();
+		curr_ctrl->tick();
 	}
 
 	void Controller_render() {
@@ -90,33 +90,17 @@ extern "C" {
 		curr_ctrl->render();
 	}
 
-	char Controller_LEFT() {
-	    return Controller::LEFT;
-	}
-
-	char Controller_RIGHT() {
-	    return Controller::RIGHT;
-	}
-
-	char Controller_UP() {
-	    return Controller::UP;
-	}
-
-	char Controller_DOWN() {
-		return Controller::DOWN;
-	}
-
 	double* Controller_COS_60() {
-        Controller* curr_ctrl = Controller_get_controller();
-        double COS_60 = curr_ctrl->COS_60;
-        return &COS_60;
+		Controller* curr_ctrl = Controller_get_controller();
+		double COS_60 = curr_ctrl->COS_60;
+		return &COS_60;
 	}
 
-    double* Controller_SIN_60() {
-        Controller* curr_ctrl = Controller_get_controller();
-        double SIN_60 = curr_ctrl->SIN_60;
-        return &SIN_60;
-    }
+	double* Controller_SIN_60() {
+		Controller* curr_ctrl = Controller_get_controller();
+		double SIN_60 = curr_ctrl->SIN_60;
+		return &SIN_60;
+	}
 
 	void Controller_mouse_left_click(double x, double y) {
 		Controller* curr_ctrl = Controller_get_controller();

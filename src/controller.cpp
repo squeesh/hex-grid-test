@@ -7,10 +7,10 @@ Controller* Controller::curr_ctrl = NULL;
 const double Controller::COS_60 = std::cos(60.0 / 360.0 * 2.0 * M_PI);
 const double Controller::SIN_60 = std::sin(60.0 / 360.0 * 2.0 * M_PI);
 
-const char Controller::LEFT  = 'L';
+/*const char Controller::LEFT  = 'L';
 const char Controller::RIGHT = 'R';
 const char Controller::UP    = 'U';
-const char Controller::DOWN  = 'D';
+const char Controller::DOWN  = 'D';*/
 
 const int Controller::MOUSE_LEFT 	= 0;
 const int Controller::MOUSE_MIDDLE 	= 1;
@@ -44,10 +44,10 @@ Controller::Controller(void) {
 
 	this->hexagon_list = NULL;
 
-	this->scroll_map[this->LEFT]    = false;
-	this->scroll_map[this->RIGHT]   = false;
-	this->scroll_map[this->UP]      = false;
-	this->scroll_map[this->DOWN]    = false;
+	this->scroll_map[GlobalConsts::LEFT]    = false;
+	this->scroll_map[GlobalConsts::RIGHT]   = false;
+	this->scroll_map[GlobalConsts::UP]      = false;
+	this->scroll_map[GlobalConsts::DOWN]    = false;
 
 	this->selected_hex = NULL;
 
@@ -267,19 +267,19 @@ void Controller::py_init_board() {
 
 
 void Controller::tick() {
-    if(this->scroll_map[this->LEFT]) {
+    if(this->scroll_map[GlobalConsts::LEFT]) {
         this->x_offset -= 0.5 * this->zoom;
     }
 
-    if(this->scroll_map[this->RIGHT]) {
+    if(this->scroll_map[GlobalConsts::RIGHT]) {
         this->x_offset += 0.5 * this->zoom;
     }
 
-    if(this->scroll_map[this->UP]) {
+    if(this->scroll_map[GlobalConsts::UP]) {
         this->y_offset += 0.5 * this->zoom;
     }
 
-    if(this->scroll_map[this->DOWN]) {
+    if(this->scroll_map[GlobalConsts::DOWN]) {
         this->y_offset -= 0.5 * this->zoom;
     }
 }
@@ -667,16 +667,16 @@ void Controller::key_down(unsigned char key, int x, int y) {
 /*
     switch(key) {
         case 'w':
-            this->set_scroll(this->UP);
+            this->set_scroll(GlobalConsts::UP);
             break;
         case 's':
-            curr_ctrl->set_scroll(this->DOWN);
+            curr_ctrl->set_scroll(GlobalConsts::DOWN);
             break;
         case 'a':
-            this->set_scroll(this->LEFT);
+            this->set_scroll(GlobalConsts::LEFT);
             break;
         case 'd':
-            this->set_scroll(this->RIGHT);
+            this->set_scroll(GlobalConsts::RIGHT);
             break;
 
         case '+':
@@ -710,16 +710,16 @@ void Controller::key_down(unsigned char key, int x, int y) {
 void Controller::key_up(unsigned char key, int x, int y) {
     /*switch(key) {
         case 'w':
-            this->clear_scroll(this->UP);
+            this->clear_scroll(GlobalConsts::UP);
             break;
         case 's':
-            this->clear_scroll(this->DOWN);
+            this->clear_scroll(GlobalConsts::DOWN);
             break;
         case 'a':
-            this->clear_scroll(this->LEFT);
+            this->clear_scroll(GlobalConsts::LEFT);
             break;
         case 'd':
-            this->clear_scroll(this->RIGHT);
+            this->clear_scroll(GlobalConsts::RIGHT);
             break;
     }*/
 

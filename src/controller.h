@@ -42,10 +42,10 @@ class Controller {
 		static const double COS_60;
 		static const double SIN_60;
 
-		static const char LEFT;
+		/*static const char LEFT;
 		static const char RIGHT;
 		static const char UP;
-		static const char DOWN;
+		static const char DOWN;*/
 
 		static const int MOUSE_LEFT;
 		static const int MOUSE_MIDDLE;

@@ -14,7 +14,7 @@ class Controller(object):
     _curr_ctrl = None
     _c_ctrl_obj = None
 
-    PATH_SHOW_SEARCH    = True
+#    PATH_SHOW_SEARCH    = True
 
 #    BOARD_HEIGHT        = 78
 #    BOARD_WIDTH         = 120
@@ -33,10 +33,10 @@ class Controller(object):
 
     view_range = GlobalConsts.BOARD_WIDTH * 1.25
 
-    LEFT    = controller_lib.Controller_LEFT()
-    RIGHT   = controller_lib.Controller_RIGHT()
-    UP      = controller_lib.Controller_UP()
-    DOWN    = controller_lib.Controller_DOWN()
+#    LEFT    = controller_lib.Controller_LEFT()
+#    RIGHT   = controller_lib.Controller_RIGHT()
+#    UP      = controller_lib.Controller_UP()
+#    DOWN    = controller_lib.Controller_DOWN()
 
     COS_60  = c_double.from_address(controller_lib.Controller_COS_60()).value
     SIN_60  = c_double.from_address(controller_lib.Controller_SIN_60()).value
@@ -82,7 +82,7 @@ class Controller(object):
         print "Linking Segments..."
         self.link_segments()
 
-        if True:
+        if False:
             print 'Generating hills',
             for i in range(int(20 * (GlobalConsts.BOARD_WIDTH / 100.0))):
                 print '.',
@@ -90,10 +90,9 @@ class Controller(object):
                 y_start = int(random() * GlobalConsts.BOARD_WIDTH)
                 RollingHills.generate(self.get_hexagon(x_start, y_start), 750 * (GlobalConsts.BOARD_WIDTH / 100.0), height_range=(0,  0.015))
                 RollingHills.generate(self.get_hexagon(x_start, y_start), 750 * (GlobalConsts.BOARD_WIDTH / 100.0), height_range=(0, -0.0225))
-
             print
 
-        if True:
+        if False:
             print 'Generating mountains',
             for i in range(int(7 * (GlobalConsts.BOARD_WIDTH / 100.0))):
                 print '.',
@@ -175,13 +174,13 @@ class Controller(object):
 
     def key_down(self, key, x, y):
         if key == 'w':
-            self.set_scroll(self.UP)
+            self.set_scroll(GlobalConsts.UP)
         elif key == 's':
-            self.set_scroll(self.DOWN)
+            self.set_scroll(GlobalConsts.DOWN)
         elif key == 'a':
-            self.set_scroll(self.LEFT)
+            self.set_scroll(GlobalConsts.LEFT)
         elif key == 'd':
-            self.set_scroll(self.RIGHT)
+            self.set_scroll(GlobalConsts.RIGHT)
 
         elif key == '+':
             self.zoom /= 1.25
@@ -212,13 +211,13 @@ class Controller(object):
 
     def key_up(self, key, x, y):
         if key == 'w':
-            self.clear_scroll(self.UP)
+            self.clear_scroll(GlobalConsts.UP)
         elif key == 's':
-            self.clear_scroll(self.DOWN)
+            self.clear_scroll(GlobalConsts.DOWN)
         elif key == 'a':
-            self.clear_scroll(self.LEFT)
+            self.clear_scroll(GlobalConsts.LEFT)
         elif key == 'd':
-            self.clear_scroll(self.RIGHT)
+            self.clear_scroll(GlobalConsts.RIGHT)
 
     def get_zoom(self):
         zoom = controller_lib.Controller_get_zoom()
