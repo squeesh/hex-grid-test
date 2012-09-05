@@ -82,7 +82,7 @@ class Controller(object):
         print "Linking Segments..."
         self.link_segments()
 
-        if False:
+        if True:
             print 'Generating hills',
             for i in range(int(20 * (self.BOARD_WIDTH / 100.0))):
                 print '.',
@@ -93,7 +93,7 @@ class Controller(object):
 
             print
 
-        if False:
+        if True:
             print 'Generating mountains',
             for i in range(int(7 * (self.BOARD_WIDTH / 100.0))):
                 print '.',

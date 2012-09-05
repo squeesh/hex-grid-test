@@ -92,6 +92,8 @@ class Controller {
 
 		Hexagon* get_clicked_hex(double x, double y);
 
+		std::vector<Hexagon*>* get_neighbor_in_radius(Hexagon*, int);
+
 		Hexagon* get_hex_by_name(long name);
 
 		void mouse_left_click(int x, int y);

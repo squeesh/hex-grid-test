@@ -9,11 +9,12 @@ struct cmp_str {
 };
 
 
+template <typename T>
 struct cmp_coord {
-    bool operator()(std::vector<double> *vect_a, std::vector<double> *vect_b) const {
+    bool operator()(std::vector<T> *vect_a, std::vector<T> *vect_b) const {
 	// I have no idea why this works...
-	std::vector<double> &temp_a = *vect_a;
-	std::vector<double> &temp_b = *vect_b;
+	std::vector<T> &temp_a = *vect_a;
+	std::vector<T> &temp_b = *vect_b;
 
 	return temp_a < temp_b;
     }
@@ -147,22 +148,126 @@ PyObject* py_call_func(PyObject *py_obj, char* func_name, PyObject* py_obj_1, Py
 
 /***************/
 
+template <typename T>
 class TightlyPackedVector { 
 	private:
-		std::vector<double> *vector_data;
-		std::map< std::vector<double>*, int, cmp_coord> *index_data;
-		std::vector< std::vector<double> *> *index_data_keys;
+		std::vector<T> *vector_data;
+		std::map< std::vector<T>*, int, cmp_coord<T> > *index_data;
+		std::vector< std::vector<T> *> *index_data_keys;
 	public:
 		TightlyPackedVector();
 		~TightlyPackedVector();
 
-		double* at(int);
-		int push_back(double, double, double);
+		T* at(int);
+		int push_back(T, T, T);
 		int size();
-		int get_index(double, double, double);
-		int get_index(std::vector<double>*);
-		double* data();
+		int get_index(T, T, T);
+		int get_index(std::vector<T>*);
+		T* data();
 		void reserve(int);
 };
+
+template <typename T>
+TightlyPackedVector<T>::TightlyPackedVector() {
+    this->vector_data = new std::vector<T>();
+    this->index_data = new std::map< std::vector<T>*, int, cmp_coord<T> >();
+    this->index_data_keys = new std::vector< std::vector<T> *>();
+}
+
+template <typename T>
+TightlyPackedVector<T>::~TightlyPackedVector() {
+    delete this->vector_data;
+    delete this->index_data;
+
+    std::vector< std::vector<T> *> &curr_vec = *(this->index_data_keys);
+    for(int i = 0; i < this->index_data_keys->size(); i++) {
+        delete curr_vec[i];
+    }
+    delete this->index_data_keys;
+}
+
+template <typename T>
+T* TightlyPackedVector<T>::at(int index) {
+	if(index < this->size()) {
+		// fun with pointers...
+		return (T*)((int)(this->data()) + (sizeof(T) * index * 3));
+	} else {
+		// throw whatever error at() throws... 
+		// TODO: QUIT BEING LAZY
+		T output = this->vector_data->at(-1);
+
+		return &output;
+	}
+}
+
+template <typename T>
+int TightlyPackedVector<T>::push_back(T x, T y, T z) {
+	std::vector<T>* curr_coords = new std::vector<T>();
+	curr_coords->push_back(x);
+	curr_coords->push_back(y);
+	curr_coords->push_back(z);
+
+	int index = 0;
+
+	if(this->index_data->count(curr_coords) == 0) {
+	    std::map< std::vector<T>*, int, cmp_coord<T> > &curr_index_data = *(this->index_data);
+
+		this->vector_data->push_back(x);
+		this->vector_data->push_back(y);
+		this->vector_data->push_back(z);
+
+		index = this->size() - 1;
+		curr_index_data[curr_coords] = index;
+		this->index_data_keys->push_back(curr_coords);
+	} else {	
+		index = this->get_index(curr_coords);
+		delete curr_coords;
+	}
+
+	return index;
+}
+
+/*void TightlyPackedVector::set(int index, double x, double y, double z) {
+	this->data[index] = x;
+	this->data[index+1] = y;
+	this->data[index+2] = z;
+}*/
+
+template <typename T>
+int TightlyPackedVector<T>::size() {
+	return this->index_data->size();
+}
+
+template <typename T>
+int TightlyPackedVector<T>::get_index(T x, T y, T z) {
+	std::vector<T>* curr_coords = new std::vector<T>();
+	curr_coords->push_back(x);
+	curr_coords->push_back(y);
+	curr_coords->push_back(z);
+
+	//std::cout << "count: " << this->index_data.count(curr_coords) << std::endl;
+
+	int output = this->get_index(curr_coords);
+	delete curr_coords;
+
+	return output;
+}
+
+template <typename T>
+int TightlyPackedVector<T>::get_index(std::vector<T>* curr_coords) {
+    std::map< std::vector<T>*, int, cmp_coord<T> > &curr_index_data = *(this->index_data);
+    return curr_index_data[curr_coords];
+}
+
+template <typename T>
+T* TightlyPackedVector<T>::data() {
+    return this->vector_data->data();
+}
+
+template <typename T>
+void TightlyPackedVector<T>::reserve(int reserve) {
+    this->vector_data->reserve(reserve);
+    this->vector_data->reserve(reserve / 3);
+}
 
 #endif

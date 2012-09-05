@@ -88,7 +88,7 @@ Controller::Controller(void) {
 
 	//exit(0);
 
-	/*TightlyPackedVector* cv_test = new TightlyPackedVector();
+	/*TightlyPackedVector<float>* cv_test = new TightlyPackedVector<float>();
 	cv_test->push_back(2, 3, 2);
 	cv_test->push_back(5, 1, 4);
 	cv_test->push_back(2, 3, 2);
@@ -101,12 +101,12 @@ Controller::Controller(void) {
 	std::cout << "index: " << cv_test->get_index(5, 1, 4) << std::endl;
 	std::cout << "index: " << cv_test->get_index(2, 6, 2) << std::endl;
 
-	double* data = cv_test->at(cv_test->get_index(5, 1, 4));
+	float* data = cv_test->at(cv_test->get_index(5, 1, 4));
 	std::cout << "cv: " << data[0] << " | " << data[1] << " | " << data[2] << std::endl;
 
-	std::cout << "size: " << cv_test->size() << std::endl;*/
+	std::cout << "size: " << cv_test->size() << std::endl;
 
-	//exit(0);
+	exit(0);*/
 
 }
 
@@ -327,7 +327,7 @@ void Controller::render(int render_mode) {
         }
 
     } else {
-	/*
+	
         Vertex* curr_vert = NULL;
         int array_size = (pos_x_view+1 - neg_x_view) * (pos_y_view+1 - neg_y_view);
 
@@ -455,11 +455,11 @@ void Controller::render(int render_mode) {
         delete triangle_vertex_data;
         delete triangle_color_data;
 
-	*/
+	
 
-        int array_size = (pos_x_view+1 - neg_x_view) * (pos_y_view+1 - neg_y_view);
+        /*int array_size = (pos_x_view+1 - neg_x_view) * (pos_y_view+1 - neg_y_view);
 
-        TightlyPackedVector* vertex_data = new TightlyPackedVector();
+        TightlyPackedVector<double>* vertex_data = new TightlyPackedVector<double>();
         vertex_data->reserve(array_size);
         //std::vector<int>* render_order = new std::vector<int>();
 
@@ -531,6 +531,7 @@ void Controller::render(int render_mode) {
 
         delete vertex_data;
         //delete render_order;
+	*/
     }
 }
 
@@ -592,6 +593,10 @@ Hexagon* Controller::get_clicked_hex(double x, double y) {
 	}
 
 	return clicked_hex;
+}
+
+std::vector<Hexagon*>* Controller::get_neighbor_in_radius(Hexagon* curr_hex, int radius) {
+    
 }
 
 void Controller::mouse_left_click(int x, int y) {
