@@ -149,10 +149,12 @@ PyObject* py_call_func(PyObject *py_obj, char* func_name, PyObject* py_obj_1, Py
 
 class CoordinateVector { 
 	private:
-		std::vector<double> data;
-		std::map< std::vector<double>*, int, cmp_coord> index_data;
+		std::vector<double> *vector_data;
+		std::map< std::vector<double>*, int, cmp_coord> *index_data;
+		std::vector< std::vector<double> *> *index_data_keys;
 	public:
 		CoordinateVector();
+		~CoordinateVector();
 
 		double* at(int);
 		int push_back(double, double, double);
@@ -160,6 +162,8 @@ class CoordinateVector {
 		int size();
 		int get_index(double, double, double);
 		int get_index(std::vector<double>*);
+		double* data();
+		void reserve(int);
 };
 
 #endif

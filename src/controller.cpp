@@ -460,11 +460,12 @@ void Controller::render(int render_mode) {
         int array_size = (pos_x_view+1 - neg_x_view) * (pos_y_view+1 - neg_y_view);
 
         CoordinateVector* vertex_data = new CoordinateVector();
-	std::vector<int>* render_order = new std::vector<int>();
+        vertex_data->reserve(array_size);
+        //std::vector<int>* render_order = new std::vector<int>();
 
-	for(int i = neg_x_view; i <= pos_x_view; i++) {
-	    for(int j = neg_y_view; j <= pos_y_view; j++) {
-            
+        for(int i = neg_x_view; i <= pos_x_view; i++) {
+            for(int j = neg_y_view; j <= pos_y_view; j++) {
+
                 int curr_i = i;
                 int index;
                 int inc;
@@ -491,25 +492,45 @@ void Controller::render(int render_mode) {
 
                 Vertex* curr_vert = NULL;
 
-		glBegin(GL_LINE_LOOP);
+                //glBegin(GL_LINE_LOOP);
                 for(int k = 0; k < 6; k++) {
-			curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(index)];
-			//std::vector<double> curr_color = curr_vert->get_color();
+                    curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(k)];
+                    //std::vector<double> curr_color = curr_vert->get_color();
 
-			glColor3f(0, 1, 0);
-			glVertex3f(x + Hexagon::ROT_COORDS->at(k)->at(0), y + Hexagon::ROT_COORDS->at(k)->at(1), curr_vert->get_height());
+                    //glColor3f(0, 1, 0);
+                    //glVertex3f(x + Hexagon::ROT_COORDS->at(k)->at(0), y + Hexagon::ROT_COORDS->at(k)->at(1), curr_vert->get_height());
 
-			int index = vertex_data->push_back(
-				x + Hexagon::ROT_COORDS->at(k)->at(0), 
-				y + Hexagon::ROT_COORDS->at(k)->at(1), 
-				curr_vert->get_height()
-			);
+                    int index = vertex_data->push_back(
+                        x + Hexagon::ROT_COORDS->at(k)->at(0),
+                        y + Hexagon::ROT_COORDS->at(k)->at(1),
+                        curr_vert->get_height()
+                    );
 
-			render_order->push_back(index);
-		}
-		glEnd();
-	    }
-	}
+                    vertex_data->push_back(
+                        x + Hexagon::ROT_COORDS->at(k+1)->at(0),
+                        y + Hexagon::ROT_COORDS->at(k+1)->at(1),
+                        curr_vert->get_height()
+                    );
+
+                    //render_order->push_back(index);
+                }
+                //glEnd();
+            }
+        }
+
+        glEnableClientState(GL_VERTEX_ARRAY);
+        //glEnableClientState(GL_COLOR_ARRAY);
+
+        glVertexPointer(3, GL_DOUBLE, 0, vertex_data->data());
+        //glColorPointer(3, GL_FLOAT, 0, color_data->data());
+
+        glDrawArrays(GL_LINES, 0, vertex_data->size());
+
+        //glDisableClientState(GL_COLOR_ARRAY);
+        glDisableClientState(GL_VERTEX_ARRAY);
+
+        delete vertex_data;
+        //delete render_order;
     }
 }
 

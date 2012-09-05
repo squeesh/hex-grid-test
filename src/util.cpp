@@ -58,17 +58,30 @@ PyObject* py_call_func(PyObject *py_obj, char* func_name, PyObject* py_obj_1, Py
 /***************/
 
 CoordinateVector::CoordinateVector() {
+    this->vector_data = new std::vector<double>();
+    this->index_data = new std::map< std::vector<double>*, int, cmp_coord>();
+    this->index_data_keys = new std::vector< std::vector<double> *>();
+}
 
+CoordinateVector::~CoordinateVector() {
+    delete this->vector_data;
+    delete this->index_data;
+
+    std::vector< std::vector<double> *> &curr_vec = *(this->index_data_keys);
+    for(int i = 0; i < this->index_data_keys->size(); i++) {
+        delete curr_vec[i];
+    }
+    delete this->index_data_keys;
 }
 
 double* CoordinateVector::at(int index) {
 	if(index < this->size()) {
 		// fun with pointers...
-		return (double*)((int)this->data.data() + (sizeof(double) * index * 3));
+		return (double*)((int)this->data() + (sizeof(double) * index * 3));
 	} else {
 		// throw whatever error at() throws... 
 		// TODO: QUIT BEING LAZY
-		double output = this->data.at(-1);
+		double output = this->vector_data->at(-1);
 
 		return &output;
 	}
@@ -82,13 +95,16 @@ int CoordinateVector::push_back(double x, double y, double z) {
 
 	int index = 0;
 
-	if(this->index_data.count(curr_coords) == 0) {
-		this->data.push_back(x);
-		this->data.push_back(y);
-		this->data.push_back(z);
+	if(this->index_data->count(curr_coords) == 0) {
+	    std::map< std::vector<double>*, int, cmp_coord> &curr_index_data = *(this->index_data);
 
-		index = (this->data.size() / 3) - 1;
-		this->index_data[curr_coords] = index;
+		this->vector_data->push_back(x);
+		this->vector_data->push_back(y);
+		this->vector_data->push_back(z);
+
+		index = this->size() - 1;
+		curr_index_data[curr_coords] = index;
+		this->index_data_keys->push_back(curr_coords);
 	} else {	
 		index = this->get_index(curr_coords);
 		delete curr_coords;
@@ -104,7 +120,7 @@ int CoordinateVector::push_back(double x, double y, double z) {
 }*/
 
 int CoordinateVector::size() {
-	return this->index_data.size();
+	return this->index_data->size();
 }
 
 int CoordinateVector::get_index(double x, double y, double z) {
@@ -122,6 +138,15 @@ int CoordinateVector::get_index(double x, double y, double z) {
 }
 
 int CoordinateVector::get_index(std::vector<double>* curr_coords) {
-	return this->index_data[curr_coords];;
+    std::map< std::vector<double>*, int, cmp_coord> &curr_index_data = *(this->index_data);
+	return curr_index_data[curr_coords];
 }
 
+double* CoordinateVector::data() {
+    return this->vector_data->data();
+}
+
+void CoordinateVector::reserve(int reserve) {
+    this->vector_data->reserve(reserve);
+    this->vector_data->reserve(reserve / 3);
+}
