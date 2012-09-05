@@ -92,9 +92,14 @@ void timer(int value) {
 }
 
 int main(int argc, char** argv) {
+	std::cout << "start" << std::endl;
+
 	Py_Initialize();
 
+	std::cout << "py initied.." << std::endl;
+
 	curr_ctrl = Controller::get_controller();
+	curr_ctrl->py_init_board();
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);

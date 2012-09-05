@@ -23,8 +23,8 @@ const int Controller::RENDER_TRIANGLES = 1;
 
 
 Controller::Controller(void) {
-	this->BOARD_WIDTH = 0;
-	this->BOARD_HEIGHT = 0;
+	//GlobalConsts::BOARD_WIDTH = 0;
+	//GlobalConsts::BOARD_HEIGHT = 0;
 
 	this->MIN_VIEW_RANGE = 12.5;
 	this->MAX_VIEW_RANGE = 437.5;
@@ -150,7 +150,7 @@ void Controller::push_hexagon(Hexagon *hex) {
 		total_size += this->hexagon_list->at(i)->size();
 	}
 
-	int i = (int)(total_size % this->BOARD_WIDTH);
+	int i = (int)(total_size % GlobalConsts::BOARD_WIDTH);
 
 	this->hexagon_list->at(i)->push_back(hex);
 }
@@ -161,7 +161,7 @@ Hexagon* Controller::pop_hexagon() {
 		total_size += this->hexagon_list->at(i)->size();
 	}
 
-	int i = (int)(total_size % this->BOARD_WIDTH);
+	int i = (int)(total_size % GlobalConsts::BOARD_WIDTH);
 
 	Hexagon *last_hex = this->hexagon_list->at(i)->back();
 	this->hexagon_list->at(i)->pop_back();
@@ -249,20 +249,22 @@ void Controller::resize(long width, long height) {
         glMatrixMode(GL_MODELVIEW);
 }
 
-void Controller::init_board(long board_width, long board_height) {
-	this->BOARD_WIDTH  = board_width;
-	this->BOARD_HEIGHT = board_height;
-
+void Controller::init_board() {
 	this->hexagon_list = new RoundVector< RoundVector< Hexagon* >* >();
-	this->hexagon_list->reserve(this->BOARD_WIDTH);
+	this->hexagon_list->reserve(GlobalConsts::BOARD_WIDTH);
 
-	for(int i = 0; i < this->BOARD_WIDTH; i++) {
+	for(int i = 0; i < GlobalConsts::BOARD_WIDTH; i++) {
 	    RoundVector< Hexagon* >* curr_vect = new RoundVector< Hexagon* >();
-		curr_vect->reserve(this->BOARD_HEIGHT);
+		curr_vect->reserve(GlobalConsts::BOARD_HEIGHT);
 
 		this->hexagon_list->push_back(curr_vect);
 	}
 }
+
+void Controller::py_init_board() {
+	py_call_func(this->controller_py, "init_board");
+}
+
 
 void Controller::tick() {
     if(this->scroll_map[this->LEFT]) {

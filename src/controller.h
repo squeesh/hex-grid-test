@@ -10,8 +10,8 @@ class Controller {
 		static const int RENDER_LINES;
 		static const int RENDER_TRIANGLES;
 
-		long BOARD_WIDTH;
-		long BOARD_HEIGHT;
+		//long BOARD_WIDTH;
+		//long BOARD_HEIGHT;
 
 		double MIN_VIEW_RANGE;
 		double MAX_VIEW_RANGE;
@@ -64,6 +64,9 @@ class Controller {
 		void set_MAX_PATHABLE_SLOPE(double slope);
 		double get_MAX_PATHABLE_SLOPE();
 
+		void init_board();
+		void py_init_board();
+
 		void push_hexagon(Hexagon *hex);
 		Hexagon* pop_hexagon();
 		Hexagon* get_hexagon(int i, int j);
@@ -83,7 +86,7 @@ class Controller {
 		void init_gl(long width, long height);
 		void resize(long width, long height);
 
-		void init_board(long board_width, long board_height);
+		
 
 		void tick();
 

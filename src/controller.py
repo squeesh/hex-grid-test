@@ -4,6 +4,7 @@ controller_lib = cdll.LoadLibrary('./controller.so')
 from itertools import cycle, islice
 from random import random
 
+from global_consts import GlobalConsts
 from hexagon import Hexagon
 from land_generation import RollingHills, MountainRange
 from util import dist_between, a_star
@@ -15,8 +16,8 @@ class Controller(object):
 
     PATH_SHOW_SEARCH    = True
 
-    BOARD_HEIGHT        = 78
-    BOARD_WIDTH         = 120
+#    BOARD_HEIGHT        = 78
+#    BOARD_WIDTH         = 120
 #
 #    BOARD_HEIGHT = int(BOARD_HEIGHT * 0.5)
 #    BOARD_WIDTH  = int(BOARD_WIDTH  * 0.5)
@@ -24,13 +25,13 @@ class Controller(object):
 #    BOARD_HEIGHT = 5
 #    BOARD_WIDTH  = 6
 
-    ZOOM                = BOARD_WIDTH / 20.0
+    ZOOM                = GlobalConsts.BOARD_WIDTH / 20.0
     ROTATION            = -30.0
     MAX_PATHABLE_SLOPE  = 2.0
 
 
 
-    view_range = BOARD_WIDTH * 1.25
+    view_range = GlobalConsts.BOARD_WIDTH * 1.25
 
     LEFT    = controller_lib.Controller_LEFT()
     RIGHT   = controller_lib.Controller_RIGHT()
@@ -51,7 +52,6 @@ class Controller(object):
         if Controller._curr_ctrl is None:
             try:
                 Controller._curr_ctrl = Controller()
-                Controller._curr_ctrl.init_board()
             except Exception:
                 import traceback
                 traceback.print_exc()
@@ -63,15 +63,15 @@ class Controller(object):
         print 'init...'
         self.zoom = self.ZOOM
         self.rotation = self.ROTATION
-        self.view_range = self.BOARD_WIDTH
+        self.view_range = GlobalConsts.BOARD_WIDTH
 
         controller_lib.Controller_set_MAX_PATHABLE_SLOPE(c_double(self.MAX_PATHABLE_SLOPE))
 
         print 'Creating Board...'
-        controller_lib.Controller_init_board(self.BOARD_WIDTH, self.BOARD_HEIGHT)
+        controller_lib.Controller_init_board()
 
-        for j in range(self.BOARD_HEIGHT):
-            for i in range(self.BOARD_WIDTH):
+        for j in range(GlobalConsts.BOARD_HEIGHT):
+            for i in range(GlobalConsts.BOARD_WIDTH):
                 x = i * 1.5
                 y = j if not i%2 else j + 0.5
 
@@ -84,25 +84,25 @@ class Controller(object):
 
         if True:
             print 'Generating hills',
-            for i in range(int(20 * (self.BOARD_WIDTH / 100.0))):
+            for i in range(int(20 * (GlobalConsts.BOARD_WIDTH / 100.0))):
                 print '.',
-                x_start = int(random() * self.BOARD_WIDTH)
-                y_start = int(random() * self.BOARD_WIDTH)
-                RollingHills.generate(self.get_hexagon(x_start, y_start), 750 * (self.BOARD_WIDTH / 100.0), height_range=(0,  0.015))
-                RollingHills.generate(self.get_hexagon(x_start, y_start), 750 * (self.BOARD_WIDTH / 100.0), height_range=(0, -0.0225))
+                x_start = int(random() * GlobalConsts.BOARD_WIDTH)
+                y_start = int(random() * GlobalConsts.BOARD_WIDTH)
+                RollingHills.generate(self.get_hexagon(x_start, y_start), 750 * (GlobalConsts.BOARD_WIDTH / 100.0), height_range=(0,  0.015))
+                RollingHills.generate(self.get_hexagon(x_start, y_start), 750 * (GlobalConsts.BOARD_WIDTH / 100.0), height_range=(0, -0.0225))
 
             print
 
         if True:
             print 'Generating mountains',
-            for i in range(int(7 * (self.BOARD_WIDTH / 100.0))):
+            for i in range(int(7 * (GlobalConsts.BOARD_WIDTH / 100.0))):
                 print '.',
-                x_start = int(random() * self.BOARD_WIDTH)
-                y_start = int(random() * self.BOARD_WIDTH)
+                x_start = int(random() * GlobalConsts.BOARD_WIDTH)
+                y_start = int(random() * GlobalConsts.BOARD_WIDTH)
                 MountainRange.generate(
                     self.get_hexagon(x_start, y_start),
                     Hexagon.NEIGHBOR_DIRECTION[int(random() * len(Hexagon.NEIGHBOR_DIRECTION))],
-                    60 * (self.BOARD_WIDTH / 100.0), 2, height_range=(0.25, 1.0)
+                    60 * (GlobalConsts.BOARD_WIDTH / 100.0), 2, height_range=(0.25, 1.0)
                 )
             print
 
@@ -142,10 +142,10 @@ class Controller(object):
         return islice(cycle([EVEN_OFFSET, ODD_OFFSET]), index, index+1).next()
 
     def link_segments(self):
-        for i in range(self.BOARD_WIDTH):
+        for i in range(GlobalConsts.BOARD_WIDTH):
             offset = self.get_neighbor_offset(i)
 
-            for j in range(self.BOARD_HEIGHT):
+            for j in range(GlobalConsts.BOARD_HEIGHT):
                 neighbor_dict = {}
                 curr_hex = self.get_hexagon(i, j)
 
