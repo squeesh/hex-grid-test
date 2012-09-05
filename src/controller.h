@@ -10,9 +10,6 @@ class Controller {
 		static const int RENDER_LINES;
 		static const int RENDER_TRIANGLES;
 
-		//long BOARD_WIDTH;
-		//long BOARD_HEIGHT;
-
 		double MIN_VIEW_RANGE;
 		double MAX_VIEW_RANGE;
 
@@ -42,24 +39,10 @@ class Controller {
 		static const double COS_60;
 		static const double SIN_60;
 
-		/*static const char LEFT;
-		static const char RIGHT;
-		static const char UP;
-		static const char DOWN;*/
-
-		static const int MOUSE_LEFT;
-		static const int MOUSE_MIDDLE;
-		static const int MOUSE_RIGHT;
-		static const int MOUSE_SCROLL_UP;
-		static const int MOUSE_SCROLL_DOWN;
-
 		std::map<int, std::map<const char*, int, cmp_str> > old_mouse_pos;
 
 		static Controller* _get_controller();
 		static Controller* get_controller();
-
-		/*void set_BOARD_SIZE(long size);
-		long get_BOARD_SIZE();*/
 
 		void set_MAX_PATHABLE_SLOPE(double slope);
 		double get_MAX_PATHABLE_SLOPE();

@@ -82,7 +82,7 @@ class Controller(object):
         print "Linking Segments..."
         self.link_segments()
 
-        if False:
+        if True:
             print 'Generating hills',
             for i in range(int(20 * (GlobalConsts.BOARD_WIDTH / 100.0))):
                 print '.',
@@ -92,7 +92,7 @@ class Controller(object):
                 RollingHills.generate(self.get_hexagon(x_start, y_start), 750 * (GlobalConsts.BOARD_WIDTH / 100.0), height_range=(0, -0.0225))
             print
 
-        if False:
+        if True:
             print 'Generating mountains',
             for i in range(int(7 * (GlobalConsts.BOARD_WIDTH / 100.0))):
                 print '.',

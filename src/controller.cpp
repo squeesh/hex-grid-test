@@ -7,25 +7,11 @@ Controller* Controller::curr_ctrl = NULL;
 const double Controller::COS_60 = std::cos(60.0 / 360.0 * 2.0 * M_PI);
 const double Controller::SIN_60 = std::sin(60.0 / 360.0 * 2.0 * M_PI);
 
-/*const char Controller::LEFT  = 'L';
-const char Controller::RIGHT = 'R';
-const char Controller::UP    = 'U';
-const char Controller::DOWN  = 'D';*/
-
-const int Controller::MOUSE_LEFT 	= 0;
-const int Controller::MOUSE_MIDDLE 	= 1;
-const int Controller::MOUSE_RIGHT 	= 2;
-const int Controller::MOUSE_SCROLL_UP 	= 3;
-const int Controller::MOUSE_SCROLL_DOWN	= 4;
-
 const int Controller::RENDER_LINES     = 0;
 const int Controller::RENDER_TRIANGLES = 1;
 
 
 Controller::Controller(void) {
-	//GlobalConsts::BOARD_WIDTH = 0;
-	//GlobalConsts::BOARD_HEIGHT = 0;
-
 	this->MIN_VIEW_RANGE = 12.5;
 	this->MAX_VIEW_RANGE = 437.5;
 
@@ -612,27 +598,27 @@ void Controller::mouse_left_click(int x, int y) {
 		this->set_selected_hex(curr_hex);
 	}
 
-	this->old_mouse_pos[Controller::MOUSE_LEFT]["down"] 	= 1;
-	this->old_mouse_pos[Controller::MOUSE_LEFT]["x"]	= x;
-	this->old_mouse_pos[Controller::MOUSE_LEFT]["y"] 	= y;
+	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["down"] 	= 1;
+	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["x"]	= x;
+	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["y"] 	= y;
 }
 
 void Controller::mouse_left_release(int x, int y) {
-	this->old_mouse_pos[Controller::MOUSE_LEFT]["down"] 	= 0;
-	this->old_mouse_pos[Controller::MOUSE_LEFT]["x"]	= x;
-	this->old_mouse_pos[Controller::MOUSE_LEFT]["y"] 	= y;
+	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["down"] 	= 0;
+	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["x"]	= x;
+	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["y"] 	= y;
 }
 
 void Controller::mouse_right_click(int x, int y) {
-	this->old_mouse_pos[Controller::MOUSE_RIGHT]["down"] 	= 1;
-	this->old_mouse_pos[Controller::MOUSE_RIGHT]["x"]	= x;
-	this->old_mouse_pos[Controller::MOUSE_RIGHT]["y"] 	= y;
+	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["down"] 	= 1;
+	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["x"]	= x;
+	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["y"] 	= y;
 }
 
 void Controller::mouse_right_release(int x, int y) {
-	this->old_mouse_pos[Controller::MOUSE_RIGHT]["down"] 	= 0;
-	this->old_mouse_pos[Controller::MOUSE_RIGHT]["x"]	= x;
-	this->old_mouse_pos[Controller::MOUSE_RIGHT]["y"] 	= y;
+	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["down"] 	= 0;
+	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["x"]	= x;
+	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["y"] 	= y;
 }
 
 void Controller::mouse_left_drag(int x, int y) {
@@ -640,14 +626,14 @@ void Controller::mouse_left_drag(int x, int y) {
 }
 
 void Controller::mouse_right_drag(int x, int y) {
-	int x_diff = x - this->old_mouse_pos[Controller::MOUSE_RIGHT]["x"];
-	int y_diff = y - this->old_mouse_pos[Controller::MOUSE_RIGHT]["y"];
+	int x_diff = x - this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["x"];
+	int y_diff = y - this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["y"];
 
 	this->x_offset -= x_diff / 30.0 * this->zoom;
 	this->y_offset += y_diff / 30.0 * this->zoom;
 
-	this->old_mouse_pos[Controller::MOUSE_RIGHT]["x"] = x;
-	this->old_mouse_pos[Controller::MOUSE_RIGHT]["y"] = y;
+	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["x"] = x;
+	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["y"] = y;
 }
 
 void Controller::mouse_scroll_up(int x, int y) {

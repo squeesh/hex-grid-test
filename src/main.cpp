@@ -55,20 +55,20 @@ void key_released(unsigned char key, int x, int y) {
 void mouse_click(int button, int state, int x, int y) {
     switch(state) {
         case GLUT_DOWN:
-		if(button == Controller::MOUSE_LEFT) {
+		if(button == GlobalConsts::MOUSE_LEFT) {
 			curr_ctrl->mouse_left_click(x, y);
-		} else if(button == Controller::MOUSE_RIGHT) {
+		} else if(button == GlobalConsts::MOUSE_RIGHT) {
 			curr_ctrl->mouse_right_click(x, y);
-		} else if(button == Controller::MOUSE_SCROLL_UP) {
+		} else if(button == GlobalConsts::MOUSE_SCROLL_UP) {
 			curr_ctrl->mouse_scroll_up(x, y);
-		} else if(button == Controller::MOUSE_SCROLL_DOWN) {
+		} else if(button == GlobalConsts::MOUSE_SCROLL_DOWN) {
 			curr_ctrl->mouse_scroll_down(x, y);
 		}
 		break;
 	case GLUT_UP:
-		if(button == Controller::MOUSE_LEFT) {
+		if(button == GlobalConsts::MOUSE_LEFT) {
 			curr_ctrl->mouse_left_release(x, y);
-		} else if(button == Controller::MOUSE_RIGHT) {
+		} else if(button == GlobalConsts::MOUSE_RIGHT) {
 			curr_ctrl->mouse_right_release(x, y);
 		}
 		break;
@@ -79,9 +79,9 @@ void mouse_click(int button, int state, int x, int y) {
 void mouse_drag(int x, int y) {
 	//std::cout << "drag: " << x << " | " << y << std::endl;
 
-	if(curr_ctrl->old_mouse_pos[Controller::MOUSE_LEFT]["down"]) {
+	if(curr_ctrl->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["down"]) {
 		curr_ctrl->mouse_left_drag(x, y);
-	} else if(curr_ctrl->old_mouse_pos[Controller::MOUSE_RIGHT]["down"]) {
+	} else if(curr_ctrl->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["down"]) {
 		curr_ctrl->mouse_right_drag(x, y);
 	}
 }

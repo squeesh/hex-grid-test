@@ -82,7 +82,7 @@ const char GlobalConsts::RIGHT = char_global_const_attr("RIGHT");
 const char GlobalConsts::UP    = char_global_const_attr("UP");
 const char GlobalConsts::DOWN  = char_global_const_attr("DOWN");
 
-const int GlobalConsts::MOUSE_LEFT 	  = long_global_const_attr("MOUSE_LEFT ");
+const int GlobalConsts::MOUSE_LEFT 	  = long_global_const_attr("MOUSE_LEFT");
 const int GlobalConsts::MOUSE_MIDDLE 	  = long_global_const_attr("MOUSE_MIDDLE");
 const int GlobalConsts::MOUSE_RIGHT 	  = long_global_const_attr("MOUSE_RIGHT");
 const int GlobalConsts::MOUSE_SCROLL_UP   = long_global_const_attr("MOUSE_SCROLL_UP");
