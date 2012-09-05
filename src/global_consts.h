@@ -23,6 +23,11 @@ class GlobalConsts {
 
 		static const double MIN_ZOOM;
 		static const double MAX_ZOOM;
+		static const double START_ZOOM;
+
+		static const double START_ROTATION;
+
+		static const double START_VIEW_RANGE;
 
 		static const double MAX_PATHABLE_SLOPE;
 };

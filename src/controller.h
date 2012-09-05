@@ -7,17 +7,6 @@ class Controller {
 		Controller(void);
 		static Controller* curr_ctrl;
 
-		static const int RENDER_LINES;
-		static const int RENDER_TRIANGLES;
-
-		double MIN_VIEW_RANGE;
-		double MAX_VIEW_RANGE;
-
-		double MIN_ZOOM;
-		double MAX_ZOOM;
-
-		double MAX_PATHABLE_SLOPE;
-
 		long width;
 		long height;
 
@@ -44,9 +33,6 @@ class Controller {
 		static Controller* _get_controller();
 		static Controller* get_controller();
 
-		void set_MAX_PATHABLE_SLOPE(double slope);
-		double get_MAX_PATHABLE_SLOPE();
-
 		void init_board();
 		void py_init_board();
 
@@ -54,8 +40,7 @@ class Controller {
 		Hexagon* pop_hexagon();
 		Hexagon* get_hexagon(int i, int j);
 
-		void set_zoom(double zoom);
-		double get_zoom();
+		void zoom_map(double);
 
 		void set_rotation(double rotation);
 		double get_rotation();
@@ -63,13 +48,8 @@ class Controller {
 		void set_scroll(char direction);
 		void clear_scroll(char direction);
 
-		double get_view_range();
-		void set_view_range(double view_range);
-
 		void init_gl(long width, long height);
 		void resize(long width, long height);
-
-		
 
 		void tick();
 

@@ -14,29 +14,9 @@ class Controller(object):
     _curr_ctrl = None
     _c_ctrl_obj = None
 
-#    PATH_SHOW_SEARCH    = True
-
-#    BOARD_HEIGHT        = 78
-#    BOARD_WIDTH         = 120
-#
-#    BOARD_HEIGHT = int(BOARD_HEIGHT * 0.5)
-#    BOARD_WIDTH  = int(BOARD_WIDTH  * 0.5)
-
-#    BOARD_HEIGHT = 5
-#    BOARD_WIDTH  = 6
-
-    ZOOM                = GlobalConsts.BOARD_WIDTH / 20.0
-    ROTATION            = -30.0
-    MAX_PATHABLE_SLOPE  = 2.0
-
-
+    #MAX_PATHABLE_SLOPE  = 2.0
 
     view_range = GlobalConsts.BOARD_WIDTH * 1.25
-
-#    LEFT    = controller_lib.Controller_LEFT()
-#    RIGHT   = controller_lib.Controller_RIGHT()
-#    UP      = controller_lib.Controller_UP()
-#    DOWN    = controller_lib.Controller_DOWN()
 
     COS_60  = c_double.from_address(controller_lib.Controller_COS_60()).value
     SIN_60  = c_double.from_address(controller_lib.Controller_SIN_60()).value
@@ -60,12 +40,11 @@ class Controller(object):
         return Controller._curr_ctrl
 
     def init_board(self):
-        print 'init...'
-        self.zoom = self.ZOOM
-        self.rotation = self.ROTATION
+        self.zoom = GlobalConsts.START_ZOOM
+        self.rotation = GlobalConsts.START_ROTATION
         self.view_range = GlobalConsts.BOARD_WIDTH
 
-        controller_lib.Controller_set_MAX_PATHABLE_SLOPE(c_double(self.MAX_PATHABLE_SLOPE))
+        #controller_lib.Controller_set_MAX_PATHABLE_SLOPE(c_double(self.MAX_PATHABLE_SLOPE))
 
         print 'Creating Board...'
         controller_lib.Controller_init_board()
@@ -82,7 +61,7 @@ class Controller(object):
         print "Linking Segments..."
         self.link_segments()
 
-        if True:
+        if GlobalConsts.GENERATE_HILLS:
             print 'Generating hills',
             for i in range(int(20 * (GlobalConsts.BOARD_WIDTH / 100.0))):
                 print '.',
@@ -92,7 +71,7 @@ class Controller(object):
                 RollingHills.generate(self.get_hexagon(x_start, y_start), 750 * (GlobalConsts.BOARD_WIDTH / 100.0), height_range=(0, -0.0225))
             print
 
-        if True:
+        if GlobalConsts.GENERATE_MOUNTAINS:
             print 'Generating mountains',
             for i in range(int(7 * (GlobalConsts.BOARD_WIDTH / 100.0))):
                 print '.',
@@ -108,16 +87,6 @@ class Controller(object):
         for hex in Hexagon.get_all_hexagons():
             if not hex.is_pathable():
                 hex.set_select_color(1, 0, 1)
-
-#        hex_neighbors = self.get_hexagon(1, 3).get_neighbors()
-#
-#        hex_neighbors['N' ].set_select_color(1, 0, 0)
-##        hex_neighbors['N' ].set_height(2)
-#        hex_neighbors['NE'].set_select_color(0, 1, 0)
-#        hex_neighbors['SE'].set_select_color(0, 0, 1)
-#        hex_neighbors['S' ].set_select_color(1, 1, 0)
-#        hex_neighbors['SW'].set_select_color(1, 0, 1)
-#        hex_neighbors['NW'].set_select_color(0, 1, 1)
 
     def get_neighbor_offset(self, index):
         EVEN_OFFSET = {
@@ -183,11 +152,9 @@ class Controller(object):
             self.set_scroll(GlobalConsts.RIGHT)
 
         elif key == '+':
-            self.zoom /= 1.25
-            self.view_range /= 1.25
+            self.zoom_map(1 / 1.25)
         elif key == '-':
-            self.zoom *= 1.25
-            self.view_range *= 1.25
+            self.zoom_map(1.25)
         elif key == '*':
             self.rotation += 2.0
         elif key == '/':
@@ -219,27 +186,8 @@ class Controller(object):
         elif key == 'd':
             self.clear_scroll(GlobalConsts.RIGHT)
 
-    def get_zoom(self):
-        zoom = controller_lib.Controller_get_zoom()
-        return c_double.from_address(zoom).value
-
-    @property
-    def zoom(self):
-        zoom = controller_lib.Controller_get_zoom()
-        return c_double.from_address(zoom).value
-
-    @zoom.setter
-    def zoom(self, zoom):
-        controller_lib.Controller_set_zoom(c_double(zoom))
-
-    @property
-    def view_range(self):
-        view_range = controller_lib.Controller_get_view_range()
-        return c_double.from_address(view_range).value
-
-    @view_range.setter
-    def view_range(self, view_range):
-        controller_lib.Controller_set_view_range(c_double(view_range))
+    def zoom_map(self, zoom_amount):
+        controller_lib.Controller_zoom_map(c_double(zoom_amount))
 
     @property
     def rotation(self):
@@ -258,10 +206,6 @@ class Controller(object):
 
     def tick(self):
         controller_lib.Controller_tick()
-
-#    def render(self):
-#        controller_lib.Controller_render()
-#        glutSwapBuffers()
 
     def mouse_down(self, x, y, button):
         controller_lib.Controller_mouse_down(c_double(x), c_double(y), 0)

@@ -7,26 +7,14 @@ Controller* Controller::curr_ctrl = NULL;
 const double Controller::COS_60 = std::cos(60.0 / 360.0 * 2.0 * M_PI);
 const double Controller::SIN_60 = std::sin(60.0 / 360.0 * 2.0 * M_PI);
 
-const int Controller::RENDER_LINES     = 0;
-const int Controller::RENDER_TRIANGLES = 1;
-
 
 Controller::Controller(void) {
-	this->MIN_VIEW_RANGE = 12.5;
-	this->MAX_VIEW_RANGE = 437.5;
-
-	this->MIN_ZOOM = 0.5;
-	this->MAX_ZOOM = 17;
-
-	this->MAX_PATHABLE_SLOPE = 0;
-
 	this->x_offset = 0.0;
 	this->y_offset = 0.0;
 
-	this->zoom = 1.0;
-	this->rotation = 0.0;
-
-	this->view_range = 34;
+	this->zoom       = GlobalConsts::START_ZOOM;
+	this->rotation   = GlobalConsts::START_ROTATION;
+	this->view_range = GlobalConsts::START_VIEW_RANGE;
 
 	this->hexagon_list = NULL;
 
@@ -42,37 +30,6 @@ Controller::Controller(void) {
 		this->old_mouse_pos[i]["x"] 	= 0;
 		this->old_mouse_pos[i]["y"] 	= 0;
 	}
-
-	/*int test_data[] = {10, 20, 30, 40, 50};
-	std::set<int> test_set = std::set<int>(test_data, test_data+5);
-
-	for (std::set<int>::iterator test_itr = test_set.begin(); test_itr != test_set.end(); test_itr++) {
-		std::cout << "itr: " << *test_itr << std::endl;
-	}
-
-	test_set.insert(60);
-
-	for (std::set<int>::iterator test_itr = test_set.begin(); test_itr != test_set.end(); test_itr++) {
-		std::cout << "itr: " << *test_itr << std::endl;
-	}
-
-	test_set.insert(30);
-
-	for (std::set<int>::iterator test_itr = test_set.begin(); test_itr != test_set.end(); test_itr++) {
-		std::cout << "itr: " << *test_itr << std::endl;
-	}
-
-	std::cout << "2 count: " << test_set.count(20) << std::endl;
-	std::cout << "3 count: " << test_set.count(3) << std::endl;
-
-	std::cout << "find: " << *(test_set.find(20)) << std::endl;*/
-
-	//int *int_ary = test_set.begin();
-
-	//std::cout << "int ary: " << int_ary << std::endl;
-
-
-	//exit(0);
 
 	/*TightlyPackedVector<float>* cv_test = new TightlyPackedVector<float>();
 	cv_test->push_back(2, 3, 2);
@@ -158,22 +115,19 @@ Hexagon* Controller::get_hexagon(int i, int j) {
     return this->hexagon_list->at(i)->at(j);
 }
 
-void Controller::set_MAX_PATHABLE_SLOPE(double slope) {
-	this->MAX_PATHABLE_SLOPE = slope;
-}
-
-double Controller::get_MAX_PATHABLE_SLOPE() {
-	return this->MAX_PATHABLE_SLOPE;
-}
-
-void Controller::set_zoom(double zoom) {
-	if(this->MIN_ZOOM < zoom && zoom < this->MAX_ZOOM) {
-		this->zoom = zoom;
+void Controller::zoom_map(double zoom_amount) {
+	if(zoom_amount > 1) {
+		if(zoom < GlobalConsts::MAX_ZOOM) {
+			this->zoom *= zoom_amount;
+			this->view_range *= zoom_amount;
+		}
+	} else {
+		if(GlobalConsts::MIN_ZOOM < zoom) {
+			this->zoom *= zoom_amount;
+			this->view_range *= zoom_amount;
+		}
 	}
-}
-
-double Controller::get_zoom() {
-	return this->zoom;
+	
 }
 
 void Controller::set_rotation(double rotation) {
@@ -190,16 +144,6 @@ void Controller::set_scroll(char direction) {
 
 void Controller::clear_scroll(char direction) {
     this->scroll_map[direction] = false;
-}
-
-double Controller::get_view_range() {
-	return this->view_range;
-}
-
-void Controller::set_view_range(double view_range) {
-	if(this->MIN_VIEW_RANGE < view_range && view_range < this->MAX_VIEW_RANGE) {
-		this->view_range = view_range;
-	}
 }
 
 void Controller::init_gl(long width, long height) {
@@ -271,7 +215,7 @@ void Controller::tick() {
 }
 
 void Controller::render() {
-	this->render(this->RENDER_LINES);
+	this->render(GlobalConsts::RENDER_LINES);
 }
 
 void Controller::render(int render_mode) {
@@ -297,7 +241,7 @@ void Controller::render(int render_mode) {
 	int neg_y_view = this->y_offset - this->view_range / 2.0;
 	int pos_y_view = this->y_offset + this->view_range / 2.0;
 
-	if(render_mode == this->RENDER_TRIANGLES) {
+	if(render_mode == GlobalConsts::RENDER_TRIANGLES) {
         for(int i = neg_x_view; i <= pos_x_view; i++) {
             for(int j = neg_y_view; j <= pos_y_view; j++) {
                 Hexagon* curr_hex = this->hexagon_list->at(i)->at(j);
@@ -443,8 +387,6 @@ void Controller::render(int render_mode) {
         delete triangle_vertex_data;
         delete triangle_color_data;
 
-	
-
         /*int array_size = (pos_x_view+1 - neg_x_view) * (pos_y_view+1 - neg_y_view);
 
         TightlyPackedVector<double>* vertex_data = new TightlyPackedVector<double>();
@@ -529,13 +471,10 @@ Hexagon* Controller::get_clicked_hex(double x, double y) {
 	GLint hits = 0;
 	GLint view[4];
 
-    //This choose the buffer where store the values for the selection data
     glSelectBuffer(64, buff);
 
-    //This retrieve info about the viewport
     glGetIntegerv(GL_VIEWPORT,view);
 
-    //Switching in selecton mode
     glRenderMode(GL_SELECT);
 
     //Clearing the name's stack
@@ -545,23 +484,18 @@ Hexagon* Controller::get_clicked_hex(double x, double y) {
     //Now fill the stack with one element (or glLoadName will generate an error)
     glPushName(0);
 
-    //Now modify the vieving volume, restricting selection area around the cursor
     glMatrixMode(GL_PROJECTION);
 
     glPushMatrix();
     glLoadIdentity();
 
-    //restrict the draw to an area around the cursor
     gluPickMatrix(x, y, 1.0, 1.0, view);
     gluPerspective(45.0, float(this->width)/float(this->height), 0.1, 1000.0);
 
-    //Draw the objects onto the screen
     glMatrixMode(GL_MODELVIEW);
 
-    //draw only the names in the stack, and fill the array
-    this->render(this->RENDER_TRIANGLES);
+    this->render(GlobalConsts::RENDER_TRIANGLES);
 
-    ///Do you remeber? We do pushMatrix in PROJECTION mode
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
 
@@ -637,50 +571,14 @@ void Controller::mouse_right_drag(int x, int y) {
 }
 
 void Controller::mouse_scroll_up(int x, int y) {
-	this->set_zoom(this->get_zoom() / 1.25);
-	this->set_view_range(this->get_view_range() / 1.25);
+	this->zoom_map(1 / 1.25);
 }
 
 void Controller::mouse_scroll_down(int x, int y) {
-	this->set_zoom(this->get_zoom() * 1.25);
-	this->set_view_range(this->get_view_range() * 1.25);
+	this->zoom_map(1.25);
 }
 
 void Controller::key_down(unsigned char key, int x, int y) {
-	/*std::cout << std::endl;
-	std::cout << "view range: " << this->view_range << std::endl;
-	std::cout << "zoom range: " << this->zoom << std::endl;*/
-/*
-    switch(key) {
-        case 'w':
-            this->set_scroll(GlobalConsts::UP);
-            break;
-        case 's':
-            curr_ctrl->set_scroll(GlobalConsts::DOWN);
-            break;
-        case 'a':
-            this->set_scroll(GlobalConsts::LEFT);
-            break;
-        case 'd':
-            this->set_scroll(GlobalConsts::RIGHT);
-            break;
-
-        case '+':
-		this->set_zoom(this->get_zoom() / 1.25);
-		this->set_view_range(this->get_view_range() / 1.25);
-            break;
-        case '-':
-		this->set_zoom(this->get_zoom() * 1.25);
-		this->set_view_range(this->get_view_range() * 1.25);
-            break;
-	case '*':
-	    this->set_rotation(this->get_rotation() + 2);
-	    break;
-	case '/':
-	    this->set_rotation(this->get_rotation() - 2);
-	    break;
-    }
-*/
     char key_str[2] = {key, '\0'};
     PyObject* py_str = PyString_FromString(key_str);
     PyObject* py_x = PyInt_FromLong(x);
@@ -694,21 +592,6 @@ void Controller::key_down(unsigned char key, int x, int y) {
 }
 
 void Controller::key_up(unsigned char key, int x, int y) {
-    /*switch(key) {
-        case 'w':
-            this->clear_scroll(GlobalConsts::UP);
-            break;
-        case 's':
-            this->clear_scroll(GlobalConsts::DOWN);
-            break;
-        case 'a':
-            this->clear_scroll(GlobalConsts::LEFT);
-            break;
-        case 'd':
-            this->clear_scroll(GlobalConsts::RIGHT);
-            break;
-    }*/
-
     char key_str[2] = {key, '\0'};
     PyObject* py_str = PyString_FromString(key_str);
     PyObject* py_x = PyInt_FromLong(x);

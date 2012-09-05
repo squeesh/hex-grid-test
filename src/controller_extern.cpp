@@ -21,15 +21,9 @@ extern "C" {
 		return curr_ctrl->get_hexagon(i, j);
 	}
 
-	void Controller_set_zoom(double zoom) {
+	void Controller_zoom_map(double zoom) {
 		Controller* curr_ctrl = Controller_get_controller();
-		curr_ctrl->set_zoom(zoom);
-	}
-
-	double* Controller_get_zoom() {
-		Controller* curr_ctrl = Controller_get_controller();
-		double zoom = curr_ctrl->get_zoom();
-		return &zoom;
+		curr_ctrl->zoom_map(zoom);
 	}
 
 	void Controller_set_rotation(double rotation) {
@@ -52,18 +46,6 @@ extern "C" {
         Controller* curr_ctrl = Controller_get_controller();
 		curr_ctrl->clear_scroll(direction);
 	}
-
-	void Controller_set_view_range(double view_range) {
-		Controller* curr_ctrl = Controller_get_controller();
-		curr_ctrl->set_view_range(view_range);
-	}
-
-	double* Controller_get_view_range() {
-        Controller* curr_ctrl = Controller_get_controller();
-        double view_range = curr_ctrl->get_view_range();
-        return &view_range;
-    }
-
 
 	void Controller_init_gl(long width, long height) {
 		Controller* curr_ctrl = Controller_get_controller();
@@ -120,17 +102,6 @@ extern "C" {
 	Hexagon* Controller_get_selected_hex() {
 		Controller* curr_ctrl = Controller_get_controller();
 		return curr_ctrl->get_selected_hex();
-	}
-
-	void Controller_set_MAX_PATHABLE_SLOPE(double slope) {
-		Controller* curr_ctrl = Controller_get_controller();
-		curr_ctrl->set_MAX_PATHABLE_SLOPE(slope);
-	}
-
-	double* Controller_get_MAX_PATHABLE_SLOPE() {
-		Controller* curr_ctrl = Controller_get_controller();
-		double slope = curr_ctrl->get_MAX_PATHABLE_SLOPE();
-		return &slope;
 	}
 
 	/********************************************/

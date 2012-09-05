@@ -151,11 +151,7 @@ double Hexagon::get_slope() {
 }
 
 bool Hexagon::is_pathable() {
-	Controller *curr_ctrl = Controller::get_controller();
-	double max_slope = curr_ctrl->get_MAX_PATHABLE_SLOPE();
-	//std::cout << "MAX: " <<  max_slope << " Slope: " << this->get_slope() << " Pathable: " << (this->get_slope() <=  max_slope) << std::endl;
-
-	return this->get_slope() <=  max_slope;
+	return this->get_slope() <= GlobalConsts::MAX_PATHABLE_SLOPE;
 }
 
 void Hexagon::set_neighbor(const char* position, Hexagon* neighbor_hex) {

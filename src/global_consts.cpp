@@ -96,6 +96,11 @@ const long GlobalConsts::BOARD_HEIGHT = long_global_const_attr("BOARD_HEIGHT");
 
 const double GlobalConsts::MIN_ZOOM = double_global_const_attr("MIN_ZOOM");
 const double GlobalConsts::MAX_ZOOM = double_global_const_attr("MAX_ZOOM");
+const double GlobalConsts::START_ZOOM = double_global_const_attr("START_ZOOM");
+
+const double GlobalConsts::START_ROTATION = double_global_const_attr("START_ROTATION");
+
+const double GlobalConsts::START_VIEW_RANGE = double_global_const_attr("START_VIEW_RANGE");
 
 const double GlobalConsts::MAX_PATHABLE_SLOPE = double_global_const_attr("MAX_PATHABLE_SLOPE");
 
