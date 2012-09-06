@@ -81,6 +81,7 @@ class Controller {
 		Hexagon* get_selected_hex();
 
 		RoundVector< RoundVector< Hexagon* >* >* hexagon_list;
+		std::map< Hexagon*, std::vector< int >* >* hexagon_indicies;
 };
 
 #endif

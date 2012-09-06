@@ -31,6 +31,10 @@ Controller::Controller(void) {
 		this->old_mouse_pos[i]["y"] 	= 0;
 	}
 
+	this->hexagon_list = new RoundVector< RoundVector< Hexagon* >* >();
+	this->hexagon_list->reserve(GlobalConsts::BOARD_WIDTH);
+	this->hexagon_indicies = new std::map< Hexagon*, std::vector< int >* >();
+
 	/*TightlyPackedVector<float>* cv_test = new TightlyPackedVector<float>();
 	cv_test->push_back(2, 3, 2);
 	cv_test->push_back(5, 1, 4);
@@ -88,6 +92,7 @@ Controller* Controller::get_controller() {
 }
 
 void Controller::push_hexagon(Hexagon *hex) {
+	// assumption: the hex being passed in is not currently in hexagon_list
 	int total_size = 0;
 	for(int i = 0; i < this->hexagon_list->size(); i++) {
 		total_size += this->hexagon_list->at(i)->size();
@@ -96,6 +101,13 @@ void Controller::push_hexagon(Hexagon *hex) {
 	int i = (int)(total_size % GlobalConsts::BOARD_WIDTH);
 
 	this->hexagon_list->at(i)->push_back(hex);
+
+	int j = this->hexagon_list->at(i)->size()-1;
+
+	std::map< Hexagon*, std::vector< int >* > &curr_indicies = *(this->hexagon_indicies);
+	curr_indicies[hex] = new std::vector< int >();
+	curr_indicies[hex]->push_back(i);
+	curr_indicies[hex]->push_back(j);
 }
 
 Hexagon* Controller::pop_hexagon() {
@@ -180,9 +192,6 @@ void Controller::resize(long width, long height) {
 }
 
 void Controller::init_board() {
-	this->hexagon_list = new RoundVector< RoundVector< Hexagon* >* >();
-	this->hexagon_list->reserve(GlobalConsts::BOARD_WIDTH);
-
 	for(int i = 0; i < GlobalConsts::BOARD_WIDTH; i++) {
 	    RoundVector< Hexagon* >* curr_vect = new RoundVector< Hexagon* >();
 		curr_vect->reserve(GlobalConsts::BOARD_HEIGHT);
@@ -274,7 +283,83 @@ void Controller::render(int render_mode) {
         }
 
     } else {
+
+
+	/*Hexagon* curr_hex = this->hexagon_list->at((int)this->x_offset)->at((int)this->y_offset);
+	glLoadName(curr_hex->name);
+
+	/*std::map< Hexagon*, std::vector< int >* > &curr_indicies = *(this->hexagon_indicies);
+	curr_indicies[hex] = new std::vector< int >();
+	curr_indicies[hex]->push_back(i);
+	curr_indicies[hex]->push_back(j);*
+
+	std::map< Hexagon*, std::vector< int >* > &curr_indicies = *(this->hexagon_indicies);
+	std::vector< int >* curr_i_j = curr_indicies[curr_hex];
+	int i_base = curr_i_j->at(0);
+	int j_base = curr_i_j->at(1);
+
+	int range = 4;
+
+	std::set< Hexagon* >* hex_set = this->get_neighbors_in_radius(curr_hex, range);
+
+	//std::cout << "size: " << hex_set->size() << std::endl;
+
+	for(std::set< Hexagon* >::iterator itr = hex_set->begin(); itr != hex_set->end(); itr++) {
+		curr_hex = *itr;
+		curr_i_j = curr_indicies[curr_hex];
+		int i_diff = i_base - curr_i_j->at(0);
+		int j_diff = j_base - curr_i_j->at(1);
+
+		/*std::cout << "base: " << i_base << " | " << j_base << std::endl;
+		std::cout << "curr: " << curr_i_j->at(0) << " | " << curr_i_j->at(1) << std::endl;
+		std::cout << "diff: " << i_diff << " | " << j_diff << std::endl;*
+
+		if(i_diff <= -range) {
+			i_diff += GlobalConsts::BOARD_WIDTH;
+		} else if (i_diff >= range) {
+			i_diff -= GlobalConsts::BOARD_WIDTH;
+		}
+
+		if(j_diff <= -range) {
+			j_diff += GlobalConsts::BOARD_HEIGHT;
+		} else if (j_diff >= range) {
+			j_diff -= GlobalConsts::BOARD_HEIGHT;
+		}
+
+		//std::cout << "aftr: " << i_diff << " | " << j_diff << std::endl;
+		//std::cout << std::endl;
+
+		int i = this->x_offset + i_diff;
+		int j = this->y_offset + j_diff;
+
+		double x = i * 1.5 * this->COS_60;
+		double y = j * 1.0 * this->SIN_60;
+
+		if(i % 2 == 0) {
+		    y += 0.5 * this->SIN_60;
+		}
 	
+		Vertex* curr_vert = NULL;
+		std::vector<double> curr_color;
+
+		glBegin(GL_LINE_LOOP);
+		for(int k = 0; k < 6; k++) {
+			curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(k)];
+			curr_color = curr_vert->get_color();
+
+			glColor3d(curr_color[0], curr_color[1], curr_color[2]);
+
+			glVertex3d(
+				x + Hexagon::ROT_COORDS->at(k)->at(0),
+				y + Hexagon::ROT_COORDS->at(k)->at(1),
+				curr_vert->get_height()
+			);
+		}
+		glEnd();
+	}
+
+	delete hex_set;*/
+
         Vertex* curr_vert = NULL;
         int array_size = (pos_x_view+1 - neg_x_view) * (pos_y_view+1 - neg_y_view);
 
