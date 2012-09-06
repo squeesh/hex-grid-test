@@ -24,6 +24,8 @@ class Controller {
 
 		PyObject* controller_py;
 
+		std::set<Hexagon*>* get_neighbors_in_radius(Hexagon*, int, std::set<Hexagon*>*);
+
 	public:
 		static const double COS_60;
 		static const double SIN_60;
@@ -58,7 +60,7 @@ class Controller {
 
 		Hexagon* get_clicked_hex(double x, double y);
 
-		std::vector<Hexagon*>* get_neighbor_in_radius(Hexagon*, int);
+		std::set<Hexagon*>* get_neighbors_in_radius(Hexagon*, int);
 
 		Hexagon* get_hex_by_name(long name);
 

@@ -47,6 +47,24 @@ const RoundVector<const char*>* init_vert_pos() {
 const RoundVector<const char*>* Hexagon::VERTEX_POSITIONS = init_vert_pos();
 
 
+const RoundVector<const char*>* init_neigh_dir() {
+	RoundVector<const char*>* output = new RoundVector<const char*>();
+	output->reserve(6);
+
+	/* ORDER IS IMPORTANT HERE */
+	output->push_back("N");
+	output->push_back("NE");
+	output->push_back("SE");
+	output->push_back("S");
+	output->push_back("SW");
+	output->push_back("NW");
+
+	return output;
+}
+
+const RoundVector<const char*>* Hexagon::NEIGHBOR_DIRECTION = init_neigh_dir();
+
+
 void Hexagon::base_init() {
 	this->select_color = NULL;
 

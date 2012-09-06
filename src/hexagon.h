@@ -12,6 +12,7 @@ class Hexagon {
 		void base_init();
 	public:
 		static const RoundVector<const char*>* VERTEX_POSITIONS;
+		static const RoundVector<const char*>* NEIGHBOR_DIRECTION;
 
 		static const RoundVector< RoundVector<double>* >* ROT_COORDS;
 

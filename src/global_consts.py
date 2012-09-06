@@ -5,8 +5,8 @@
 class GlobalConsts(object):
     PATH_SHOW_SEARCH    = True
 
-    GENERATE_HILLS = True
-    GENERATE_MOUNTAINS = True
+    GENERATE_HILLS = False
+    GENERATE_MOUNTAINS = GENERATE_HILLS
 
     BOARD_HEIGHT = 78
     BOARD_WIDTH  = 120

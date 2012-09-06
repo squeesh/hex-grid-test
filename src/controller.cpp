@@ -193,6 +193,21 @@ void Controller::init_board() {
 
 void Controller::py_init_board() {
 	py_call_func(this->controller_py, "init_board");
+
+	Hexagon* curr_hex = hexagon_list->at(0)->at(0);
+	std::cout << "curr hex: " << curr_hex << std::endl;
+
+	for(int i = 0; i < 6; i++) {
+		std::cout << "neigh hex: " << curr_hex->get_neighbor(Hexagon::NEIGHBOR_DIRECTION->at(i)) << std::endl;
+	}
+
+	std::cout << std::endl;
+
+	std::set< Hexagon* >* hex_set = this->get_neighbors_in_radius(curr_hex, 2);
+
+	for(std::set< Hexagon* >::iterator itr = hex_set->begin(); itr != hex_set->end(); itr++) {
+		std::cout << "hex: " << *itr << std::endl;
+	}
 }
 
 
@@ -517,8 +532,28 @@ Hexagon* Controller::get_clicked_hex(double x, double y) {
 	return clicked_hex;
 }
 
-std::vector<Hexagon*>* Controller::get_neighbor_in_radius(Hexagon* curr_hex, int radius) {
-    
+std::set<Hexagon*>* Controller::get_neighbors_in_radius(Hexagon* curr_hex, int radius) {
+	std::set<Hexagon*>* output = new std::set<Hexagon*>();
+	return this->get_neighbors_in_radius(curr_hex, radius, output);
+}
+
+std::set<Hexagon*>* Controller::get_neighbors_in_radius(Hexagon* curr_hex, int radius, std::set<Hexagon*>* curr_neighbors) {
+	if(radius > 0) {
+		Hexagon* neigh_hex = NULL;
+
+		curr_neighbors->insert(curr_hex);
+
+		for(int i = 0; i < 6; i++) {
+			neigh_hex = curr_hex->get_neighbor(Hexagon::NEIGHBOR_DIRECTION->at(i));
+
+			if(!curr_neighbors->count(neigh_hex)) {
+				this->get_neighbors_in_radius(neigh_hex, radius-1, curr_neighbors);
+			}
+		}
+	}
+
+	return curr_neighbors;
+
 }
 
 void Controller::mouse_left_click(int x, int y) {
