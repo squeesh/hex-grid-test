@@ -18,7 +18,7 @@ class GlobalConsts(object):
 
     START_ZOOM = BOARD_WIDTH / 20.0
     START_ROTATION  = -30.0
-    START_VIEW_RANGE = BOARD_WIDTH * 1.5
+    START_VIEW_RANGE = BOARD_WIDTH * 0.5
 
     MAX_PATHABLE_SLOPE = 2.0
 

@@ -199,10 +199,10 @@ class Controller(object):
         controller_lib.Controller_set_rotation(c_double(rotation))
 
     def set_scroll(self, direction):
-        controller_lib.Controller_set_scroll(direction)
+        controller_lib.Controller_set_scroll(c_char(direction))
 
     def clear_scroll(self, direction):
-        controller_lib.Controller_clear_scroll(direction)
+        controller_lib.Controller_clear_scroll(c_char(direction))
 
     def tick(self):
         controller_lib.Controller_tick()
