@@ -42,6 +42,8 @@ void key_pressed(unsigned char key, int x, int y) {
         case 27:
             exit(0);
             break;
+	case ' ':
+	    curr_ctrl->print_flag = true;
         default:
 	    curr_ctrl->key_down(key, x, y);
 	    break;

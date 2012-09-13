@@ -35,6 +35,8 @@ Controller::Controller(void) {
 	this->hexagon_list->reserve(GlobalConsts::BOARD_WIDTH);
 	this->hexagon_indicies = new std::map< Hexagon*, std::vector< int >* >();
 
+	this->print_flag = false;
+
 	/*TightlyPackedVector<float>* cv_test = new TightlyPackedVector<float>();
 	cv_test->push_back(2, 3, 2);
 	cv_test->push_back(5, 1, 4);
@@ -286,20 +288,20 @@ void Controller::render(int render_mode) {
     } else {
 
 
-	/*Hexagon* curr_hex = this->hexagon_list->at((int)this->x_offset)->at((int)this->y_offset);
+	Hexagon* curr_hex = this->hexagon_list->at((int)this->x_offset)->at((int)this->y_offset);
 	glLoadName(curr_hex->name);
 
 	/*std::map< Hexagon*, std::vector< int >* > &curr_indicies = *(this->hexagon_indicies);
 	curr_indicies[hex] = new std::vector< int >();
 	curr_indicies[hex]->push_back(i);
-	curr_indicies[hex]->push_back(j);*
+	curr_indicies[hex]->push_back(j);*/
 
 	std::map< Hexagon*, std::vector< int >* > &curr_indicies = *(this->hexagon_indicies);
 	std::vector< int >* curr_i_j = curr_indicies[curr_hex];
 	int i_base = curr_i_j->at(0);
 	int j_base = curr_i_j->at(1);
 
-	int range = 4;
+	int range = 3;
 
 	std::set< Hexagon* >* hex_set = this->get_neighbors_in_radius(curr_hex, range);
 
@@ -308,12 +310,12 @@ void Controller::render(int render_mode) {
 	for(std::set< Hexagon* >::iterator itr = hex_set->begin(); itr != hex_set->end(); itr++) {
 		curr_hex = *itr;
 		curr_i_j = curr_indicies[curr_hex];
-		int i_diff = i_base - curr_i_j->at(0);
-		int j_diff = j_base - curr_i_j->at(1);
+		int i_diff = -i_base + curr_i_j->at(0);
+		int j_diff = -j_base + curr_i_j->at(1);
 
 		/*std::cout << "base: " << i_base << " | " << j_base << std::endl;
 		std::cout << "curr: " << curr_i_j->at(0) << " | " << curr_i_j->at(1) << std::endl;
-		std::cout << "diff: " << i_diff << " | " << j_diff << std::endl;*
+		std::cout << "diff: " << i_diff << " | " << j_diff << std::endl;*/
 
 		if(i_diff <= -range) {
 			i_diff += GlobalConsts::BOARD_WIDTH;
@@ -337,31 +339,47 @@ void Controller::render(int render_mode) {
 		double y = j * 1.0 * this->SIN_60;
 
 		if(i % 2 == 0) {
-		    y += 0.5 * this->SIN_60;
+		    y -= 0.5 * this->SIN_60;
 		}
 	
 		Vertex* curr_vert = NULL;
 		std::vector<double> curr_color;
 
 		glBegin(GL_LINE_LOOP);
+
+		srand((long)curr_hex);
+		double curr_rand = rand() % 100 / 100.0;
+
 		for(int k = 0; k < 6; k++) {
 			curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(k)];
 			curr_color = curr_vert->get_color();
 
-			glColor3d(curr_color[0], curr_color[1], curr_color[2]);
+			glColor3d(curr_rand, 1-curr_rand, 0.5);
 
 			glVertex3d(
 				x + Hexagon::ROT_COORDS->at(k)->at(0),
 				y + Hexagon::ROT_COORDS->at(k)->at(1),
-				curr_vert->get_height()
+				curr_vert->get_height() + curr_rand
 			);
 		}
 		glEnd();
 	}
 
-	delete hex_set;*/
+	
+	if(this->print_flag) {
+		std::cout << "offset: " << this->x_offset << " | " << this->y_offset << std::endl;
+		for(std::set< Hexagon* >::iterator itr = hex_set->begin(); itr != hex_set->end(); itr++) {
+			curr_hex = *itr;
+			std::cout << "i: " << curr_indicies[curr_hex]->at(0) << " j: " << curr_indicies[curr_hex]->at(1) << std::endl;
 
-        Vertex* curr_vert = NULL;
+		}
+		this->print_flag = false;
+	}
+
+
+	delete hex_set;
+
+        /*Vertex* curr_vert = NULL;
         int array_size = (pos_x_view+1 - neg_x_view) * (pos_y_view+1 - neg_y_view);
 
         RoundVector<GLfloat>* vertex_data = new RoundVector<GLfloat>();
@@ -486,7 +504,7 @@ void Controller::render(int render_mode) {
         delete vertex_data;
         delete color_data;
         delete triangle_vertex_data;
-        delete triangle_color_data;
+        delete triangle_color_data;*/
 
         /*int array_size = (pos_x_view+1 - neg_x_view) * (pos_y_view+1 - neg_y_view);
 
@@ -561,8 +579,8 @@ void Controller::render(int render_mode) {
         glDisableClientState(GL_VERTEX_ARRAY);
 
         delete vertex_data;
-        //delete render_order;
-	*/
+        //delete render_order;*/
+	
     }
 }
 
@@ -620,7 +638,9 @@ Hexagon* Controller::get_clicked_hex(double x, double y) {
 
 std::set<Hexagon*>* Controller::get_neighbors_in_radius(Hexagon* curr_hex, int radius) {
 	std::set<Hexagon*>* output = new std::set<Hexagon*>();
-	return this->get_neighbors_in_radius(curr_hex, radius, output);
+	this->get_neighbors_in_radius(curr_hex, radius, output);
+
+	return output;
 }
 
 std::set<Hexagon*>* Controller::get_neighbors_in_radius(Hexagon* curr_hex, int radius, std::set<Hexagon*>* curr_neighbors) {
@@ -632,9 +652,9 @@ std::set<Hexagon*>* Controller::get_neighbors_in_radius(Hexagon* curr_hex, int r
 		for(int i = 0; i < 6; i++) {
 			neigh_hex = curr_hex->get_neighbor(Hexagon::NEIGHBOR_DIRECTION->at(i));
 
-			if(!curr_neighbors->count(neigh_hex)) {
+			//if(!curr_neighbors->count(neigh_hex)) {
 				this->get_neighbors_in_radius(neigh_hex, radius-1, curr_neighbors);
-			}
+			//}
 		}
 	}
 
