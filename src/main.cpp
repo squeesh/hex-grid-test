@@ -91,7 +91,9 @@ void timer(int value) {
     glutTimerFunc(SLEEP_TIME, timer, value);
 }
 
+
 int main(int argc, char** argv) {
+
 	Py_Initialize();
 
 	curr_ctrl = Controller::get_controller();

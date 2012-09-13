@@ -68,6 +68,8 @@ Controller* Controller::_get_controller() {
 
 Controller* Controller::get_controller() {
 	if(!Controller::curr_ctrl) {
+		PyRun_SimpleString("import os, sys"); 
+		PyRun_SimpleString("sys.path.append(os.getcwd())"); 
 		PyObject *py_name = PyString_FromString("src.controller");
 		PyObject *py_module = PyImport_Import(py_name);
 		Py_XDECREF(py_name);
@@ -78,7 +80,6 @@ Controller* Controller::get_controller() {
 		Py_XDECREF(py_ctrl_cls);
 
 		PyObject *py_ctrl_ptr = PyObject_GetAttrString(py_ctrl_obj, "_c_ctrl_obj");
-
 		int ctrl_ptr = ((int)PyInt_AsLong(py_ctrl_ptr));
 		Py_XDECREF(py_ctrl_ptr);
 
@@ -204,18 +205,18 @@ void Controller::py_init_board() {
 	py_call_func(this->controller_py, "init_board");
 
 	Hexagon* curr_hex = hexagon_list->at(0)->at(0);
-	std::cout << "curr hex: " << curr_hex << std::endl;
+	//std::cout << "curr hex: " << curr_hex << std::endl;
 
 	for(int i = 0; i < 6; i++) {
-		std::cout << "neigh hex: " << curr_hex->get_neighbor(Hexagon::NEIGHBOR_DIRECTION->at(i)) << std::endl;
+		//std::cout << "neigh hex: " << curr_hex->get_neighbor(Hexagon::NEIGHBOR_DIRECTION->at(i)) << std::endl;
 	}
 
-	std::cout << std::endl;
+	//std::cout << std::endl;
 
 	std::set< Hexagon* >* hex_set = this->get_neighbors_in_radius(curr_hex, 2);
 
 	for(std::set< Hexagon* >::iterator itr = hex_set->begin(); itr != hex_set->end(); itr++) {
-		std::cout << "hex: " << *itr << std::endl;
+		//std::cout << "hex: " << *itr << std::endl;
 	}
 }
 

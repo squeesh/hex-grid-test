@@ -31,19 +31,18 @@ extern "C" {
 		curr_ctrl->set_rotation(rotation);
 	}
 	
-	double* Controller_get_rotation() {
+	double Controller_get_rotation() {
 		Controller* curr_ctrl = Controller_get_controller();
-		double rotation = curr_ctrl->get_rotation();
-		return &rotation;
+		return curr_ctrl->get_rotation();
 	}
 
 	void Controller_set_scroll(char direction) {
-        Controller* curr_ctrl = Controller_get_controller();
+        	Controller* curr_ctrl = Controller_get_controller();
 		curr_ctrl->set_scroll(direction);
 	}
 
 	void Controller_clear_scroll(char direction) {
-        Controller* curr_ctrl = Controller_get_controller();
+        	Controller* curr_ctrl = Controller_get_controller();
 		curr_ctrl->clear_scroll(direction);
 	}
 
@@ -72,16 +71,14 @@ extern "C" {
 		curr_ctrl->render();
 	}
 
-	double* Controller_COS_60() {
+	double Controller_COS_60() {
 		Controller* curr_ctrl = Controller_get_controller();
-		double COS_60 = curr_ctrl->COS_60;
-		return &COS_60;
+		return curr_ctrl->COS_60;
 	}
 
-	double* Controller_SIN_60() {
+	double Controller_SIN_60() {
 		Controller* curr_ctrl = Controller_get_controller();
-		double SIN_60 = curr_ctrl->SIN_60;
-		return &SIN_60;
+		return curr_ctrl->SIN_60;
 	}
 
 	void Controller_mouse_left_click(double x, double y) {
@@ -118,22 +115,20 @@ extern "C" {
 		return curr_hex->get_vertex(position);
 	}
 
-    void Hexagon_set_last_x(Hexagon *curr_hex, double last_x) {
-        curr_hex->last_x = last_x;
-    }
-
-    void Hexagon_set_last_y(Hexagon *curr_hex, double last_y) {
-        curr_hex->last_y = last_y;
-    }
-
-	double* Hexagon_get_last_x(Hexagon *curr_hex) {
-		double last_x = curr_hex->last_x;
-		return &last_x;
+	void Hexagon_set_last_x(Hexagon *curr_hex, double last_x) {
+		curr_hex->last_x = last_x;
 	}
 
-	double* Hexagon_get_last_y(Hexagon *curr_hex) {
-		double last_y = curr_hex->last_y;
-		return &last_y;
+	void Hexagon_set_last_y(Hexagon *curr_hex, double last_y) {
+		curr_hex->last_y = last_y;
+	}
+
+	double Hexagon_get_last_x(Hexagon *curr_hex) {
+		return curr_hex->last_x;
+	}
+
+	double Hexagon_get_last_y(Hexagon *curr_hex) {
+		return curr_hex->last_y;
 	}
 
 	void Hexagon_set_color(Hexagon *curr_hex, double red, double green, double blue) {
@@ -156,14 +151,12 @@ extern "C" {
 		curr_hex->add_height(height);
 	}
 
-	double* Hexagon_get_height(Hexagon *curr_hex) {
-		double height = curr_hex->get_height();
-		return &height;
+	double Hexagon_get_height(Hexagon *curr_hex) {
+		return curr_hex->get_height();
 	}
 
-	double* Hexagon_get_slope(Hexagon *curr_hex) {
-		double slope = curr_hex->get_slope();
-		return &slope;
+	double Hexagon_get_slope(Hexagon *curr_hex) {
+		return curr_hex->get_slope();
 	}
 
 	void Hexagon_set_neighbor(Hexagon* curr_hex, const char* position, Hexagon* neighbor_hex) {
@@ -174,8 +167,7 @@ extern "C" {
 		return curr_hex->get_neighbor(position);
 	}
 
-	bool* Hexagon_is_pathable(Hexagon* curr_hex) {
-		bool pathable = curr_hex->is_pathable();
-		return &pathable;
+	bool Hexagon_is_pathable(Hexagon* curr_hex) {
+		return curr_hex->is_pathable();
 	}
 }

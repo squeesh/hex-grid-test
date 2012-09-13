@@ -1,6 +1,14 @@
 from ctypes import *
 controller_lib = cdll.LoadLibrary('./controller.so')
 
+controller_lib.Controller_COS_60.restype = c_double
+controller_lib.Controller_SIN_60.restype = c_double
+controller_lib.Controller_get_rotation.restype = c_double
+
+controller_lib.Controller_get_controller.restype = c_long
+controller_lib.Controller_get_hexagon.restype = c_long
+controller_lib.Controller_get_selected_hex.restype = c_long
+
 from itertools import cycle, islice
 from random import random
 
@@ -18,8 +26,8 @@ class Controller(object):
 
     view_range = GlobalConsts.BOARD_WIDTH * 1.25
 
-    COS_60  = c_double.from_address(controller_lib.Controller_COS_60()).value
-    SIN_60  = c_double.from_address(controller_lib.Controller_SIN_60()).value
+    COS_60  = controller_lib.Controller_COS_60()
+    SIN_60  = controller_lib.Controller_SIN_60()
 
     width   = None
     height  = None
@@ -191,8 +199,7 @@ class Controller(object):
 
     @property
     def rotation(self):
-        curr_rot = controller_lib.Controller_get_rotation()
-        return c_double.from_address(curr_rot).value
+        return controller_lib.Controller_get_rotation()
 
     @rotation.setter
     def rotation(self, rotation):
@@ -212,7 +219,6 @@ class Controller(object):
 
     def get_selected_hex(self):
         c_hex_obj = controller_lib.Controller_get_selected_hex()
-
         return Hexagon.get_hexagon(c_hex_obj)
 
     def find_path(self, start_hex_addr, end_hex_addr):

@@ -1,9 +1,20 @@
 #include "includes.h"
 
 PyObject* get_py_attr(const char* attr_str) {
+	PyRun_SimpleString("import os, sys"); 
+	PyRun_SimpleString("sys.path.append(os.getcwd())"); 
 	PyObject *py_name = PyString_FromString("src.global_consts");
 	PyObject *py_module = PyImport_Import(py_name);
+
 	Py_XDECREF(py_name);
+
+	if(PyErr_Occurred()) {
+		PyErr_Print();
+	}
+
+	if(!py_module) {
+		return NULL;
+	}
 
 	PyObject *py_global_consts = PyObject_GetAttrString(py_module, "GlobalConsts");
 	Py_XDECREF(py_module);
@@ -23,6 +34,10 @@ long long_global_const_attr(const char* attr_str) {
 	}
 
 	PyObject *py_attr = get_py_attr(attr_str);
+
+	if(!py_attr) {
+		return NULL;
+	}
 
 	long output = PyInt_AsLong(py_attr);
 	Py_XDECREF(py_attr);
@@ -45,6 +60,10 @@ char char_global_const_attr(const char* attr_str) {
 
 	PyObject *py_attr = get_py_attr(attr_str);
 
+	if(!py_attr) {
+		return NULL;
+	}
+
 	char output = PyString_AsString(py_attr)[0];
 	Py_XDECREF(py_attr);
 
@@ -65,6 +84,10 @@ double double_global_const_attr(const char* attr_str) {
 	}
 
 	PyObject *py_attr = get_py_attr(attr_str);
+
+	if(!py_attr) {
+		return NULL;
+	}
 
 	double output = PyFloat_AsDouble(py_attr);
 	Py_XDECREF(py_attr);

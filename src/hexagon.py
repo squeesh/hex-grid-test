@@ -1,6 +1,17 @@
 from ctypes import *
 hexagon_lib = cdll.LoadLibrary('./controller.so')
 
+hexagon_lib.Hexagon_new_hexagon.restype = c_long
+hexagon_lib.Hexagon_get_vertex.restype = c_long
+hexagon_lib.Hexagon_get_neighbor.restype = c_long
+
+hexagon_lib.Hexagon_get_height.restype = c_double
+hexagon_lib.Hexagon_get_slope.restype = c_double
+hexagon_lib.Hexagon_get_last_x.restype = c_double
+hexagon_lib.Hexagon_get_last_y.restype = c_double
+
+hexagon_lib.Hexagon_is_pathable.restype = c_bool
+
 from util import RoundList
 
 
@@ -27,7 +38,7 @@ class Hexagon(object):
     def __init__(self, x, y, color=(0, 1, 0)):
         self.c_hex_obj = hexagon_lib.Hexagon_new_hexagon()
         self.set_color(*color)
-        
+
 #        print
 #        print x, '|', y
         hexagon_lib.Hexagon_set_last_x(self.c_hex_obj, c_double(x))
@@ -51,12 +62,10 @@ class Hexagon(object):
         hexagon_lib.Hexagon_add_height(self.c_hex_obj, c_double(height))
 
     def get_height(self):
-        height = hexagon_lib.Hexagon_get_height(self.c_hex_obj)
-        return c_double.from_address(height).value
+        return hexagon_lib.Hexagon_get_height(self.c_hex_obj)
 
     def get_slope(self):
-        slope = hexagon_lib.Hexagon_get_slope(self.c_hex_obj)
-        return c_double.from_address(slope).value
+        return hexagon_lib.Hexagon_get_slope(self.c_hex_obj)
 
     def get_vertex(self, position):
         return hexagon_lib.Hexagon_get_vertex(self.c_hex_obj, position)
@@ -127,18 +136,13 @@ class Hexagon(object):
         return Hexagon._hex_cache.values()
 
     def get_last_coord(self):
-        # Note be sure to capture as soon as returned... or the memory address is wiped
-        c_last_x = hexagon_lib.Hexagon_get_last_x(self.c_hex_obj)
-        py_last_x = c_double.from_address(c_last_x).value
-
-        c_last_y = hexagon_lib.Hexagon_get_last_y(self.c_hex_obj)
-        py_last_y = c_double.from_address(c_last_y).value
+        py_last_x = hexagon_lib.Hexagon_get_last_x(self.c_hex_obj)
+        py_last_y = hexagon_lib.Hexagon_get_last_y(self.c_hex_obj)
 
         return (py_last_x, py_last_y)
 
     def is_pathable(self):
-        val = hexagon_lib.Hexagon_is_pathable(self.c_hex_obj)
-        return c_bool.from_address(val).value
+        return hexagon_lib.Hexagon_is_pathable(self.c_hex_obj)
 
 
 class Vertex(object):
