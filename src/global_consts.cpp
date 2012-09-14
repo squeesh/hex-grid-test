@@ -111,10 +111,21 @@ std::map< const char*, std::vector< double >*, cmp_str> get_render_tray_coords()
 	output["NE"]->push_back( 1.5 * GlobalConsts::COS_60);
 	output["NE"]->push_back( 0.5 * GlobalConsts::SIN_60);
 
-
 	output["SE"] = new std::vector< double >();
 	output["SE"]->push_back( 1.5 * GlobalConsts::COS_60);
 	output["SE"]->push_back(-0.5 * GlobalConsts::SIN_60);
+
+	output["S"] = new std::vector< double >();
+	output["S"]->push_back( 0);
+	output["S"]->push_back(-1.0 * GlobalConsts::SIN_60);
+
+	output["SW"] = new std::vector< double >();
+	output["SW"]->push_back(-1.5 * GlobalConsts::COS_60);
+	output["SW"]->push_back(-0.5 * GlobalConsts::SIN_60);
+
+	output["NW"] = new std::vector< double >();
+	output["NW"]->push_back(-1.5 * GlobalConsts::COS_60);
+	output["NW"]->push_back( 0.5 * GlobalConsts::SIN_60);
 
 	return output;
 }
@@ -139,6 +150,8 @@ const int GlobalConsts::RENDER_TRIANGLES = long_global_const_attr("RENDER_TRIANG
 
 const long GlobalConsts::BOARD_WIDTH  = long_global_const_attr("BOARD_WIDTH");
 const long GlobalConsts::BOARD_HEIGHT = long_global_const_attr("BOARD_HEIGHT");
+
+const long GlobalConsts::BOARD_CHUNK_SIZE = long_global_const_attr("BOARD_CHUNK_SIZE");
 
 const double GlobalConsts::MIN_ZOOM = double_global_const_attr("MIN_ZOOM");
 const double GlobalConsts::MAX_ZOOM = double_global_const_attr("MAX_ZOOM");

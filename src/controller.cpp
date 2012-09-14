@@ -341,24 +341,39 @@ std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* curr_
 		delete curr_color_data;
 		delete render_data;
 
-		const char* dir_ary[] = {"N", "NE", "SE"}; 
+		const char* dir_ary[] = {"SE", "NE"}; 
 
-		for(int i = 0; i < 3; i++) {
-			const char* direction = dir_ary[i];
+		for(int i = 0; i < GlobalConsts::BOARD_CHUNK_SIZE; i++) {
+			const char* direction = dir_ary[i%2];
 			std::vector< double >* x_y_diff = GlobalConsts::RENDER_TRAY_COORDS[direction];
+			Hexagon* temp_hex = curr_hex;
+			double temp_x = x;
+			double temp_y = y;
 
-			render_data = this->generate_render_data(curr_hex->get_neighbor(direction), x + x_y_diff->at(0), y + x_y_diff->at(1));
-			curr_vertex_data = render_data->at(0);
-			curr_color_data = render_data->at(1);
+			for(int j = 0; j < GlobalConsts::BOARD_CHUNK_SIZE; j++) {
+				render_data = this->generate_render_data(temp_hex, temp_x, temp_y);
+				curr_vertex_data = render_data->at(0);
+				curr_color_data = render_data->at(1);
 
-			for(int i = 0; i < curr_vertex_data->size(); i++) {
-				vertex_data->push_back(curr_vertex_data->at(i));
-				color_data->push_back(curr_color_data->at(i));
+				for(int i = 0; i < curr_vertex_data->size(); i++) {
+					vertex_data->push_back(curr_vertex_data->at(i));
+					color_data->push_back(curr_color_data->at(i));
+				}
+
+				delete curr_vertex_data;
+				delete curr_color_data;
+				delete render_data;
+
+				temp_hex = temp_hex->get_neighbor("N");
+				std::vector< double >* temp_x_y_diff = GlobalConsts::RENDER_TRAY_COORDS["N"];
+				temp_x += temp_x_y_diff->at(0);
+				temp_y += temp_x_y_diff->at(1);
+
 			}
 
-			delete curr_vertex_data;
-			delete curr_color_data;
-			delete render_data;
+			curr_hex = curr_hex->get_neighbor(direction);
+			x += x_y_diff->at(0);
+			y += x_y_diff->at(1);
 		}
 
 		output = new std::vector< std::vector< GLfloat >* >();
@@ -394,9 +409,9 @@ void Controller::render(int render_mode) {
 	glRotatef(this->rotation, 1.0, 0.0, 0.0);
 	glTranslatef(0.0, -this->y_offset * this->SIN_60, 0.0);
 
-	int neg_x_view = this->x_offset - this->view_range / 2.0;
+	int neg_x_view = this->x_offset - this->view_range / 2.0 - GlobalConsts::BOARD_CHUNK_SIZE;
 	int pos_x_view = this->x_offset + this->view_range / 2.0;
-	int neg_y_view = this->y_offset - this->view_range / 2.0;
+	int neg_y_view = this->y_offset - this->view_range / 2.0 - GlobalConsts::BOARD_CHUNK_SIZE;
 	int pos_y_view = this->y_offset + this->view_range / 2.0;
 
 	if(render_mode == GlobalConsts::RENDER_TRIANGLES) {
@@ -419,12 +434,6 @@ void Controller::render(int render_mode) {
     } else {
         Vertex* curr_vert = NULL;
         int array_size = (pos_x_view+1 - neg_x_view) * (pos_y_view+1 - neg_y_view);
-
-        /*RoundVector<GLfloat>* vertex_data = new RoundVector<GLfloat>();
-        vertex_data->reserve(array_size * 6 * 2);
-
-        RoundVector<GLfloat>* color_data = new RoundVector<GLfloat>();
-        color_data->reserve(array_size * 6 * 2);*/
 
         RoundVector<GLfloat>* triangle_vertex_data = new RoundVector<GLfloat>();
         triangle_vertex_data->reserve(array_size * 3);
@@ -489,25 +498,16 @@ void Controller::render(int render_mode) {
                     }
                 }
 
-		if(i % 2 == 0 && j % 2 == 0) {
+		if(i % GlobalConsts::BOARD_CHUNK_SIZE == 0 && j % GlobalConsts::BOARD_CHUNK_SIZE == 0) {
 			std::vector<std::vector< GLfloat >*>* render_data = get_render_data(curr_hex, x, y);
 			std::vector< GLfloat >* curr_vertex_data = render_data->at(0);
 			std::vector< GLfloat >* curr_color_data = render_data->at(1);
-
-			/*for(int k = 0; k < curr_vertex_data->size(); k++) {
-				vertex_data->push_back(curr_vertex_data->at(k));
-				color_data->push_back(curr_color_data->at(k));
-			}*/
 
 			glVertexPointer(3, GL_FLOAT, 0, curr_vertex_data->data());
 			glColorPointer(3, GL_FLOAT, 0, curr_color_data->data());
 
 			//glDrawArrays(GL_LINES, 0, array_size * 6 * 2);
 			glDrawArrays(GL_LINES, 0, (int)(curr_vertex_data->size() / 3.0));
-
-			//delete curr_vertex_data;
-			//delete curr_color_data;
-			//delete render_data;
 		}
             }
         }

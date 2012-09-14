@@ -24,6 +24,8 @@ class GlobalConsts {
 		static const long BOARD_WIDTH;
 		static const long BOARD_HEIGHT;
 
+		static const long BOARD_CHUNK_SIZE;
+
 		static const double MIN_ZOOM;
 		static const double MAX_ZOOM;
 		static const double START_ZOOM;
