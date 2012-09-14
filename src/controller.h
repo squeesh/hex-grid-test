@@ -57,15 +57,15 @@ class Controller {
 
 		void tick();
 
-		std::vector<std::vector< GLfloat >*>* get_render_data(Hexagon*, double, double);
-		std::vector<std::vector< GLfloat >*>* generate_render_data(Hexagon*, double, double);
+		std::vector<std::vector< GLfloat >* >* get_render_data(Hexagon*, double, double);
+		std::vector<std::vector< GLfloat >* >* generate_render_data(Hexagon*, double, double);
 
 		void render();
 		void render(int render_mode);
 
 		Hexagon* get_clicked_hex(double x, double y);
 
-		std::set<Hexagon*>* get_neighbors_in_radius(Hexagon*, int);
+		std::set< Hexagon* >* get_neighbors_in_radius(Hexagon*, int);
 
 		Hexagon* get_hex_by_name(long name);
 
@@ -87,6 +87,8 @@ class Controller {
 
 		RoundVector< RoundVector< Hexagon* >* >* hexagon_list;
 		std::map< Hexagon*, std::vector< int >* >* hexagon_indicies;
+
+		std::map< Hexagon*, std::map< std::vector< double >*, std::vector< std::vector< GLfloat >* >*, cmp_coord< double > >* >* vertex_data_cache;
 };
 
 #endif

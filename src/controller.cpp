@@ -34,6 +34,7 @@ Controller::Controller(void) {
 	this->hexagon_list = new RoundVector< RoundVector< Hexagon* >* >();
 	this->hexagon_list->reserve(GlobalConsts::BOARD_WIDTH);
 	this->hexagon_indicies = new std::map< Hexagon*, std::vector< int >* >();
+	this->vertex_data_cache = new std::map< Hexagon*, std::map< std::vector< double >*, std::vector<std::vector< GLfloat >* >*, cmp_coord< double > >* >();
 
 	this->print_flag = false;
 
@@ -290,42 +291,44 @@ std::vector<std::vector< GLfloat >*>* Controller::generate_render_data(Hexagon* 
 }
 
 std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* curr_hex, double base_x, double base_y) {
-	std::vector< GLfloat >* vertex_data = new std::vector< GLfloat >();
-	std::vector< GLfloat >* color_data = new std::vector< GLfloat >();
+	std::vector< double >* coord_vect = new std::vector< double >();
+	coord_vect->reserve(2);
+	coord_vect->push_back(base_x);
+	coord_vect->push_back(base_y);
 
-	vertex_data->reserve(4*6*3*2);
-	color_data->reserve(4*6*3*2);
+	std::vector<std::vector< GLfloat >* >* output = NULL;
+	std::map< Hexagon*, std::map< std::vector< double >*, std::vector<std::vector< GLfloat >* >*, cmp_coord< double > >* > &curr_data_cache = *(this->vertex_data_cache);
 
-	Vertex* curr_vert = NULL;
-	std::vector<double> curr_color;
 
-	double x = base_x;
-        double y = base_y;
+	//std::cout << curr_data_cache.count(curr_hex) << " | ";
 
-	std::vector<std::vector< GLfloat >*>* render_data = NULL;
-	std::vector< GLfloat >* curr_vertex_data = NULL;
-	std::vector< GLfloat >* curr_color_data = NULL;
-
-	render_data = this->generate_render_data(curr_hex, x, y);
-	curr_vertex_data = render_data->at(0);
-	curr_color_data = render_data->at(1);
-
-	for(int i = 0; i < curr_vertex_data->size(); i++) {
-		vertex_data->push_back(curr_vertex_data->at(i));
-		color_data->push_back(curr_color_data->at(i));
+	if(curr_data_cache.count(curr_hex) == 0) {
+		curr_data_cache[curr_hex] = new std::map< std::vector< double >*, std::vector<std::vector< GLfloat >* >*, cmp_coord< double > >();
 	}
+	std::map< std::vector< double >*, std::vector<std::vector< GLfloat >* >*, cmp_coord< double > > &curr_coord_data_cache = *(curr_data_cache[curr_hex]);
 
-	delete curr_vertex_data;
-	delete curr_color_data;
-	delete render_data;
+	//std::cout << curr_coord_data_cache.count(coord_vect) << std::endl; 
 
-	const char* dir_ary[] = {"N", "NE", "SE"}; 
+	//  << " | " << this->vertex_data_cache[curr_hex].count(coord_vect) << " | " << this->vertex_data_cache[curr_hex][coord_vect] << std::endl;
 
-	for(int i = 0; i < 3; i++) {
-		const char* direction = dir_ary[i];
-		std::vector< double >* x_y_diff = GlobalConsts::RENDER_TRAY_COORDS[direction];
+	if(curr_data_cache.count(curr_hex) == 0 || curr_coord_data_cache.count(coord_vect) == 0) {
+		std::vector< GLfloat >* vertex_data = new std::vector< GLfloat >();
+		std::vector< GLfloat >* color_data = new std::vector< GLfloat >();
 
-		render_data = this->generate_render_data(curr_hex->get_neighbor(direction), x + x_y_diff->at(0), y + x_y_diff->at(1));
+		vertex_data->reserve(4*6*3*2);
+		color_data->reserve(4*6*3*2);
+
+		//Vertex* curr_vert = NULL;
+		//std::vector<double> curr_color;
+
+		double x = base_x;
+		double y = base_y;
+
+		std::vector< std::vector< GLfloat >* >* render_data = NULL;
+		std::vector< GLfloat >* curr_vertex_data = NULL;
+		std::vector< GLfloat >* curr_color_data = NULL;
+
+		render_data = this->generate_render_data(curr_hex, x, y);
 		curr_vertex_data = render_data->at(0);
 		curr_color_data = render_data->at(1);
 
@@ -337,11 +340,38 @@ std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* curr_
 		delete curr_vertex_data;
 		delete curr_color_data;
 		delete render_data;
+
+		const char* dir_ary[] = {"N", "NE", "SE"}; 
+
+		for(int i = 0; i < 3; i++) {
+			const char* direction = dir_ary[i];
+			std::vector< double >* x_y_diff = GlobalConsts::RENDER_TRAY_COORDS[direction];
+
+			render_data = this->generate_render_data(curr_hex->get_neighbor(direction), x + x_y_diff->at(0), y + x_y_diff->at(1));
+			curr_vertex_data = render_data->at(0);
+			curr_color_data = render_data->at(1);
+
+			for(int i = 0; i < curr_vertex_data->size(); i++) {
+				vertex_data->push_back(curr_vertex_data->at(i));
+				color_data->push_back(curr_color_data->at(i));
+			}
+
+			delete curr_vertex_data;
+			delete curr_color_data;
+			delete render_data;
+		}
+
+		output = new std::vector< std::vector< GLfloat >* >();
+		output->push_back(vertex_data);
+		output->push_back(color_data);
+
+		curr_coord_data_cache[coord_vect] = output;
+	} else {
+		output = curr_coord_data_cache[coord_vect];
 	}
 
-	std::vector<std::vector< GLfloat >*>* output = new std::vector<std::vector< GLfloat >*>();
-	output->push_back(vertex_data);
-	output->push_back(color_data);
+	//std::cout << "output: " << output << std::endl;
+	//std::cout << "size: " << (int)output->size() << std::endl;
 
 	return output;
 }
@@ -390,11 +420,11 @@ void Controller::render(int render_mode) {
         Vertex* curr_vert = NULL;
         int array_size = (pos_x_view+1 - neg_x_view) * (pos_y_view+1 - neg_y_view);
 
-        RoundVector<GLfloat>* vertex_data = new RoundVector<GLfloat>();
+        /*RoundVector<GLfloat>* vertex_data = new RoundVector<GLfloat>();
         vertex_data->reserve(array_size * 6 * 2);
 
         RoundVector<GLfloat>* color_data = new RoundVector<GLfloat>();
-        color_data->reserve(array_size * 6 * 2);
+        color_data->reserve(array_size * 6 * 2);*/
 
         RoundVector<GLfloat>* triangle_vertex_data = new RoundVector<GLfloat>();
         triangle_vertex_data->reserve(array_size * 3);
@@ -403,6 +433,10 @@ void Controller::render(int render_mode) {
         triangle_color_data->reserve(array_size);
 
         int tri_count = 0;
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
 
         for(int j = neg_y_view; j <= pos_y_view; j++) {
             for(int i = neg_x_view; i <= pos_x_view; i++) {
@@ -460,19 +494,28 @@ void Controller::render(int render_mode) {
 			std::vector< GLfloat >* curr_vertex_data = render_data->at(0);
 			std::vector< GLfloat >* curr_color_data = render_data->at(1);
 
-			for(int k = 0; k < curr_vertex_data->size(); k++) {
+			/*for(int k = 0; k < curr_vertex_data->size(); k++) {
 				vertex_data->push_back(curr_vertex_data->at(k));
 				color_data->push_back(curr_color_data->at(k));
-			}
+			}*/
 
-			delete curr_vertex_data;
-			delete curr_color_data;
-			delete render_data;
+			glVertexPointer(3, GL_FLOAT, 0, curr_vertex_data->data());
+			glColorPointer(3, GL_FLOAT, 0, curr_color_data->data());
+
+			//glDrawArrays(GL_LINES, 0, array_size * 6 * 2);
+			glDrawArrays(GL_LINES, 0, (int)(curr_vertex_data->size() / 3.0));
+
+			//delete curr_vertex_data;
+			//delete curr_color_data;
+			//delete render_data;
 		}
             }
         }
 
-        glEnableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+        /*glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
 
         glVertexPointer(3, GL_FLOAT, 0, vertex_data->data());
@@ -482,7 +525,7 @@ void Controller::render(int render_mode) {
 	glDrawArrays(GL_LINES, 0, (int)(vertex_data->size() / 3.0));
 
         glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_VERTEX_ARRAY);*/
 
         //----------
 
@@ -497,8 +540,8 @@ void Controller::render(int render_mode) {
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
 
-        delete vertex_data;
-        delete color_data;
+        //delete vertex_data;
+        //delete color_data;
         delete triangle_vertex_data;
         delete triangle_color_data;
     }
