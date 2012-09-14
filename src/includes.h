@@ -9,8 +9,8 @@
 #include <GL/glu.h>
 #include <Python.h>
 
-#include "global_consts.h"
 #include "util.h"
+#include "global_consts.h"
 #include "color.h"
 #include "vertex.h"
 #include "hexagon.h"

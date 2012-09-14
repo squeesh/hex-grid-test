@@ -100,6 +100,28 @@ double double_global_const_attr(const char* attr_str) {
 	return output;
 }
 
+std::map< const char*, std::vector< double >*, cmp_str> get_render_tray_coords() {
+	std::map< const char*, std::vector< double >*, cmp_str> output; 
+
+	output["N"] = new std::vector< double >();
+	output["N"]->push_back( 0);
+	output["N"]->push_back( 1.0 * GlobalConsts::SIN_60);
+
+	output["NE"] = new std::vector< double >();
+	output["NE"]->push_back( 1.5 * GlobalConsts::COS_60);
+	output["NE"]->push_back( 0.5 * GlobalConsts::SIN_60);
+
+
+	output["SE"] = new std::vector< double >();
+	output["SE"]->push_back( 1.5 * GlobalConsts::COS_60);
+	output["SE"]->push_back(-0.5 * GlobalConsts::SIN_60);
+
+	return output;
+}
+
+
+const double GlobalConsts::COS_60 = std::cos(60.0 / 360.0 * 2.0 * M_PI);
+const double GlobalConsts::SIN_60 = std::sin(60.0 / 360.0 * 2.0 * M_PI);
 
 const char GlobalConsts::LEFT  = char_global_const_attr("LEFT");
 const char GlobalConsts::RIGHT = char_global_const_attr("RIGHT");
@@ -127,5 +149,8 @@ const double GlobalConsts::START_ROTATION = double_global_const_attr("START_ROTA
 const double GlobalConsts::START_VIEW_RANGE = double_global_const_attr("START_VIEW_RANGE");
 
 const double GlobalConsts::MAX_PATHABLE_SLOPE = double_global_const_attr("MAX_PATHABLE_SLOPE");
+
+std::map< const char*, std::vector< double >*, cmp_str>  GlobalConsts::RENDER_TRAY_COORDS = get_render_tray_coords();
+
 
 

@@ -289,7 +289,7 @@ std::vector<std::vector< GLfloat >*>* Controller::generate_render_data(Hexagon* 
 	return output;
 }
 
-std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* base_hex, double base_x, double base_y) {
+std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* curr_hex, double base_x, double base_y) {
 	std::vector< GLfloat >* vertex_data = new std::vector< GLfloat >();
 	std::vector< GLfloat >* color_data = new std::vector< GLfloat >();
 
@@ -302,12 +302,10 @@ std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* base_
 	double x = base_x;
         double y = base_y;
 
-	Hexagon* curr_hex = NULL;
 	std::vector<std::vector< GLfloat >*>* render_data = NULL;
 	std::vector< GLfloat >* curr_vertex_data = NULL;
 	std::vector< GLfloat >* curr_color_data = NULL;
 
-	curr_hex = base_hex;
 	render_data = this->generate_render_data(curr_hex, x, y);
 	curr_vertex_data = render_data->at(0);
 	curr_color_data = render_data->at(1);
@@ -321,48 +319,25 @@ std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* base_
 	delete curr_color_data;
 	delete render_data;
 
-	curr_hex = base_hex->get_neighbor("N");
-	render_data = this->generate_render_data(curr_hex, x, y + (1.0 * this->SIN_60));
-	curr_vertex_data = render_data->at(0);
-	curr_color_data = render_data->at(1);
+	const char* dir_ary[] = {"N", "NE", "SE"}; 
 
-	for(int i = 0; i < curr_vertex_data->size(); i++) {
-		vertex_data->push_back(curr_vertex_data->at(i));
-		color_data->push_back(curr_color_data->at(i));
+	for(int i = 0; i < 3; i++) {
+		const char* direction = dir_ary[i];
+		std::vector< double >* x_y_diff = GlobalConsts::RENDER_TRAY_COORDS[direction];
+
+		render_data = this->generate_render_data(curr_hex->get_neighbor(direction), x + x_y_diff->at(0), y + x_y_diff->at(1));
+		curr_vertex_data = render_data->at(0);
+		curr_color_data = render_data->at(1);
+
+		for(int i = 0; i < curr_vertex_data->size(); i++) {
+			vertex_data->push_back(curr_vertex_data->at(i));
+			color_data->push_back(curr_color_data->at(i));
+		}
+
+		delete curr_vertex_data;
+		delete curr_color_data;
+		delete render_data;
 	}
-
-	delete curr_vertex_data;
-	delete curr_color_data;
-	delete render_data;
-
-
-	curr_hex = base_hex->get_neighbor("NE");
-	render_data = this->generate_render_data(curr_hex, x + (1.5 * this->COS_60), y + (0.5 * this->SIN_60));
-	curr_vertex_data = render_data->at(0);
-	curr_color_data = render_data->at(1);
-
-	for(int i = 0; i < curr_vertex_data->size(); i++) {
-		vertex_data->push_back(curr_vertex_data->at(i));
-		color_data->push_back(curr_color_data->at(i));
-	}
-
-	delete curr_vertex_data;
-	delete curr_color_data;
-	delete render_data;
-
-	curr_hex = base_hex->get_neighbor("SE");
-	render_data = this->generate_render_data(curr_hex, x + (1.5 * this->COS_60), y - (0.5 * this->SIN_60));
-	curr_vertex_data = render_data->at(0);
-	curr_color_data = render_data->at(1);
-
-	for(int i = 0; i < curr_vertex_data->size(); i++) {
-		vertex_data->push_back(curr_vertex_data->at(i));
-		color_data->push_back(curr_color_data->at(i));
-	}
-
-	delete curr_vertex_data;
-	delete curr_color_data;
-	delete render_data;
 
 	std::vector<std::vector< GLfloat >*>* output = new std::vector<std::vector< GLfloat >*>();
 	output->push_back(vertex_data);
@@ -412,99 +387,6 @@ void Controller::render(int render_mode) {
         }
 
     } else {
-
-
-	/*Hexagon* curr_hex = this->hexagon_list->at((int)this->x_offset)->at((int)this->y_offset);
-	glLoadName(curr_hex->name);
-
-	/*std::map< Hexagon*, std::vector< int >* > &curr_indicies = *(this->hexagon_indicies);
-	curr_indicies[hex] = new std::vector< int >();
-	curr_indicies[hex]->push_back(i);
-	curr_indicies[hex]->push_back(j);*
-
-	std::map< Hexagon*, std::vector< int >* > &curr_indicies = *(this->hexagon_indicies);
-	std::vector< int >* curr_i_j = curr_indicies[curr_hex];
-	int i_base = curr_i_j->at(0);
-	int j_base = curr_i_j->at(1);
-
-	int range = 3;
-
-	std::set< Hexagon* >* hex_set = this->get_neighbors_in_radius(curr_hex, range);
-
-	//std::cout << "size: " << hex_set->size() << std::endl;
-
-	for(std::set< Hexagon* >::iterator itr = hex_set->begin(); itr != hex_set->end(); itr++) {
-		curr_hex = *itr;
-		curr_i_j = curr_indicies[curr_hex];
-		int i_diff = -i_base + curr_i_j->at(0);
-		int j_diff = -j_base + curr_i_j->at(1);
-
-		/*std::cout << "base: " << i_base << " | " << j_base << std::endl;
-		std::cout << "curr: " << curr_i_j->at(0) << " | " << curr_i_j->at(1) << std::endl;
-		std::cout << "diff: " << i_diff << " | " << j_diff << std::endl;*
-
-		if(i_diff <= -range) {
-			i_diff += GlobalConsts::BOARD_WIDTH;
-		} else if (i_diff >= range) {
-			i_diff -= GlobalConsts::BOARD_WIDTH;
-		}
-
-		if(j_diff <= -range) {
-			j_diff += GlobalConsts::BOARD_HEIGHT;
-		} else if (j_diff >= range) {
-			j_diff -= GlobalConsts::BOARD_HEIGHT;
-		}
-
-		//std::cout << "aftr: " << i_diff << " | " << j_diff << std::endl;
-		//std::cout << std::endl;
-
-		int i = this->x_offset + i_diff;
-		int j = this->y_offset + j_diff;
-
-		double x = i * 1.5 * this->COS_60;
-		double y = j * 1.0 * this->SIN_60;
-
-		if(i % 2 == 0) {
-		    y -= 0.5 * this->SIN_60;
-		}
-	
-		Vertex* curr_vert = NULL;
-		std::vector<double> curr_color;
-
-		glBegin(GL_LINE_LOOP);
-
-		srand((long)curr_hex);
-		double curr_rand = rand() % 100 / 100.0;
-
-		for(int k = 0; k < 6; k++) {
-			curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(k)];
-			curr_color = curr_vert->get_color();
-
-			glColor3d(curr_rand, 1-curr_rand, 0.5);
-
-			glVertex3d(
-				x + Hexagon::ROT_COORDS->at(k)->at(0),
-				y + Hexagon::ROT_COORDS->at(k)->at(1),
-				curr_vert->get_height() + curr_rand
-			);
-		}
-		glEnd();
-	}
-
-	
-	if(this->print_flag) {
-		std::cout << "offset: " << this->x_offset << " | " << this->y_offset << std::endl;
-		for(std::set< Hexagon* >::iterator itr = hex_set->begin(); itr != hex_set->end(); itr++) {
-			curr_hex = *itr;
-			std::cout << "i: " << curr_indicies[curr_hex]->at(0) << " j: " << curr_indicies[curr_hex]->at(1) << std::endl;
-
-		}
-		this->print_flag = false;
-	}
-
-
-	delete hex_set;*/
-
         Vertex* curr_vert = NULL;
         int array_size = (pos_x_view+1 - neg_x_view) * (pos_y_view+1 - neg_y_view);
 
@@ -571,28 +453,6 @@ void Controller::render(int render_mode) {
                             tri_count++;
                         }
                     }
-
-		    /*curr_color = curr_vert->get_color();
-
-		    color_data->push_back(curr_color[0]);
-		    color_data->push_back(curr_color[1]);
-		    color_data->push_back(curr_color[2]);
-
-		    vertex_data->push_back(x + Hexagon::ROT_COORDS->at(k)->at(0));
-		    vertex_data->push_back(y + Hexagon::ROT_COORDS->at(k)->at(1));
-		    vertex_data->push_back(curr_vert->get_height());
-
-		    curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(k+1)];
-
-		    curr_color = curr_vert->get_color();
-
-		    color_data->push_back(curr_color[0]);
-		    color_data->push_back(curr_color[1]);
-		    color_data->push_back(curr_color[2]);
-
-		    vertex_data->push_back(x + Hexagon::ROT_COORDS->at(k+1)->at(0));
-		    vertex_data->push_back(y + Hexagon::ROT_COORDS->at(k+1)->at(1));
-		    vertex_data->push_back(curr_vert->get_height());*/
                 }
 
 		if(i % 2 == 0 && j % 2 == 0) {
@@ -641,82 +501,6 @@ void Controller::render(int render_mode) {
         delete color_data;
         delete triangle_vertex_data;
         delete triangle_color_data;
-
-        /*int array_size = (pos_x_view+1 - neg_x_view) * (pos_y_view+1 - neg_y_view);
-
-        TightlyPackedVector<double>* vertex_data = new TightlyPackedVector<double>();
-        vertex_data->reserve(array_size);
-        //std::vector<int>* render_order = new std::vector<int>();
-
-        for(int i = neg_x_view; i <= pos_x_view; i++) {
-            for(int j = neg_y_view; j <= pos_y_view; j++) {
-
-                int curr_i = i;
-                int index;
-                int inc;
-
-                if(j % 2 == 0) {
-                    curr_i = i;
-                    index = 0;
-                    inc = 1;
-                } else {
-                    curr_i = pos_x_view - (i - neg_x_view);
-                    index = 3;
-                    inc = -1;
-                }
-
-                Hexagon* curr_hex = this->hexagon_list->at(curr_i)->at(j);
-                glLoadName(curr_hex->name);
-
-                double x = curr_i * 1.5 * this->COS_60;
-                double y = j * 1.0 * this->SIN_60;
-
-                if(curr_i % 2 != 0) {
-                    y += 0.5 * this->SIN_60;
-                }
-
-                Vertex* curr_vert = NULL;
-
-                //glBegin(GL_LINE_LOOP);
-                for(int k = 0; k < 6; k++) {
-                    curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(k)];
-                    //std::vector<double> curr_color = curr_vert->get_color();
-
-                    //glColor3f(0, 1, 0);
-                    //glVertex3f(x + Hexagon::ROT_COORDS->at(k)->at(0), y + Hexagon::ROT_COORDS->at(k)->at(1), curr_vert->get_height());
-
-                    int index = vertex_data->push_back(
-                        x + Hexagon::ROT_COORDS->at(k)->at(0),
-                        y + Hexagon::ROT_COORDS->at(k)->at(1),
-                        curr_vert->get_height()
-                    );
-
-                    vertex_data->push_back(
-                        x + Hexagon::ROT_COORDS->at(k+1)->at(0),
-                        y + Hexagon::ROT_COORDS->at(k+1)->at(1),
-                        curr_vert->get_height()
-                    );
-
-                    //render_order->push_back(index);
-                }
-                //glEnd();
-            }
-        }
-
-        glEnableClientState(GL_VERTEX_ARRAY);
-        //glEnableClientState(GL_COLOR_ARRAY);
-
-        glVertexPointer(3, GL_DOUBLE, 0, vertex_data->data());
-        //glColorPointer(3, GL_FLOAT, 0, color_data->data());
-
-        glDrawArrays(GL_LINES, 0, vertex_data->size());
-
-        //glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_VERTEX_ARRAY);
-
-        delete vertex_data;
-        //delete render_order;*/
-	
     }
 }
 

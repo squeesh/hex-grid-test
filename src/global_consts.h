@@ -4,6 +4,9 @@
 
 class GlobalConsts {
 	public:
+		static const double COS_60;
+		static const double SIN_60;
+
 		static const char LEFT;
 		static const char RIGHT;
 		static const char UP;
@@ -30,6 +33,9 @@ class GlobalConsts {
 		static const double START_VIEW_RANGE;
 
 		static const double MAX_PATHABLE_SLOPE;
+
+		// TODO: this should be const...
+		static std::map< const char*, std::vector< double >*, cmp_str> RENDER_TRAY_COORDS;
 };
 
 
