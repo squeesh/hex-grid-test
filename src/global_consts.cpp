@@ -2,7 +2,8 @@
 
 PyObject* get_py_attr(const char* attr_str) {
 	PyRun_SimpleString("import os, sys"); 
-	PyRun_SimpleString("sys.path.append(os.getcwd())"); 
+	PyRun_SimpleString("sys.path.append(os.getcwd())");
+	PyRun_SimpleString("sys.dont_write_bytecode = True");  
 	PyObject *py_name = PyString_FromString("src.global_consts");
 	PyObject *py_module = PyImport_Import(py_name);
 

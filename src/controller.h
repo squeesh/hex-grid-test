@@ -57,6 +57,9 @@ class Controller {
 
 		void tick();
 
+		std::vector<std::vector< GLfloat >*>* get_render_data(Hexagon*, double, double);
+		std::vector<std::vector< GLfloat >*>* generate_render_data(Hexagon*, double, double);
+
 		void render();
 		void render(int render_mode);
 
