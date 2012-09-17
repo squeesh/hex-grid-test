@@ -34,7 +34,7 @@ Controller::Controller(void) {
 	this->hexagon_list = new RoundVector< RoundVector< Hexagon* >* >();
 	this->hexagon_list->reserve(GlobalConsts::BOARD_WIDTH);
 	this->hexagon_indicies = new std::map< Hexagon*, std::vector< int >* >();
-	this->vertex_data_cache = new std::map< Hexagon*, std::map< std::vector< double >*, std::vector<std::vector< GLfloat >* >*, cmp_coord< double > >* >();
+	this->vertex_data_cache = new std::map< Hexagon*, std::vector<std::vector< GLfloat >* >* >();
 
 	this->print_flag = false;
 
@@ -290,28 +290,30 @@ std::vector<std::vector< GLfloat >*>* Controller::generate_render_data(Hexagon* 
 	return output;
 }
 
-std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* curr_hex, double base_x, double base_y) {
+std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* base_hex) {
+	double base_x = 0;
+	double base_y = 0;
+
 	std::vector< double >* coord_vect = new std::vector< double >();
 	coord_vect->reserve(2);
 	coord_vect->push_back(base_x);
 	coord_vect->push_back(base_y);
 
 	std::vector<std::vector< GLfloat >* >* output = NULL;
-	std::map< Hexagon*, std::map< std::vector< double >*, std::vector<std::vector< GLfloat >* >*, cmp_coord< double > >* > &curr_data_cache = *(this->vertex_data_cache);
+	std::map< Hexagon*, std::vector< std::vector< GLfloat >* >* > &curr_data_cache = *(this->vertex_data_cache);
 
-
-	//std::cout << curr_data_cache.count(curr_hex) << " | ";
-
-	if(curr_data_cache.count(curr_hex) == 0) {
-		curr_data_cache[curr_hex] = new std::map< std::vector< double >*, std::vector<std::vector< GLfloat >* >*, cmp_coord< double > >();
-	}
-	std::map< std::vector< double >*, std::vector<std::vector< GLfloat >* >*, cmp_coord< double > > &curr_coord_data_cache = *(curr_data_cache[curr_hex]);
+	
+	/*std::cout << std::endl << "----------" << std::endl;
+	std::cout << curr_data_cache.count(base_hex) << " | " << base_hex << std::endl; 
+	std::cout << "----------" << std::endl << std::endl;*/
 
 	//std::cout << curr_coord_data_cache.count(coord_vect) << std::endl; 
 
-	//  << " | " << this->vertex_data_cache[curr_hex].count(coord_vect) << " | " << this->vertex_data_cache[curr_hex][coord_vect] << std::endl;
+	//  << " | " << this->vertex_data_cache[base_hex].count(coord_vect) << " | " << this->vertex_data_cache[base_hex][coord_vect] << std::endl;
 
-	if(curr_data_cache.count(curr_hex) == 0 || curr_coord_data_cache.count(coord_vect) == 0) {
+	if(curr_data_cache.count(base_hex) == 0) {
+		//std::cout << "gen..." << std::endl;
+
 		std::vector< GLfloat >* vertex_data = new std::vector< GLfloat >();
 		std::vector< GLfloat >* color_data = new std::vector< GLfloat >();
 
@@ -328,7 +330,7 @@ std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* curr_
 		std::vector< GLfloat >* curr_vertex_data = NULL;
 		std::vector< GLfloat >* curr_color_data = NULL;
 
-		render_data = this->generate_render_data(curr_hex, x, y);
+		render_data = this->generate_render_data(base_hex, x, y);
 		curr_vertex_data = render_data->at(0);
 		curr_color_data = render_data->at(1);
 
@@ -342,6 +344,8 @@ std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* curr_
 		delete render_data;
 
 		const char* dir_ary[] = {"SE", "NE"}; 
+
+		Hexagon* curr_hex = base_hex;
 
 		for(int i = 0; i < GlobalConsts::BOARD_CHUNK_SIZE; i++) {
 			const char* direction = dir_ary[i%2];
@@ -380,13 +384,17 @@ std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* curr_
 		output->push_back(vertex_data);
 		output->push_back(color_data);
 
-		curr_coord_data_cache[coord_vect] = output;
+		//std::cout << curr_data_cache.count(base_hex) << " | " << base_hex << std::endl; 
+		curr_data_cache[base_hex] = output;
+		//std::cout << curr_data_cache.count(base_hex) << " | " << base_hex << std::endl << std::endl; 
 	} else {
-		output = curr_coord_data_cache[coord_vect];
+		//std::cout << curr_data_cache.count(base_hex) << " | " << base_hex << std::endl; 
+		output = curr_data_cache[base_hex];
+		//std::cout << curr_data_cache.count(base_hex) << " | " << base_hex << std::endl << std::endl; 
 	}
 
 	//std::cout << "output: " << output << std::endl;
-	//std::cout << "size: " << (int)output->size() << std::endl;
+	//std::cout << "size: " << (int)output->size() << " | " << curr_data_cache.size() << std::endl;
 
 	return output;
 }
@@ -499,15 +507,18 @@ void Controller::render(int render_mode) {
                 }
 
 		if(i % GlobalConsts::BOARD_CHUNK_SIZE == 0 && j % GlobalConsts::BOARD_CHUNK_SIZE == 0) {
-			std::vector<std::vector< GLfloat >*>* render_data = get_render_data(curr_hex, x, y);
-			std::vector< GLfloat >* curr_vertex_data = render_data->at(0);
-			std::vector< GLfloat >* curr_color_data = render_data->at(1);
+			std::vector<std::vector< GLfloat >*>* render_chunk = get_render_data(curr_hex);
+			std::vector< GLfloat >* curr_vertex_data = render_chunk->at(0);
+			std::vector< GLfloat >* curr_color_data = render_chunk->at(1);
 
+			glPushMatrix();
+			glTranslatef(x, y, 0);
 			glVertexPointer(3, GL_FLOAT, 0, curr_vertex_data->data());
 			glColorPointer(3, GL_FLOAT, 0, curr_color_data->data());
 
 			//glDrawArrays(GL_LINES, 0, array_size * 6 * 2);
 			glDrawArrays(GL_LINES, 0, (int)(curr_vertex_data->size() / 3.0));
+			glPopMatrix();
 		}
             }
         }
