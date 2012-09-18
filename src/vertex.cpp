@@ -22,13 +22,13 @@ std::vector<double> Vertex::get_color() {
 void Vertex::set_height(double height) {
 	this->height = height;
 
-        double height_percent = height / 10.0;
+        /*double height_percent = height / 10.0;
 
         if(height > 0) {
             this->set_color(height_percent, 1, height_percent);
         } else {
             this->set_color(-height_percent, 1 + height_percent, 0);
-        }
+        }*/
 }
 
 double Vertex::get_height() {
