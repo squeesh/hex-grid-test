@@ -37,7 +37,7 @@ class Hexagon(object):
 
     def __init__(self, x, y, color=(0, 1, 0)):
         self.c_hex_obj = hexagon_lib.Hexagon_new_hexagon()
-        self.set_color(*color)
+        self.set_border_color(*color)
 
 #        print
 #        print x, '|', y
@@ -46,8 +46,11 @@ class Hexagon(object):
 
         self._hex_cache[self.c_hex_obj] = self
 
-    def set_color(self, red, green, blue):
-        hexagon_lib.Hexagon_set_color(self.c_hex_obj, c_double(red), c_double(green), c_double(blue))
+    def set_border_color(self, red, green, blue):
+        hexagon_lib.Hexagon_set_border_color(self.c_hex_obj, c_double(red), c_double(green), c_double(blue))
+
+    def set_hex_color(self, red, green, blue):
+        hexagon_lib.Hexagon_set_hex_color(self.c_hex_obj, c_double(red), c_double(green), c_double(blue))
 
     def set_select_color(self, red, green, blue):
         hexagon_lib.Hexagon_set_select_color(self.c_hex_obj, c_double(red), c_double(green), c_double(blue))

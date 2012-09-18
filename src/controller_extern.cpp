@@ -131,8 +131,12 @@ extern "C" {
 		return curr_hex->last_y;
 	}
 
-	void Hexagon_set_color(Hexagon *curr_hex, double red, double green, double blue) {
-		curr_hex->set_color(red, green, blue);
+	void Hexagon_set_border_color(Hexagon *curr_hex, double red, double green, double blue) {
+		curr_hex->set_border_color(red, green, blue);
+	}
+
+	void Hexagon_set_hex_color(Hexagon *curr_hex, double red, double green, double blue) {
+		curr_hex->set_hex_color(red, green, blue);
 	}
 
 	void Hexagon_set_select_color(Hexagon *curr_hex, double red, double green, double blue) {

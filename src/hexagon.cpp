@@ -69,8 +69,11 @@ void Hexagon::base_init() {
 	this->select_color = NULL;
 
 	for(int i = 0; i < 6; i++) {
-		this->set_vertex(this->VERTEX_POSITIONS->at(i), new Vertex(0, 1, 0, 0));
+		this->set_vertex(this->VERTEX_POSITIONS->at(i), new Vertex(0, 0, 0, 0));
 	}
+
+	this->hex_color = NULL;
+	this->set_hex_color(0, 1, 0);
 
 	this->name_count++;
 	this->name = this->name_count;
@@ -91,13 +94,13 @@ Vertex* Hexagon::get_vertex(const char* position) {
 	return this->verticies[position];
 }
 
-void Hexagon::set_color(double red, double green, double blue) {
+void Hexagon::set_border_color(double red, double green, double blue) {
 	for(int i = 0; i < 6; i++) {
 		this->verticies[this->VERTEX_POSITIONS->at(i)]->set_color(red, green, blue);
 	}
 }
 
-void Hexagon::set_color(std::vector<double> rgb) {
+void Hexagon::set_border_color(std::vector<double> rgb) {
 	for(int i = 0; i < 6; i++) {
 		this->verticies[this->VERTEX_POSITIONS->at(i)]->set_color(rgb);
 	}
@@ -105,29 +108,56 @@ void Hexagon::set_color(std::vector<double> rgb) {
 
 void Hexagon::set_select_color(double red, double green, double blue) {
 	if(!this->select_color) {
-		this->select_color = new Color(red, green, blue);
-	} else {
-		this->select_color->set_rgb(red, green, blue);
-	}
+		this->select_color = new std::vector< double >();
+	} 
+
+	this->select_color->clear();
+	this->select_color->push_back(red);
+	this->select_color->push_back(green);
+	this->select_color->push_back(blue);
 }
 
 void Hexagon::set_select_color(std::vector<double> rgb) {
 	if(!this->select_color) {
-		this->select_color = new Color(rgb);
-	} else {
-		this->select_color->set_rgb(rgb);
-	}
+		this->select_color = new std::vector< double >();
+	} 
+
+	this->set_select_color(rgb[0], rgb[1], rgb[2]);
 }
 
 void Hexagon::clear_select_color() {
-    delete this->select_color;
-    this->select_color = NULL;
+	if(this->select_color) {
+		delete this->select_color;
+		this->select_color = NULL;
+	}
 }
 
-std::vector<double> Hexagon::get_select_color() {
-    return this->select_color->get_rgb();
+std::vector<double>* Hexagon::get_select_color() {
+	return this->select_color;
 }
 
+void Hexagon::set_hex_color(double red, double green, double blue) {
+	if(!this->hex_color) {
+		this->hex_color = new std::vector< double >();
+	} 
+
+	this->hex_color->clear();
+	this->hex_color->push_back(red);
+	this->hex_color->push_back(green);
+	this->hex_color->push_back(blue);
+}
+
+void Hexagon::set_hex_color(std::vector<double> rgb) {
+	if(!this->hex_color) {
+		this->hex_color = new std::vector< double >();
+	} 
+
+	this->set_hex_color(rgb[0], rgb[1], rgb[2]);
+}
+
+std::vector<double>* Hexagon::get_hex_color() {
+	return this->hex_color;
+}
 
 void Hexagon::set_height(double height) {
 	for(int i = 0; i < 6; i++) {
@@ -239,7 +269,7 @@ void Hexagon::render_select(double x, double y) {
 		for(int i = 0; i < 6; i++) {
 			Vertex* curr_vert = this->verticies[this->VERTEX_POSITIONS->at(i)];
 
-			glColor3dv(this->select_color->get_rgb().data());
+			glColor3dv(this->select_color->data());
 			glVertex3f(x + ROT_COORDS->at(i)->at(0) * 0.8, y + ROT_COORDS->at(i)->at(1) * 0.8, curr_vert->get_height());
 		}
 	glEnd();

@@ -149,7 +149,7 @@ PyObject* py_call_func(PyObject *py_obj, char* func_name, PyObject* py_obj_1, Py
 /***************/
 
 template <typename T>
-class TightlyPackedVector { 
+class UniqueDataVector { 
 	private:
 		std::vector<T> *vector_data;
 		std::vector<T> *color;
@@ -157,8 +157,8 @@ class TightlyPackedVector {
 		std::vector< std::vector<T> *> *index_data_keys;
 		std::vector< int > *indicies;
 	public:
-		TightlyPackedVector();
-		~TightlyPackedVector();
+		UniqueDataVector();
+		~UniqueDataVector();
 
 		T* at(int);
 		int push_back(T, T, T, T, T, T);
@@ -173,7 +173,7 @@ class TightlyPackedVector {
 };
 
 template <typename T>
-TightlyPackedVector<T>::TightlyPackedVector() {
+UniqueDataVector<T>::UniqueDataVector() {
     this->vector_data = new std::vector<T>();
     this->color = new std::vector<T>();
     this->index_data = new std::map< std::vector<T>*, int, cmp_coord<T> >();
@@ -182,7 +182,7 @@ TightlyPackedVector<T>::TightlyPackedVector() {
 }
 
 template <typename T>
-TightlyPackedVector<T>::~TightlyPackedVector() {
+UniqueDataVector<T>::~UniqueDataVector() {
     delete this->vector_data;
     delete this->index_data;
 
@@ -194,7 +194,7 @@ TightlyPackedVector<T>::~TightlyPackedVector() {
 }
 
 template <typename T>
-T* TightlyPackedVector<T>::at(int index) {
+T* UniqueDataVector<T>::at(int index) {
 	if(index < this->size()) {
 		// fun with pointers...
 		return (T*)((long)(this->data()) + (sizeof(T) * index * 3));
@@ -208,7 +208,7 @@ T* TightlyPackedVector<T>::at(int index) {
 }
 
 template <typename T>
-int TightlyPackedVector<T>::push_back(T x, T y, T z, T r, T g, T b) {
+int UniqueDataVector<T>::push_back(T x, T y, T z, T r, T g, T b) {
 	std::vector<T>* curr_coords = new std::vector<T>();
 	curr_coords->push_back(x);
 	curr_coords->push_back(y);
@@ -240,30 +240,30 @@ int TightlyPackedVector<T>::push_back(T x, T y, T z, T r, T g, T b) {
 	return index;
 }
 
-/*void TightlyPackedVector::set(int index, double x, double y, double z) {
+/*void UniqueDataVector::set(int index, double x, double y, double z) {
 	this->data[index] = x;
 	this->data[index+1] = y;
 	this->data[index+2] = z;
 }*/
 
-/*void TightlyPackedVector::set(int index, double x, double y, double z) {
+/*void UniqueDataVector::set(int index, double x, double y, double z) {
 	this->data[index] = x;
 	this->data[index+1] = y;
 	this->data[index+2] = z;
 }*/
 
 template <typename T>
-int TightlyPackedVector<T>::size() {
+int UniqueDataVector<T>::size() {
 	return this->index_data->size();
 }
 
 template <typename T>
-int TightlyPackedVector<T>::indicies_size() {
+int UniqueDataVector<T>::indicies_size() {
 	return this->indicies->size();
 }
 
 template <typename T>
-int TightlyPackedVector<T>::get_index(T x, T y, T z) {
+int UniqueDataVector<T>::get_index(T x, T y, T z) {
 	std::vector<T>* curr_coords = new std::vector<T>();
 	curr_coords->push_back(x);
 	curr_coords->push_back(y);
@@ -278,28 +278,28 @@ int TightlyPackedVector<T>::get_index(T x, T y, T z) {
 }
 
 template <typename T>
-int TightlyPackedVector<T>::get_index(std::vector<T>* curr_coords) {
+int UniqueDataVector<T>::get_index(std::vector<T>* curr_coords) {
     std::map< std::vector<T>*, int, cmp_coord<T> > &curr_index_data = *(this->index_data);
     return curr_index_data[curr_coords];
 }
 
 template <typename T>
-T* TightlyPackedVector<T>::data() {
+T* UniqueDataVector<T>::data() {
     return this->vector_data->data();
 }
 
 template <typename T>
-int* TightlyPackedVector<T>::indicies_data() {
+int* UniqueDataVector<T>::indicies_data() {
     return this->indicies->data();
 }
 
 template <typename T>
-T* TightlyPackedVector<T>::color_data() {
+T* UniqueDataVector<T>::color_data() {
     return this->color->data();
 }
 
 template <typename T>
-void TightlyPackedVector<T>::reserve(int reserve) {
+void UniqueDataVector<T>::reserve(int reserve) {
     this->vector_data->reserve(reserve);
     this->vector_data->reserve(reserve / 3);
 }

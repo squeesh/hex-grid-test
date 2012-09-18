@@ -7,7 +7,8 @@ class Hexagon {
 
 		std::map<const char*, Hexagon*, cmp_str> neighbor_hexagons;
 
-
+		std::vector< double >* select_color;
+		std::vector< double >* hex_color;
 
 		void base_init();
 	public:
@@ -22,8 +23,6 @@ class Hexagon {
 		static RoundVector< RoundVector<double>* >* rendered_verticies;
 		std::map<const char*, Vertex*, cmp_str> verticies;
 
-		Color* select_color;
-
 		double last_x;
 		double last_y;	
 
@@ -32,13 +31,17 @@ class Hexagon {
 		void set_vertex(const char* position, Vertex* vertex);
 		Vertex* get_vertex(const char* position);
 
-		void set_color(double red, double green, double blue);
-		void set_color(std::vector<double> rgb);
+		void set_border_color(double red, double green, double blue);
+		void set_border_color(std::vector< double > rgb);
+
+		void set_hex_color(double red, double green, double blue);
+		void set_hex_color(std::vector< double > rgb);
+		std::vector< double >* get_hex_color();
 
 		void set_select_color(double red, double green, double blue);
-		void set_select_color(std::vector<double> rgb);
+		void set_select_color(std::vector< double > rgb);
 		void clear_select_color();
-		std::vector<double> get_select_color();
+		std::vector< double >* get_select_color();
 
 		void set_height(double height);
 		void add_height(double height);
