@@ -207,21 +207,6 @@ void Controller::init_board() {
 
 void Controller::py_init_board() {
 	py_call_func(this->controller_py, "init_board");
-
-	Hexagon* curr_hex = hexagon_list->at(0)->at(0);
-	//std::cout << "curr hex: " << curr_hex << std::endl;
-
-	for(int i = 0; i < 6; i++) {
-		//std::cout << "neigh hex: " << curr_hex->get_neighbor(Hexagon::NEIGHBOR_DIRECTION->at(i)) << std::endl;
-	}
-
-	//std::cout << std::endl;
-
-	std::set< Hexagon* >* hex_set = this->get_neighbors_in_radius(curr_hex, 2);
-
-	for(std::set< Hexagon* >::iterator itr = hex_set->begin(); itr != hex_set->end(); itr++) {
-		//std::cout << "hex: " << *itr << std::endl;
-	}
 }
 
 
@@ -248,16 +233,8 @@ void Controller::render() {
 }
 
 void Controller::generate_render_data(Hexagon* curr_hex, double x, double y, TightlyPackedVector< GLfloat >* output) {
-	//std::cout << "Controller::generate_render_data: " << output << std::endl;
-
-	/*std::vector< GLfloat >* vertex_data = new std::vector< GLfloat >();
-	std::vector< GLfloat >* color_data = new std::vector< GLfloat >();
-
-	vertex_data->reserve(4*3*2);
-	color_data->reserve(4*3*2);*/
-
 	Vertex* curr_vert = NULL;
-	std::vector<double> curr_color;
+	std::vector< double > curr_color;
 
 	for(int i = 0; i < 6; i++) {
 		curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(i)];
@@ -278,12 +255,6 @@ void Controller::generate_render_data(Hexagon* curr_hex, double x, double y, Tig
 			curr_color[0], curr_color[1], curr_color[2]
 		);
 	}
-
-	
-	//output->push_back(vertex_data);
-	//output->push_back(color_data);
-
-	//return output;
 }
 
 TightlyPackedVector< GLfloat >* Controller::get_render_data(Hexagon* base_hex) {
@@ -298,48 +269,11 @@ TightlyPackedVector< GLfloat >* Controller::get_render_data(Hexagon* base_hex) {
 	TightlyPackedVector< GLfloat >* output = NULL;
 	std::map< Hexagon*, TightlyPackedVector< GLfloat >* > &curr_data_cache = *(this->vertex_data_cache);
 
-	
-	/*std::cout << std::endl << "----------" << std::endl;
-	std::cout << curr_data_cache.count(base_hex) << " | " << base_hex << std::endl; 
-	std::cout << "----------" << std::endl << std::endl;*/
-
-	//std::cout << curr_coord_data_cache.count(coord_vect) << std::endl; 
-
-	//  << " | " << this->vertex_data_cache[base_hex].count(coord_vect) << " | " << this->vertex_data_cache[base_hex][coord_vect] << std::endl;
-
 	if(curr_data_cache.count(base_hex) == 0) {
 		output = new TightlyPackedVector< GLfloat >();
 
-		std::cout << "gen: " << base_hex << std::endl;
-
-		/*std::vector< GLfloat >* vertex_data = new std::vector< GLfloat >();
-		std::vector< GLfloat >* color_data = new std::vector< GLfloat >();*
-
-		vertex_data->reserve(4*6*3*2);
-		color_data->reserve(4*6*3*2);*/
-
-		//Vertex* curr_vert = NULL;
-		//std::vector<double> curr_color;
-
 		double x = base_x;
 		double y = base_y;
-
-		//TightlyPackedVector< GLfloat >* render_data = NULL;
-		/*std::vector< GLfloat >* curr_vertex_data = NULL;
-		std::vector< GLfloat >* curr_color_data = NULL;*/
-
-		//this->generate_render_data(base_hex, x, y, output);
-		/*curr_vertex_data = render_data->at(0);
-		curr_color_data = render_data->at(1);*/
-
-		/*for(int i = 0; i < curr_vertex_data->size(); i++) {
-			vertex_data->push_back(curr_vertex_data->at(i));
-			color_data->push_back(curr_color_data->at(i));
-		}
-
-		delete curr_vertex_data;
-		delete curr_color_data;
-		delete render_data;*/
 
 		const char* dir_ary[] = {"SE", "NE"}; 
 
