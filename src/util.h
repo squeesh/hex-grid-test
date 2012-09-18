@@ -152,26 +152,33 @@ template <typename T>
 class TightlyPackedVector { 
 	private:
 		std::vector<T> *vector_data;
+		std::vector<T> *color;
 		std::map< std::vector<T>*, int, cmp_coord<T> > *index_data;
 		std::vector< std::vector<T> *> *index_data_keys;
+		std::vector< int > *indicies;
 	public:
 		TightlyPackedVector();
 		~TightlyPackedVector();
 
 		T* at(int);
-		int push_back(T, T, T);
+		int push_back(T, T, T, T, T, T);
 		int size();
+		int indicies_size();
 		int get_index(T, T, T);
 		int get_index(std::vector<T>*);
 		T* data();
+		int* indicies_data();
+		T* color_data();
 		void reserve(int);
 };
 
 template <typename T>
 TightlyPackedVector<T>::TightlyPackedVector() {
     this->vector_data = new std::vector<T>();
+    this->color = new std::vector<T>();
     this->index_data = new std::map< std::vector<T>*, int, cmp_coord<T> >();
     this->index_data_keys = new std::vector< std::vector<T> *>();
+    this->indicies = new std::vector< int >();
 }
 
 template <typename T>
@@ -190,7 +197,7 @@ template <typename T>
 T* TightlyPackedVector<T>::at(int index) {
 	if(index < this->size()) {
 		// fun with pointers...
-		return (T*)((int)(this->data()) + (sizeof(T) * index * 3));
+		return (T*)((long)(this->data()) + (sizeof(T) * index * 3));
 	} else {
 		// throw whatever error at() throws... 
 		// TODO: QUIT BEING LAZY
@@ -201,7 +208,7 @@ T* TightlyPackedVector<T>::at(int index) {
 }
 
 template <typename T>
-int TightlyPackedVector<T>::push_back(T x, T y, T z) {
+int TightlyPackedVector<T>::push_back(T x, T y, T z, T r, T g, T b) {
 	std::vector<T>* curr_coords = new std::vector<T>();
 	curr_coords->push_back(x);
 	curr_coords->push_back(y);
@@ -216,11 +223,17 @@ int TightlyPackedVector<T>::push_back(T x, T y, T z) {
 		this->vector_data->push_back(y);
 		this->vector_data->push_back(z);
 
-		index = this->size() - 1;
+		this->color->push_back(r);
+		this->color->push_back(g);
+		this->color->push_back(b);
+
+		index = (int)(this->vector_data->size() / 3.0) - 1;
+		this->indicies->push_back(index);
 		curr_index_data[curr_coords] = index;
 		this->index_data_keys->push_back(curr_coords);
 	} else {	
 		index = this->get_index(curr_coords);
+		this->indicies->push_back(index);
 		delete curr_coords;
 	}
 
@@ -233,9 +246,20 @@ int TightlyPackedVector<T>::push_back(T x, T y, T z) {
 	this->data[index+2] = z;
 }*/
 
+/*void TightlyPackedVector::set(int index, double x, double y, double z) {
+	this->data[index] = x;
+	this->data[index+1] = y;
+	this->data[index+2] = z;
+}*/
+
 template <typename T>
 int TightlyPackedVector<T>::size() {
 	return this->index_data->size();
+}
+
+template <typename T>
+int TightlyPackedVector<T>::indicies_size() {
+	return this->indicies->size();
 }
 
 template <typename T>
@@ -262,6 +286,16 @@ int TightlyPackedVector<T>::get_index(std::vector<T>* curr_coords) {
 template <typename T>
 T* TightlyPackedVector<T>::data() {
     return this->vector_data->data();
+}
+
+template <typename T>
+int* TightlyPackedVector<T>::indicies_data() {
+    return this->indicies->data();
+}
+
+template <typename T>
+T* TightlyPackedVector<T>::color_data() {
+    return this->color->data();
 }
 
 template <typename T>

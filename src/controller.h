@@ -57,8 +57,8 @@ class Controller {
 
 		void tick();
 
-		std::vector<std::vector< GLfloat >* >* get_render_data(Hexagon*);
-		std::vector<std::vector< GLfloat >* >* generate_render_data(Hexagon*, double, double);
+		void generate_render_data(Hexagon*, double, double, TightlyPackedVector< GLfloat >*);
+		TightlyPackedVector< GLfloat >* get_render_data(Hexagon*);
 
 		void render();
 		void render(int render_mode);
@@ -88,7 +88,7 @@ class Controller {
 		RoundVector< RoundVector< Hexagon* >* >* hexagon_list;
 		std::map< Hexagon*, std::vector< int >* >* hexagon_indicies;
 
-		std::map< Hexagon*, std::vector< std::vector< GLfloat >* >* >* vertex_data_cache;
+		std::map< Hexagon*, TightlyPackedVector< GLfloat >* >* vertex_data_cache;
 };
 
 #endif

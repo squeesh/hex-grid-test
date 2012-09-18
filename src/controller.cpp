@@ -34,7 +34,7 @@ Controller::Controller(void) {
 	this->hexagon_list = new RoundVector< RoundVector< Hexagon* >* >();
 	this->hexagon_list->reserve(GlobalConsts::BOARD_WIDTH);
 	this->hexagon_indicies = new std::map< Hexagon*, std::vector< int >* >();
-	this->vertex_data_cache = new std::map< Hexagon*, std::vector<std::vector< GLfloat >* >* >();
+	this->vertex_data_cache = new std::map< Hexagon*, TightlyPackedVector< GLfloat >* >();
 
 	this->print_flag = false;
 
@@ -247,12 +247,14 @@ void Controller::render() {
 	this->render(GlobalConsts::RENDER_LINES);
 }
 
-std::vector<std::vector< GLfloat >*>* Controller::generate_render_data(Hexagon* curr_hex, double x, double y) {
-	std::vector< GLfloat >* vertex_data = new std::vector< GLfloat >();
+void Controller::generate_render_data(Hexagon* curr_hex, double x, double y, TightlyPackedVector< GLfloat >* output) {
+	//std::cout << "Controller::generate_render_data: " << output << std::endl;
+
+	/*std::vector< GLfloat >* vertex_data = new std::vector< GLfloat >();
 	std::vector< GLfloat >* color_data = new std::vector< GLfloat >();
 
 	vertex_data->reserve(4*3*2);
-	color_data->reserve(4*3*2);
+	color_data->reserve(4*3*2);*/
 
 	Vertex* curr_vert = NULL;
 	std::vector<double> curr_color;
@@ -262,35 +264,29 @@ std::vector<std::vector< GLfloat >*>* Controller::generate_render_data(Hexagon* 
 
 		curr_color = curr_vert->get_color();
 
-		color_data->push_back(curr_color[0]);
-		color_data->push_back(curr_color[1]);
-		color_data->push_back(curr_color[2]);
-
-		vertex_data->push_back(x + Hexagon::ROT_COORDS->at(i)->at(0));
-		vertex_data->push_back(y + Hexagon::ROT_COORDS->at(i)->at(1));
-		vertex_data->push_back(curr_vert->get_height());
+		output->push_back(
+			x + Hexagon::ROT_COORDS->at(i)->at(0), y + Hexagon::ROT_COORDS->at(i)->at(1), curr_vert->get_height(),
+			curr_color[0], curr_color[1], curr_color[2]
+		);
 
 		curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(i+1)];
 
 		curr_color = curr_vert->get_color();
 
-		color_data->push_back(curr_color[0]);
-		color_data->push_back(curr_color[1]);
-		color_data->push_back(curr_color[2]);
-
-		vertex_data->push_back(x + Hexagon::ROT_COORDS->at(i+1)->at(0));
-		vertex_data->push_back(y + Hexagon::ROT_COORDS->at(i+1)->at(1));
-		vertex_data->push_back(curr_vert->get_height());
+		output->push_back(
+			x + Hexagon::ROT_COORDS->at(i+1)->at(0), y + Hexagon::ROT_COORDS->at(i+1)->at(1), curr_vert->get_height(),
+			curr_color[0], curr_color[1], curr_color[2]
+		);
 	}
 
-	std::vector<std::vector< GLfloat >*>* output = new std::vector<std::vector< GLfloat >*>();
-	output->push_back(vertex_data);
-	output->push_back(color_data);
+	
+	//output->push_back(vertex_data);
+	//output->push_back(color_data);
 
-	return output;
+	//return output;
 }
 
-std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* base_hex) {
+TightlyPackedVector< GLfloat >* Controller::get_render_data(Hexagon* base_hex) {
 	double base_x = 0;
 	double base_y = 0;
 
@@ -299,8 +295,8 @@ std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* base_
 	coord_vect->push_back(base_x);
 	coord_vect->push_back(base_y);
 
-	std::vector<std::vector< GLfloat >* >* output = NULL;
-	std::map< Hexagon*, std::vector< std::vector< GLfloat >* >* > &curr_data_cache = *(this->vertex_data_cache);
+	TightlyPackedVector< GLfloat >* output = NULL;
+	std::map< Hexagon*, TightlyPackedVector< GLfloat >* > &curr_data_cache = *(this->vertex_data_cache);
 
 	
 	/*std::cout << std::endl << "----------" << std::endl;
@@ -312,13 +308,15 @@ std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* base_
 	//  << " | " << this->vertex_data_cache[base_hex].count(coord_vect) << " | " << this->vertex_data_cache[base_hex][coord_vect] << std::endl;
 
 	if(curr_data_cache.count(base_hex) == 0) {
-		//std::cout << "gen..." << std::endl;
+		output = new TightlyPackedVector< GLfloat >();
 
-		std::vector< GLfloat >* vertex_data = new std::vector< GLfloat >();
-		std::vector< GLfloat >* color_data = new std::vector< GLfloat >();
+		std::cout << "gen: " << base_hex << std::endl;
+
+		/*std::vector< GLfloat >* vertex_data = new std::vector< GLfloat >();
+		std::vector< GLfloat >* color_data = new std::vector< GLfloat >();*
 
 		vertex_data->reserve(4*6*3*2);
-		color_data->reserve(4*6*3*2);
+		color_data->reserve(4*6*3*2);*/
 
 		//Vertex* curr_vert = NULL;
 		//std::vector<double> curr_color;
@@ -326,22 +324,22 @@ std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* base_
 		double x = base_x;
 		double y = base_y;
 
-		std::vector< std::vector< GLfloat >* >* render_data = NULL;
-		std::vector< GLfloat >* curr_vertex_data = NULL;
-		std::vector< GLfloat >* curr_color_data = NULL;
+		//TightlyPackedVector< GLfloat >* render_data = NULL;
+		/*std::vector< GLfloat >* curr_vertex_data = NULL;
+		std::vector< GLfloat >* curr_color_data = NULL;*/
 
-		render_data = this->generate_render_data(base_hex, x, y);
-		curr_vertex_data = render_data->at(0);
-		curr_color_data = render_data->at(1);
+		//this->generate_render_data(base_hex, x, y, output);
+		/*curr_vertex_data = render_data->at(0);
+		curr_color_data = render_data->at(1);*/
 
-		for(int i = 0; i < curr_vertex_data->size(); i++) {
+		/*for(int i = 0; i < curr_vertex_data->size(); i++) {
 			vertex_data->push_back(curr_vertex_data->at(i));
 			color_data->push_back(curr_color_data->at(i));
 		}
 
 		delete curr_vertex_data;
 		delete curr_color_data;
-		delete render_data;
+		delete render_data;*/
 
 		const char* dir_ary[] = {"SE", "NE"}; 
 
@@ -355,18 +353,7 @@ std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* base_
 			double temp_y = y;
 
 			for(int j = 0; j < GlobalConsts::BOARD_CHUNK_SIZE; j++) {
-				render_data = this->generate_render_data(temp_hex, temp_x, temp_y);
-				curr_vertex_data = render_data->at(0);
-				curr_color_data = render_data->at(1);
-
-				for(int i = 0; i < curr_vertex_data->size(); i++) {
-					vertex_data->push_back(curr_vertex_data->at(i));
-					color_data->push_back(curr_color_data->at(i));
-				}
-
-				delete curr_vertex_data;
-				delete curr_color_data;
-				delete render_data;
+				this->generate_render_data(temp_hex, temp_x, temp_y, output);
 
 				temp_hex = temp_hex->get_neighbor("N");
 				std::vector< double >* temp_x_y_diff = GlobalConsts::RENDER_TRAY_COORDS["N"];
@@ -380,21 +367,22 @@ std::vector<std::vector< GLfloat >*>* Controller::get_render_data(Hexagon* base_
 			y += x_y_diff->at(1);
 		}
 
-		output = new std::vector< std::vector< GLfloat >* >();
-		output->push_back(vertex_data);
-		output->push_back(color_data);
-
-		//std::cout << curr_data_cache.count(base_hex) << " | " << base_hex << std::endl; 
 		curr_data_cache[base_hex] = output;
-		//std::cout << curr_data_cache.count(base_hex) << " | " << base_hex << std::endl << std::endl; 
-	} else {
-		//std::cout << curr_data_cache.count(base_hex) << " | " << base_hex << std::endl; 
-		output = curr_data_cache[base_hex];
-		//std::cout << curr_data_cache.count(base_hex) << " | " << base_hex << std::endl << std::endl; 
-	}
 
-	//std::cout << "output: " << output << std::endl;
-	//std::cout << "size: " << (int)output->size() << " | " << curr_data_cache.size() << std::endl;
+		/*int* indicies = output->indicies_data();
+		float* render_data =  output->data();
+
+		for(int i = 0; i < output->indicies_size(); i ++) {
+			std::cout << indicies[i] << " ";
+			if(i % 2 != 0) {
+				std::cout << "- ";
+			}
+		}
+		std::cout << std::endl << std::endl;*/
+
+	} else {
+		output = curr_data_cache[base_hex];
+	}
 
 	return output;
 }
@@ -453,6 +441,7 @@ void Controller::render(int render_mode) {
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
+	glEnableClientState(GL_INDEX_ARRAY);
 
 
         for(int j = neg_y_view; j <= pos_y_view; j++) {
@@ -507,36 +496,26 @@ void Controller::render(int render_mode) {
                 }
 
 		if(i % GlobalConsts::BOARD_CHUNK_SIZE == 0 && j % GlobalConsts::BOARD_CHUNK_SIZE == 0) {
-			std::vector<std::vector< GLfloat >*>* render_chunk = get_render_data(curr_hex);
-			std::vector< GLfloat >* curr_vertex_data = render_chunk->at(0);
-			std::vector< GLfloat >* curr_color_data = render_chunk->at(1);
+			TightlyPackedVector< GLfloat >* render_chunk = get_render_data(curr_hex);
 
 			glPushMatrix();
 			glTranslatef(x, y, 0);
-			glVertexPointer(3, GL_FLOAT, 0, curr_vertex_data->data());
-			glColorPointer(3, GL_FLOAT, 0, curr_color_data->data());
 
-			//glDrawArrays(GL_LINES, 0, array_size * 6 * 2);
-			glDrawArrays(GL_LINES, 0, (int)(curr_vertex_data->size() / 3.0));
+			int* indicies = render_chunk->indicies_data();
+
+			glIndexPointer( GL_UNSIGNED_BYTE, 0, indicies);
+			glColorPointer(3, GL_FLOAT, 0, render_chunk->color_data());
+			glVertexPointer(3, GL_FLOAT, 0, render_chunk->data());
+
+			glDrawElements(GL_LINES, render_chunk->indicies_size(), GL_UNSIGNED_INT, indicies);
 			glPopMatrix();
 		}
             }
         }
 
+	glDisableClientState(GL_INDEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
-
-        /*glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_COLOR_ARRAY);
-
-        glVertexPointer(3, GL_FLOAT, 0, vertex_data->data());
-        glColorPointer(3, GL_FLOAT, 0, color_data->data());
-
-        //glDrawArrays(GL_LINES, 0, array_size * 6 * 2);
-	glDrawArrays(GL_LINES, 0, (int)(vertex_data->size() / 3.0));
-
-        glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_VERTEX_ARRAY);*/
 
         //----------
 
@@ -551,8 +530,6 @@ void Controller::render(int render_mode) {
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
 
-        //delete vertex_data;
-        //delete color_data;
         delete triangle_vertex_data;
         delete triangle_color_data;
     }
