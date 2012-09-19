@@ -214,6 +214,10 @@ int UniqueDataVector<T>::push_back(T x, T y, T z, T r, T g, T b) {
 	curr_coords->push_back(y);
 	curr_coords->push_back(z);
 
+	curr_coords->push_back(r);
+	curr_coords->push_back(g);
+	curr_coords->push_back(b);
+
 	int index = 0;
 
 	if(this->index_data->count(curr_coords) == 0) {

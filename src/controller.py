@@ -97,13 +97,13 @@ class Controller(object):
             height_percent = height / 10.0;
 
             if height > 0:
-                hex.set_hex_color(height_percent, 1, height_percent)
+                hex.set_hex_color(height_percent, 0.7, height_percent)
             else:
-                hex.set_hex_color(-height_percent, 1 + height_percent, 0)
+                hex.set_hex_color(-height_percent, 0.7 + height_percent, 0)
 
         for hex in Hexagon.get_all_hexagons():
             if not hex.is_pathable():
-                hex.set_hex_color(1, 0, 1)
+                hex.set_hex_color(0.5, 0, 0.5)
 
     def get_neighbor_offset(self, index):
         EVEN_OFFSET = {

@@ -242,9 +242,9 @@ void Controller::generate_render_data(Hexagon* curr_hex, double x, double y, Uni
 
 	if(render_mode == GlobalConsts::RENDER_LINES) {
 		// Render hex boarders
-		for(int i = 0; i < 6; i++) {
+		/*for(int i = 0; i < 6; i++) {
 			curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(i)];
-			curr_color = &(curr_vert->get_color());
+			//curr_color = &(curr_vert->get_color());
 
 			output->push_back(
 				x + Hexagon::ROT_COORDS->at(i)->at(0), y + Hexagon::ROT_COORDS->at(i)->at(1), curr_vert->get_height() + .1,
@@ -253,14 +253,14 @@ void Controller::generate_render_data(Hexagon* curr_hex, double x, double y, Uni
 			);
 
 			curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(i+1)];
-			curr_color = &(curr_vert->get_color());
+			//curr_color = &(curr_vert->get_color());
 
 			output->push_back(
 				x + Hexagon::ROT_COORDS->at(i+1)->at(0), y + Hexagon::ROT_COORDS->at(i+1)->at(1), curr_vert->get_height() + .1,
 				//curr_color->at(0), curr_color->at(1), curr_color->at(2)
 				0, 0, 0
 			);
-		}
+		}*/
 	} else if(render_mode == GlobalConsts::RENDER_TRIANGLES) {
 		// Render hex guts
 		curr_color = curr_hex->get_hex_color();
