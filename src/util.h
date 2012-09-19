@@ -170,6 +170,7 @@ class UniqueDataVector {
 		int* indicies_data();
 		T* color_data();
 		void reserve(int);
+		void reverse_indicies();
 };
 
 template <typename T>
@@ -307,5 +308,13 @@ void UniqueDataVector<T>::reserve(int reserve) {
     this->vector_data->reserve(reserve);
     this->vector_data->reserve(reserve / 3);
 }
+
+
+template <typename T>
+void UniqueDataVector<T>::reverse_indicies() {
+    std::reverse(this->indicies->begin(), this->indicies->end()); 
+}
+
+
 
 #endif

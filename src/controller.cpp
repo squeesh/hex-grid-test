@@ -172,6 +172,9 @@ void Controller::init_gl(long width, long height) {
 	glClearDepth(1.0);
 	glDepthFunc(GL_LESS);
 	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	glShadeModel(GL_SMOOTH);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable( GL_BLEND );
@@ -181,8 +184,8 @@ void Controller::init_gl(long width, long height) {
 	gluPerspective(45.0, this->width/((double) this->height), 0.1, 1000.0);
 	glMatrixMode(GL_MODELVIEW);
 
-	glEnable(GL_LINE_SMOOTH);
-	glLineWidth(3);
+	//glEnable(GL_LINE_SMOOTH);
+	glLineWidth(5);
 }
 
 void Controller::resize(long width, long height) {
@@ -242,12 +245,12 @@ void Controller::generate_render_data(Hexagon* curr_hex, double x, double y, Uni
 
 	if(render_mode == GlobalConsts::RENDER_LINES) {
 		// Render hex boarders
-		/*for(int i = 0; i < 6; i++) {
+		for(int i = 0; i < 6; i++) {
 			curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(i)];
 			//curr_color = &(curr_vert->get_color());
 
 			output->push_back(
-				x + Hexagon::ROT_COORDS->at(i)->at(0), y + Hexagon::ROT_COORDS->at(i)->at(1), curr_vert->get_height() + .1,
+				x + Hexagon::ROT_COORDS->at(i)->at(0), y + Hexagon::ROT_COORDS->at(i)->at(1), curr_vert->get_height() + 0.1,
 				//curr_color->at(0), curr_color->at(1), curr_color->at(2)  // bug... why is this green?
 				0, 0, 0
 			);
@@ -256,11 +259,11 @@ void Controller::generate_render_data(Hexagon* curr_hex, double x, double y, Uni
 			//curr_color = &(curr_vert->get_color());
 
 			output->push_back(
-				x + Hexagon::ROT_COORDS->at(i+1)->at(0), y + Hexagon::ROT_COORDS->at(i+1)->at(1), curr_vert->get_height() + .1,
+				x + Hexagon::ROT_COORDS->at(i+1)->at(0), y + Hexagon::ROT_COORDS->at(i+1)->at(1), curr_vert->get_height() + 0.1,
 				//curr_color->at(0), curr_color->at(1), curr_color->at(2)
 				0, 0, 0
 			);
-		}*/
+		}
 	} else if(render_mode == GlobalConsts::RENDER_TRIANGLES) {
 		// Render hex guts
 		curr_color = curr_hex->get_hex_color();
@@ -347,6 +350,7 @@ UniqueDataVector< GLfloat >* Controller::get_render_data(Hexagon* base_hex, int 
 			y += x_y_diff->at(1);
 		}
 
+		output->reverse_indicies();
 		curr_vertex_data[base_hex] = output;
 
 		/*int* indicies = output->indicies_data();
@@ -390,7 +394,10 @@ void Controller::render(int render_mode) {
 	int neg_y_view = this->y_offset - this->view_range / 2.0 - GlobalConsts::BOARD_CHUNK_SIZE;
 	int pos_y_view = this->y_offset + this->view_range / 2.0;
 
-	if(render_mode == GlobalConsts::RENDER_TRIANGLES) {
+    if(render_mode == GlobalConsts::RENDER_TRIANGLES) {
+	glDisable(GL_CULL_FACE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
         for(int i = neg_x_view; i <= pos_x_view; i++) {
             for(int j = neg_y_view; j <= pos_y_view; j++) {
                 Hexagon* curr_hex = this->hexagon_list->at(i)->at(j);
@@ -403,9 +410,12 @@ void Controller::render(int render_mode) {
                     y += 0.5 * this->SIN_60;
                 }
 
+		
                 curr_hex->render_as_selected(x, y);
+		
             }
         }
+	glEnable(GL_CULL_FACE);
 
     } else {
         Vertex* curr_vert = NULL;
@@ -418,10 +428,6 @@ void Controller::render(int render_mode) {
         triangle_color_data->reserve(array_size);
 
         int tri_count = 0;
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
-	glEnableClientState(GL_INDEX_ARRAY);
 
         for(int j = neg_y_view; j <= pos_y_view; j++) {
             for(int i = neg_x_view; i <= pos_x_view; i++) {
@@ -476,38 +482,55 @@ void Controller::render(int render_mode) {
 			glPushMatrix();
 			glTranslatef(x, y, 0);
 
-			UniqueDataVector< GLfloat >* render_line_chunk = get_render_data(curr_hex, GlobalConsts::RENDER_LINES);
-
-			int* line_indicies = render_line_chunk->indicies_data();
-
-			glIndexPointer(GL_UNSIGNED_INT, 0, line_indicies);
-			glColorPointer(3, GL_FLOAT, 0, render_line_chunk->color_data());
-			glVertexPointer(3, GL_FLOAT, 0, render_line_chunk->data());
-
-			glDrawElements(GL_LINES, render_line_chunk->indicies_size(), GL_UNSIGNED_INT, line_indicies);
-
-			/********************************/
-
 			UniqueDataVector< GLfloat >* render_triangle_chunk = get_render_data(curr_hex, GlobalConsts::RENDER_TRIANGLES);
 
 			int* triangle_indicies = render_triangle_chunk->indicies_data();
+
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_COLOR_ARRAY);
+			glEnableClientState(GL_INDEX_ARRAY);
 
 			glIndexPointer(GL_UNSIGNED_INT, 0, triangle_indicies);
 			glColorPointer(3, GL_FLOAT, 0, render_triangle_chunk->color_data());
 			glVertexPointer(3, GL_FLOAT, 0, render_triangle_chunk->data());
 
+			glPolygonMode(GL_FRONT, GL_FILL);
 			glDrawElements(GL_TRIANGLES, render_triangle_chunk->indicies_size(), GL_UNSIGNED_INT, triangle_indicies);
+
+			glDisableClientState(GL_INDEX_ARRAY);
+			glDisableClientState(GL_COLOR_ARRAY);
+			glDisableClientState(GL_VERTEX_ARRAY);
+
+			/********************************/
+
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_INDEX_ARRAY);
+
+			glCullFace(GL_FRONT);
+
+			glIndexPointer(GL_UNSIGNED_INT, 0, triangle_indicies);
+			glColor3f(0, 0, 0);
+			glVertexPointer(3, GL_FLOAT, 0, render_triangle_chunk->data());
+
+			glPolygonMode(GL_BACK,  GL_LINE);
+			glDrawElements(GL_TRIANGLES, render_triangle_chunk->indicies_size(), GL_UNSIGNED_INT, triangle_indicies);
+
+			glCullFace(GL_BACK);
+
+			glDisableClientState(GL_INDEX_ARRAY);
+			glDisableClientState(GL_VERTEX_ARRAY);
 
 			glPopMatrix();
 		}
             }
         }
 
-	glDisableClientState(GL_INDEX_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
+
 
         //----------
+
+	glDisable(GL_CULL_FACE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
@@ -519,6 +542,8 @@ void Controller::render(int render_mode) {
 
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
+
+	glEnable(GL_CULL_FACE);
 
         delete triangle_vertex_data;
         delete triangle_color_data;
