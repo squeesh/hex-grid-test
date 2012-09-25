@@ -35,11 +35,7 @@ Controller::Controller(void) {
 	this->hexagon_list = new RoundVector< RoundVector< Hexagon* >* >();
 	this->hexagon_list->reserve(GlobalConsts::BOARD_WIDTH);
 	this->hexagon_indicies = new std::map< Hexagon*, std::vector< int >* >();
-	this->line_vertex_data = new std::map< Hexagon*, UniqueDataVector< GLfloat >* >();
-	this->triangle_vertex_data = new std::map< Hexagon*, UniqueDataVector< GLfloat >* >();
-	this->vbo_ids = new std::map< Hexagon*, GLuint >();
-	this->vbo_colors = new std::map< Hexagon*, GLuint >();
-	this->vbo_indicies = new std::map< Hexagon*, GLuint >();
+	this->init_board_render_cache();
 
 	this->print_flag = false;
 
@@ -240,63 +236,38 @@ void Controller::tick() {
 }
 
 
-void Controller::generate_render_data(Hexagon* curr_hex, double x, double y, UniqueDataVector< GLfloat >* output, int render_mode) {
+void Controller::generate_render_data(Hexagon* curr_hex, double x, double y, UniqueDataVector< GLfloat >* output) {
 	Vertex* curr_vert = NULL;
 	std::vector< double >* curr_color;
 
-	if(render_mode == GlobalConsts::RENDER_LINES) {
-		// Render hex boarders
-		for(int i = 0; i < 6; i++) {
-			curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(i)];
-			//curr_color = &(curr_vert->get_color());
+	// Render hex guts
+	curr_color = curr_hex->get_hex_color();
 
-			output->push_back(
-				x + Hexagon::ROT_COORDS->at(i)->at(0), y + Hexagon::ROT_COORDS->at(i)->at(1), curr_vert->get_height() + 0.1,
-				//curr_color->at(0), curr_color->at(1), curr_color->at(2)  // bug... why is this green?
-				0, 0, 0
-			);
+	for(int i = 1; i < 5; i++) {
+		curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(0)];
 
-			curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(i+1)];
-			//curr_color = &(curr_vert->get_color());
+		output->push_back(
+			x + Hexagon::ROT_COORDS->at(0)->at(0), y + Hexagon::ROT_COORDS->at(0)->at(1), curr_vert->get_height(),
+			curr_color->at(0), curr_color->at(1), curr_color->at(2)
+		);
 
-			output->push_back(
-				x + Hexagon::ROT_COORDS->at(i+1)->at(0), y + Hexagon::ROT_COORDS->at(i+1)->at(1), curr_vert->get_height() + 0.1,
-				//curr_color->at(0), curr_color->at(1), curr_color->at(2)
-				0, 0, 0
-			);
-		}
-	} else if(render_mode == GlobalConsts::RENDER_TRIANGLES) {
-		// Render hex guts
-		curr_color = curr_hex->get_hex_color();
+		curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(i)];
 
-		for(int i = 1; i < 5; i++) {
-			curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(0)];
+		output->push_back(
+			x + Hexagon::ROT_COORDS->at(i)->at(0), y + Hexagon::ROT_COORDS->at(i)->at(1), curr_vert->get_height(),
+			curr_color->at(0), curr_color->at(1), curr_color->at(2)
+		);
 
-			output->push_back(
-				x + Hexagon::ROT_COORDS->at(0)->at(0), y + Hexagon::ROT_COORDS->at(0)->at(1), curr_vert->get_height(),
-				curr_color->at(0), curr_color->at(1), curr_color->at(2)
-			);
+		curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(i+1)];
 
-			curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(i)];
-
-			output->push_back(
-				x + Hexagon::ROT_COORDS->at(i)->at(0), y + Hexagon::ROT_COORDS->at(i)->at(1), curr_vert->get_height(),
-				curr_color->at(0), curr_color->at(1), curr_color->at(2)
-			);
-
-			curr_vert = curr_hex->verticies[curr_hex->VERTEX_POSITIONS->at(i+1)];
-
-			output->push_back(
-				x + Hexagon::ROT_COORDS->at(i+1)->at(0), y + Hexagon::ROT_COORDS->at(i+1)->at(1), curr_vert->get_height(),
-				curr_color->at(0), curr_color->at(1), curr_color->at(2)
-			);
-		}
-	} else {
-		throw "DOUBLE NEIN!";
+		output->push_back(
+			x + Hexagon::ROT_COORDS->at(i+1)->at(0), y + Hexagon::ROT_COORDS->at(i+1)->at(1), curr_vert->get_height(),
+			curr_color->at(0), curr_color->at(1), curr_color->at(2)
+		);
 	}
 }
 
-UniqueDataVector< GLfloat >* Controller::get_render_data(Hexagon* base_hex, int render_mode) {
+UniqueDataVector< GLfloat >* Controller::get_render_data(Hexagon* base_hex) {
 	double base_x = 0;
 	double base_y = 0;
 
@@ -307,17 +278,7 @@ UniqueDataVector< GLfloat >* Controller::get_render_data(Hexagon* base_hex, int 
 
 	UniqueDataVector< GLfloat >* output = NULL;
 
-	std::map< Hexagon*, UniqueDataVector< GLfloat >* >* data_prt = NULL;
-
-	if(render_mode == GlobalConsts::RENDER_LINES) {
-		data_prt = this->line_vertex_data;
-	} else if(render_mode == GlobalConsts::RENDER_TRIANGLES) {
-		data_prt = this->triangle_vertex_data;
-	} else {
-		throw "NEIN!";
-	}
-
-	std::map< Hexagon*, UniqueDataVector< GLfloat >* > &curr_vertex_data = *data_prt;
+	std::map< Hexagon*, UniqueDataVector< GLfloat >* > &curr_vertex_data = *(this->triangle_vertex_data);
 
 	if(curr_vertex_data.count(base_hex) == 0) {
 		std::cout << "generating: " << base_hex << std::endl;
@@ -339,7 +300,7 @@ UniqueDataVector< GLfloat >* Controller::get_render_data(Hexagon* base_hex, int 
 			double temp_y = y;
 
 			for(int j = 0; j < GlobalConsts::BOARD_CHUNK_SIZE; j++) {
-				this->generate_render_data(temp_hex, temp_x, temp_y, output, render_mode);
+				this->generate_render_data(temp_hex, temp_x, temp_y, output);
 
 				temp_hex = temp_hex->get_neighbor("N");
 				std::vector< double >* temp_x_y_diff = GlobalConsts::RENDER_TRAY_COORDS["N"];
@@ -555,7 +516,7 @@ void Controller::render() {
 			glPushMatrix();
 			glTranslatef(x, y, 0);
 
-			UniqueDataVector< GLfloat >* render_triangle_chunk = get_render_data(curr_hex, GlobalConsts::RENDER_TRIANGLES);
+			UniqueDataVector< GLfloat >* render_triangle_chunk = get_render_data(curr_hex);
 
 			int* triangle_indicies = render_triangle_chunk->indicies_data();
 
@@ -602,82 +563,6 @@ void Controller::render() {
             }
         }
 
-
-	/*
-	int x_diff = neg_x_view;
-
-	if(x_diff < 0) {
-		x_diff *= -1;
-	}
-
-	x_diff = x_diff % GlobalConsts::BOARD_CHUNK_SIZE;
-
-	int y_diff = neg_y_view;
-
-	if(y_diff < 0) {
-		y_diff *= -1;
-	}
-
-	y_diff = y_diff % GlobalConsts::BOARD_CHUNK_SIZE;
-
-
-	for(int j = neg_y_view - y_diff; j <= pos_y_view + y_diff; j += GlobalConsts::BOARD_CHUNK_SIZE) {
-    		for(int i = neg_x_view - x_diff; i <= pos_x_view + x_diff; i += GlobalConsts::BOARD_CHUNK_SIZE) {
-			Hexagon* curr_hex = this->hexagon_list->at(i)->at(j);
-        		glLoadName(curr_hex->name);
-
-	                double x = i * 1.5 * this->COS_60;
-			double y = j * 1.0 * this->SIN_60;
-
-			if(i % 2 != 0) {
-			    y += 0.5 * this->SIN_60;
-			}
-
-			glPushMatrix();
-			glTranslatef(x, y, 0);
-
-			UniqueDataVector< GLfloat >* render_triangle_chunk = get_render_data(curr_hex, GlobalConsts::RENDER_TRIANGLES);
-
-			int* triangle_indicies = render_triangle_chunk->indicies_data();
-
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glEnableClientState(GL_COLOR_ARRAY);
-			glEnableClientState(GL_INDEX_ARRAY);
-
-			glIndexPointer(GL_UNSIGNED_INT, 0, triangle_indicies);
-			glColorPointer(3, GL_FLOAT, 0, render_triangle_chunk->color_data());
-			glVertexPointer(3, GL_FLOAT, 0, render_triangle_chunk->data());
-
-			glPolygonMode(GL_FRONT, GL_FILL);
-			glDrawElements(GL_TRIANGLES, render_triangle_chunk->indicies_size(), GL_UNSIGNED_INT, triangle_indicies);
-
-			glDisableClientState(GL_INDEX_ARRAY);
-			glDisableClientState(GL_COLOR_ARRAY);
-			glDisableClientState(GL_VERTEX_ARRAY);
-
-			//------------------------------
-
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glEnableClientState(GL_INDEX_ARRAY);
-
-			glCullFace(GL_FRONT);
-
-			glIndexPointer(GL_UNSIGNED_INT, 0, triangle_indicies);
-			glColor3f(0, 0, 0);
-			glVertexPointer(3, GL_FLOAT, 0, render_triangle_chunk->data());
-
-			glPolygonMode(GL_BACK,  GL_LINE);
-			glDrawElements(GL_TRIANGLES, render_triangle_chunk->indicies_size(), GL_UNSIGNED_INT, triangle_indicies);
-
-			glCullFace(GL_BACK);
-
-			glDisableClientState(GL_INDEX_ARRAY);
-			glDisableClientState(GL_VERTEX_ARRAY);
-
-			glPopMatrix();
-		}
-	}*/	
-
         //----------
 
 	glDisable(GL_CULL_FACE);
@@ -698,6 +583,43 @@ void Controller::render() {
 
         delete triangle_vertex_data;
         delete triangle_color_data;
+}
+
+
+void Controller::init_board_render_cache() {
+	this->triangle_vertex_data = new std::map< Hexagon*, UniqueDataVector< GLfloat >* >();
+	this->vbo_ids = new std::map< Hexagon*, GLuint >();
+	this->vbo_colors = new std::map< Hexagon*, GLuint >();
+	this->vbo_indicies = new std::map< Hexagon*, GLuint >();
+}
+
+
+void Controller::reset_board_render_cache() {
+	std::map< Hexagon*, UniqueDataVector< GLfloat >* > &curr_triangle_vertex_data = *(this->triangle_vertex_data);
+	for(std::map< Hexagon*, UniqueDataVector< GLfloat >* >::iterator itr = curr_triangle_vertex_data.begin(); itr != curr_triangle_vertex_data.end(); itr++) {
+		delete (*itr).second;
+	}
+	delete this->triangle_vertex_data;
+
+	std::map< Hexagon*, GLuint > &curr_vbo_ids = *(this->vbo_ids);
+	for(std::map< Hexagon*, GLuint >::iterator itr = curr_vbo_ids.begin(); itr != curr_vbo_ids.end(); itr++) {
+		glDeleteBuffers(1, &((*itr).second));
+	}
+	delete this->vbo_ids;
+
+	std::map< Hexagon*, GLuint > &curr_vbo_colors = *(this->vbo_colors);
+	for(std::map< Hexagon*, GLuint >::iterator itr = curr_vbo_colors.begin(); itr != curr_vbo_colors.end(); itr++) {
+		glDeleteBuffers(1, &((*itr).second));
+	}
+	delete this->vbo_colors;
+	
+	std::map< Hexagon*, GLuint > &curr_vbo_indicies = *(this->vbo_indicies);
+	for(std::map< Hexagon*, GLuint >::iterator itr = curr_vbo_indicies.begin(); itr != curr_vbo_indicies.end(); itr++) {
+		glDeleteBuffers(1, &((*itr).second));
+	}
+	delete this->vbo_indicies;
+
+	this->init_board_render_cache();
 }
 
 
@@ -787,6 +709,7 @@ void Controller::mouse_left_click(int x, int y) {
 		}
 
 		this->set_selected_hex(curr_hex);
+		this->reset_board_render_cache();
 	}
 
 	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["down"] 	= 1;

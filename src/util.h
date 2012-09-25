@@ -187,6 +187,8 @@ template <typename T>
 UniqueDataVector<T>::~UniqueDataVector() {
     delete this->vector_data;
     delete this->index_data;
+    delete this->color;
+    delete this->indicies;
 
     std::vector< std::vector<T> *> &curr_vec = *(this->index_data_keys);
     for(int i = 0; i < this->index_data_keys->size(); i++) {
@@ -222,7 +224,7 @@ int UniqueDataVector<T>::push_back(T x, T y, T z, T r, T g, T b) {
 
 	int index = 0;
 
-	//if(this->index_data->count(curr_coords) == 0) {
+	if(this->index_data->count(curr_coords) == 0) {
 	    std::map< std::vector<T>*, int, cmp_coord<T> > &curr_index_data = *(this->index_data);
 
 		this->vector_data->push_back(x);
@@ -237,11 +239,11 @@ int UniqueDataVector<T>::push_back(T x, T y, T z, T r, T g, T b) {
 		this->indicies->push_back(index);
 		curr_index_data[curr_coords] = index;
 		this->index_data_keys->push_back(curr_coords);
-	/*} else {	
+	} else {	
 		index = this->get_index(curr_coords);
 		this->indicies->push_back(index);
 		delete curr_coords;
-	}*/
+	}
 
 	return index;
 }

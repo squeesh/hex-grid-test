@@ -57,11 +57,14 @@ class Controller {
 
 		void tick();
 
-		void generate_render_data(Hexagon*, double, double, UniqueDataVector< GLfloat >*, int);
-		UniqueDataVector< GLfloat >* get_render_data(Hexagon*, int);
+		void generate_render_data(Hexagon*, double, double, UniqueDataVector< GLfloat >*);
+		UniqueDataVector< GLfloat >* get_render_data(Hexagon*);
 
 		void render();
 		void render_for_select();
+
+		void init_board_render_cache();
+		void reset_board_render_cache();
 
 		Hexagon* get_clicked_hex(double x, double y);
 
@@ -88,7 +91,7 @@ class Controller {
 		RoundVector< RoundVector< Hexagon* >* >* hexagon_list;
 		std::map< Hexagon*, std::vector< int >* >* hexagon_indicies;
 
-		std::map< Hexagon*, UniqueDataVector< GLfloat >* >* line_vertex_data;
+		//std::map< Hexagon*, UniqueDataVector< GLfloat >* >* line_vertex_data;
 		std::map< Hexagon*, UniqueDataVector< GLfloat >* >* triangle_vertex_data;
 		std::map< Hexagon*, GLuint >* vbo_ids;
 		std::map< Hexagon*, GLuint >* vbo_colors;
