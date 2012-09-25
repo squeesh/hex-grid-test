@@ -10,11 +10,11 @@ class GlobalConsts(object):
 
 #    GENERATE_MOUNTAINS = True
 
-#    BOARD_HEIGHT = 40
-#    BOARD_WIDTH  = 40
+    BOARD_HEIGHT = 40
+    BOARD_WIDTH  = 40
 
-    BOARD_HEIGHT = 80
-    BOARD_WIDTH  = 120
+#    BOARD_HEIGHT = 80
+#    BOARD_WIDTH  = 120
 
 #    BOARD_HEIGHT = int(BOARD_HEIGHT * 0.5)
 #    BOARD_WIDTH  = int(BOARD_WIDTH  * 0.5)

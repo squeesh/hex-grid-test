@@ -6,8 +6,9 @@
 #include <cmath>
 #include <set>
 #include <string.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+//#include <GL/gl.h>
+//#include <GL/glu.h>
+#include <GL/glew.h>
 #include <Python.h>
 
 #include "util.h"

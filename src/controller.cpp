@@ -1,5 +1,6 @@
 #include "includes.h"
 
+//PFNGLISRENDERBUFFEREXTPROC glIsRenderbufferEXT;
 
 Controller* Controller::curr_ctrl = NULL;
 
@@ -36,6 +37,9 @@ Controller::Controller(void) {
 	this->hexagon_indicies = new std::map< Hexagon*, std::vector< int >* >();
 	this->line_vertex_data = new std::map< Hexagon*, UniqueDataVector< GLfloat >* >();
 	this->triangle_vertex_data = new std::map< Hexagon*, UniqueDataVector< GLfloat >* >();
+	this->vbo_ids = new std::map< Hexagon*, GLuint >();
+	this->vbo_colors = new std::map< Hexagon*, GLuint >();
+	this->vbo_indicies = new std::map< Hexagon*, GLuint >();
 
 	this->print_flag = false;
 
@@ -319,6 +323,8 @@ UniqueDataVector< GLfloat >* Controller::get_render_data(Hexagon* base_hex, int 
 	std::map< Hexagon*, UniqueDataVector< GLfloat >* > &curr_vertex_data = *data_prt;
 
 	if(curr_vertex_data.count(base_hex) == 0) {
+		std::cout << "generating: " << base_hex << std::endl;
+
 		output = new UniqueDataVector< GLfloat >();
 
 		double x = base_x;
@@ -351,7 +357,45 @@ UniqueDataVector< GLfloat >* Controller::get_render_data(Hexagon* base_hex, int 
 		}
 
 		output->reverse_indicies();
+		//output->reverse_verticies();
 		curr_vertex_data[base_hex] = output;
+
+		// TODO: This needs to be rewritten...
+		// Really you should pass the function a hex, and it should return all the VBO pointers needed...
+
+		GLuint vec_vboId;
+		// generate a new VBO and get the associated ID
+		glGenBuffersARB(1, &vec_vboId);
+		// bind VBO in order to use
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, vec_vboId);
+		// upload data to VBO
+		glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(output->data()) * output->indicies_size() * 3, output->data(), GL_STATIC_DRAW_ARB);
+		std::map< Hexagon*, GLuint > &curr_vbo_ids = *(this->vbo_ids);
+		curr_vbo_ids[base_hex] = vec_vboId;
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+
+		GLuint color_vboId;
+		// generate a new VBO and get the associated ID
+		glGenBuffersARB(1, &color_vboId);
+		// bind VBO in order to use
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, color_vboId);
+		// upload data to VBO
+		glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(output->color_data()) * output->indicies_size() * 3, output->color_data(), GL_STATIC_DRAW_ARB);
+		std::map< Hexagon*, GLuint > &curr_vbo_colors = *(this->vbo_colors);
+		curr_vbo_colors[base_hex] = color_vboId;
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+
+		GLuint ind_vboId;
+		// generate a new VBO and get the associated ID
+		glGenBuffersARB(1, &ind_vboId);
+		// bind VBO in order to use
+		glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, ind_vboId);
+		// upload data to VBO
+		glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, sizeof(output->indicies_data()) * output->indicies_size(), output->indicies_data(), GL_STATIC_DRAW_ARB);
+		std::map< Hexagon*, GLuint > &curr_vbo_indicies = *(this->vbo_indicies);
+		curr_vbo_indicies[base_hex] = ind_vboId;
+		glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
+
 
 		/*int* indicies = output->indicies_data();
 		float* render_data =  output->data();
@@ -428,6 +472,13 @@ void Controller::render(int render_mode) {
         triangle_color_data->reserve(array_size);
 
         int tri_count = 0;
+	std::map< Hexagon*, GLuint > &curr_vbo_ids = *(this->vbo_ids);
+	std::map< Hexagon*, GLuint > &curr_vbo_colors = *(this->vbo_colors);
+	std::map< Hexagon*, GLuint > &curr_vbo_indicies = *(this->vbo_indicies);
+
+	GLuint vec_vboId;
+	GLuint color_vboId;
+	GLuint ind_vboId;
 
         for(int j = neg_y_view; j <= pos_y_view; j++) {
             for(int i = neg_x_view; i <= pos_x_view; i++) {
@@ -486,6 +537,87 @@ void Controller::render(int render_mode) {
 
 			int* triangle_indicies = render_triangle_chunk->indicies_data();
 
+			vec_vboId = curr_vbo_ids[curr_hex];
+			color_vboId = curr_vbo_colors[curr_hex];
+			ind_vboId = curr_vbo_indicies[curr_hex];
+
+			glEnableClientState(GL_VERTEX_ARRAY);             // activate vertex coords array
+			glEnableClientState(GL_COLOR_ARRAY);
+
+			// bind VBOs for vertex array and index array
+			glBindBufferARB(GL_ARRAY_BUFFER_ARB, vec_vboId);         // for vertex coordinates
+			glVertexPointer(3, GL_FLOAT, 0, 0);               // last param is offset, not ptr
+
+			// color VBO
+			glBindBuffer(GL_ARRAY_BUFFER_ARB, color_vboId);
+    			glColorPointer(3, GL_FLOAT, 0, 0);
+
+			// bind indicie VBO
+			glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, ind_vboId);
+
+			// front facing polys
+			glPolygonMode(GL_FRONT, GL_FILL);
+			glDrawElements(GL_TRIANGLES, render_triangle_chunk->indicies_size(), GL_UNSIGNED_INT, 0);
+
+			// turn off color array so that we can draw black lines
+			glDisableClientState(GL_COLOR_ARRAY);
+
+			// draw back facing black lines
+			glCullFace(GL_FRONT);
+			glPolygonMode(GL_BACK,  GL_LINE);
+			glColor3f(0, 0, 0);
+			glDrawElements(GL_TRIANGLES, render_triangle_chunk->indicies_size(), GL_UNSIGNED_INT, 0);
+			glCullFace(GL_BACK);
+
+			glDisableClientState(GL_VERTEX_ARRAY);            // deactivate vertex array
+
+			// bind with 0, so, switch back to normal pointer operation
+			glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+			glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
+
+			glPopMatrix();
+		}
+            }
+        }
+
+
+	/*
+	int x_diff = neg_x_view;
+
+	if(x_diff < 0) {
+		x_diff *= -1;
+	}
+
+	x_diff = x_diff % GlobalConsts::BOARD_CHUNK_SIZE;
+
+	int y_diff = neg_y_view;
+
+	if(y_diff < 0) {
+		y_diff *= -1;
+	}
+
+	y_diff = y_diff % GlobalConsts::BOARD_CHUNK_SIZE;
+
+
+	for(int j = neg_y_view - y_diff; j <= pos_y_view + y_diff; j += GlobalConsts::BOARD_CHUNK_SIZE) {
+    		for(int i = neg_x_view - x_diff; i <= pos_x_view + x_diff; i += GlobalConsts::BOARD_CHUNK_SIZE) {
+			Hexagon* curr_hex = this->hexagon_list->at(i)->at(j);
+        		glLoadName(curr_hex->name);
+
+	                double x = i * 1.5 * this->COS_60;
+			double y = j * 1.0 * this->SIN_60;
+
+			if(i % 2 != 0) {
+			    y += 0.5 * this->SIN_60;
+			}
+
+			glPushMatrix();
+			glTranslatef(x, y, 0);
+
+			UniqueDataVector< GLfloat >* render_triangle_chunk = get_render_data(curr_hex, GlobalConsts::RENDER_TRIANGLES);
+
+			int* triangle_indicies = render_triangle_chunk->indicies_data();
+
 			glEnableClientState(GL_VERTEX_ARRAY);
 			glEnableClientState(GL_COLOR_ARRAY);
 			glEnableClientState(GL_INDEX_ARRAY);
@@ -501,7 +633,7 @@ void Controller::render(int render_mode) {
 			glDisableClientState(GL_COLOR_ARRAY);
 			glDisableClientState(GL_VERTEX_ARRAY);
 
-			/********************************/
+			//------------------------------
 
 			glEnableClientState(GL_VERTEX_ARRAY);
 			glEnableClientState(GL_INDEX_ARRAY);
@@ -522,10 +654,7 @@ void Controller::render(int render_mode) {
 
 			glPopMatrix();
 		}
-            }
-        }
-
-
+	}*/	
 
         //----------
 

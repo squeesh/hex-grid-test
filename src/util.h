@@ -171,6 +171,7 @@ class UniqueDataVector {
 		T* color_data();
 		void reserve(int);
 		void reverse_indicies();
+		void reverse_verticies();
 };
 
 template <typename T>
@@ -221,7 +222,7 @@ int UniqueDataVector<T>::push_back(T x, T y, T z, T r, T g, T b) {
 
 	int index = 0;
 
-	if(this->index_data->count(curr_coords) == 0) {
+	//if(this->index_data->count(curr_coords) == 0) {
 	    std::map< std::vector<T>*, int, cmp_coord<T> > &curr_index_data = *(this->index_data);
 
 		this->vector_data->push_back(x);
@@ -236,11 +237,11 @@ int UniqueDataVector<T>::push_back(T x, T y, T z, T r, T g, T b) {
 		this->indicies->push_back(index);
 		curr_index_data[curr_coords] = index;
 		this->index_data_keys->push_back(curr_coords);
-	} else {	
+	/*} else {	
 		index = this->get_index(curr_coords);
 		this->indicies->push_back(index);
 		delete curr_coords;
-	}
+	}*/
 
 	return index;
 }
@@ -315,6 +316,12 @@ void UniqueDataVector<T>::reverse_indicies() {
     std::reverse(this->indicies->begin(), this->indicies->end()); 
 }
 
+
+template <typename T>
+void UniqueDataVector<T>::reverse_verticies() {
+	std::reverse(this->vector_data->begin(), this->vector_data->end()); 
+	std::reverse(this->color->begin(), this->color->end()); 
+}
 
 
 #endif

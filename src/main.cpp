@@ -116,8 +116,18 @@ int main(int argc, char** argv) {
 	glutMouseFunc(mouse_click);
 	glutMotionFunc(mouse_drag);
 
+	GLenum err = glewInit();
+	if (GLEW_OK != err)
+	{
+		/* Problem: glewInit failed, something is seriously wrong. */
+		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+	}
+	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+
+
 	curr_ctrl->init_gl(RESOLUTION[0], RESOLUTION[1]);
 	//curr_ctrl->init_board(BOARD_WIDTH, BOARD_HEIGHT);
+
 
 	glutMainLoop();
 

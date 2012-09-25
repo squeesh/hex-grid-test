@@ -90,7 +90,12 @@ class Controller {
 
 		std::map< Hexagon*, UniqueDataVector< GLfloat >* >* line_vertex_data;
 		std::map< Hexagon*, UniqueDataVector< GLfloat >* >* triangle_vertex_data;
+		std::map< Hexagon*, GLuint >* vbo_ids;
+		std::map< Hexagon*, GLuint >* vbo_colors;
+		std::map< Hexagon*, GLuint >* vbo_indicies;
 };
+
+//extern PFNGLGENBUFFERSARB glGenBuffersARB;
 
 #endif
 
