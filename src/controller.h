@@ -61,7 +61,7 @@ class Controller {
 		UniqueDataVector< GLfloat >* get_render_data(Hexagon*, int);
 
 		void render();
-		void render(int render_mode);
+		void render_for_select();
 
 		Hexagon* get_clicked_hex(double x, double y);
 

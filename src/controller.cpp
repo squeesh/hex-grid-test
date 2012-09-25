@@ -239,9 +239,6 @@ void Controller::tick() {
     }
 }
 
-void Controller::render() {
-	this->render(GlobalConsts::RENDER_LINES);
-}
 
 void Controller::generate_render_data(Hexagon* curr_hex, double x, double y, UniqueDataVector< GLfloat >* output, int render_mode) {
 	Vertex* curr_vert = NULL;
@@ -415,7 +412,56 @@ UniqueDataVector< GLfloat >* Controller::get_render_data(Hexagon* base_hex, int 
 	return output;
 }
 
-void Controller::render(int render_mode) {
+
+void Controller::render_for_select() {
+	// TODO: Do something about duplicated code...
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+
+	double eye_x = this->x_offset * 1.5 * this->COS_60;
+	double eye_y = this->y_offset * 1.0 * this->SIN_60;
+
+	gluLookAt(
+	    eye_x, eye_y, 15 * this->zoom,
+	    eye_x, eye_y, 0,
+		0, 1, 0
+	);
+
+	// set the rotation point... since our "origin" kinda changes... we need to go to it, rotate, then go back
+	glTranslatef(0.0, this->y_offset * this->SIN_60, 0.0);
+	glRotatef(this->rotation, 1.0, 0.0, 0.0);
+	glTranslatef(0.0, -this->y_offset * this->SIN_60, 0.0);
+
+	int neg_x_view = this->x_offset - this->view_range / 2.0;
+	int pos_x_view = this->x_offset + this->view_range / 2.0;
+	int neg_y_view = this->y_offset - this->view_range / 2.0;
+	int pos_y_view = this->y_offset + this->view_range / 2.0;
+
+	glDisable(GL_CULL_FACE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+        for(int i = neg_x_view; i <= pos_x_view; i++) {
+            for(int j = neg_y_view; j <= pos_y_view; j++) {
+                Hexagon* curr_hex = this->hexagon_list->at(i)->at(j);
+                glLoadName(curr_hex->name);
+
+                double x = i * 1.5 * this->COS_60;
+                double y = j * 1.0 * this->SIN_60;
+
+                if(i % 2 != 0) {
+                    y += 0.5 * this->SIN_60;
+                }
+
+                curr_hex->render_for_select(x, y);
+		
+            }
+        }
+	glEnable(GL_CULL_FACE);
+}
+
+
+void Controller::render() {
+	// TODO: Do something about duplicated code...
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
@@ -438,30 +484,6 @@ void Controller::render(int render_mode) {
 	int neg_y_view = this->y_offset - this->view_range / 2.0 - GlobalConsts::BOARD_CHUNK_SIZE;
 	int pos_y_view = this->y_offset + this->view_range / 2.0;
 
-    if(render_mode == GlobalConsts::RENDER_TRIANGLES) {
-	glDisable(GL_CULL_FACE);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-        for(int i = neg_x_view; i <= pos_x_view; i++) {
-            for(int j = neg_y_view; j <= pos_y_view; j++) {
-                Hexagon* curr_hex = this->hexagon_list->at(i)->at(j);
-                glLoadName(curr_hex->name);
-
-                double x = i * 1.5 * this->COS_60;
-                double y = j * 1.0 * this->SIN_60;
-
-                if(i % 2 != 0) {
-                    y += 0.5 * this->SIN_60;
-                }
-
-		
-                curr_hex->render_as_selected(x, y);
-		
-            }
-        }
-	glEnable(GL_CULL_FACE);
-
-    } else {
         Vertex* curr_vert = NULL;
         int array_size = (pos_x_view+1 - neg_x_view) * (pos_y_view+1 - neg_y_view);
 
@@ -676,7 +698,6 @@ void Controller::render(int render_mode) {
 
         delete triangle_vertex_data;
         delete triangle_color_data;
-    }
 }
 
 
@@ -708,7 +729,7 @@ Hexagon* Controller::get_clicked_hex(double x, double y) {
 
     glMatrixMode(GL_MODELVIEW);
 
-    this->render(GlobalConsts::RENDER_TRIANGLES);
+    this->render_for_select();
 
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();

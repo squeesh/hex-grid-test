@@ -53,14 +53,7 @@ class Hexagon {
 		void set_neighbor(const char* position, Hexagon* neighbor_hex);
 		Hexagon* get_neighbor(const char* position);
 
-		void render(double x, double y);
-		void render_as_selected(double x, double y);
-
-		void render_border(double x, double y);
-		void render_triangles(double x, double y);
-		void render_select(double x, double y);
-
-		
+		void render_for_select(double x, double y);	
 };
 
 #endif

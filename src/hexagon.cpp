@@ -210,67 +210,14 @@ Hexagon* Hexagon::get_neighbor(const char* position) {
 	return this->neighbor_hexagons[position];
 }
 
-void Hexagon::render(double x, double y) {
-	this->last_x = x;
-	this->last_y = y;
 
-	this->render_border(x, y);
-	if(this->select_color) {
-		this->render_select(x, y);
-	}
-}
-
-void Hexagon::render_as_selected(double x, double y) {
-	this->render_triangles(x, y);
-}
-
-void Hexagon::render_border(double x, double y) {
-	glBegin(GL_LINE_LOOP);
-		for(int i = 0; i < 6; i++) {
-			Vertex* curr_vert = this->verticies[this->VERTEX_POSITIONS->at(i)];
-
-			glColor3dv(curr_vert->get_color().data());
-			glVertex3f(x + ROT_COORDS->at(i)->at(0), y + ROT_COORDS->at(i)->at(1), curr_vert->get_height());
-		}
-	glEnd();
-}
-
-void Hexagon::render_triangles(double x, double y) {
+void Hexagon::render_for_select(double x, double y) {
 	glBegin(GL_TRIANGLE_FAN);
 		for(int i = 0; i < 6; i++) {
 			Vertex* curr_vert = this->verticies[this->VERTEX_POSITIONS->at(i)];
 
 			glColor3dv(curr_vert->get_color().data());
 			glVertex3f(x + ROT_COORDS->at(i)->at(0), y + ROT_COORDS->at(i)->at(1), curr_vert->get_height());
-		}
-	glEnd();
-}
-
-void Hexagon::render_select(double x, double y) {
-	/*// not 100% correct... but works
-	glPushMatrix();	
-		glTranslatef(x, y, 0);
-		glScalef(0.4, 0.4, 1);
-		glTranslatef(-1, 0, 0);
-		glRotatef(-30, 0.0, 0.0, 1.0);
-		for(int i = 0; i < 6; i++) {
-			glBegin(GL_TRIANGLES);
-				glColor3dv(this->select_color->get_rgb().data());
-				glVertex3f(0, 0, this->verticies[this->VERTEX_POSITIONS->at(i)]->get_height());
-				glVertex3f(0, 1, this->verticies[this->VERTEX_POSITIONS->at(i+1)]->get_height());
-				glVertex3f(1, 0.5, this->get_height());
-			glEnd();
-			glTranslatef(0, 1, 0);
-			glRotatef(-60, 0.0, 0.0, 1.0);
-		}
-	glPopMatrix();*/
-
-	glBegin(GL_TRIANGLE_FAN);
-		for(int i = 0; i < 6; i++) {
-			Vertex* curr_vert = this->verticies[this->VERTEX_POSITIONS->at(i)];
-
-			glColor3dv(this->select_color->data());
-			glVertex3f(x + ROT_COORDS->at(i)->at(0) * 0.8, y + ROT_COORDS->at(i)->at(1) * 0.8, curr_vert->get_height());
 		}
 	glEnd();
 }
