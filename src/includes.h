@@ -16,6 +16,7 @@
 #include "color.h"
 #include "vertex.h"
 #include "hexagon.h"
+#include "gameboard.h"
 #include "controller.h"
 
 

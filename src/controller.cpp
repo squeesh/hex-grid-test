@@ -36,6 +36,7 @@ Controller::Controller(void) {
 	this->hexagon_list->reserve(GlobalConsts::BOARD_WIDTH);
 	this->hexagon_indicies = new std::map< Hexagon*, std::vector< int >* >();
 	this->init_board_render_cache();
+	this->gameboard = new Gameboard();
 
 	this->print_flag = false;
 

@@ -96,6 +96,8 @@ class Controller {
 		std::map< Hexagon*, GLuint >* vbo_ids;
 		std::map< Hexagon*, GLuint >* vbo_colors;
 		std::map< Hexagon*, GLuint >* vbo_indicies;
+
+		Gameboard* gameboard;
 };
 
 //extern PFNGLGENBUFFERSARB glGenBuffersARB;
