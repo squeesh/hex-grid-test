@@ -3,15 +3,23 @@
 
 class GameboardChunk {
 	public:
-		GLuint vbo_id;
-		GLuint vbo_color;
-		GLuint vbo_indicie;
+		GLuint vbo_hex_vert;
+		GLuint vbo_hex_color;
+		GLuint vbo_hex_indicie;
+
+		GLuint vbo_sel_vert;
+		GLuint vbo_sel_color;
+		GLuint vbo_sel_indicie;
 
 		UniqueDataVector< GLfloat >* board_vertex_data;
+		UniqueDataVector< GLfloat >* board_select_data;
 
 		GameboardChunk();
+		~GameboardChunk();
 
 		void generate_render_data(Hexagon*, double, double);
+
+		void write_VBO_data();
 
 };
 

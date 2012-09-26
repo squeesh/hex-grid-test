@@ -40,57 +40,11 @@ GameboardChunk* Gameboard::generate_chunk(Hexagon* base_hex) {
 	}
 
 	output->board_vertex_data->reverse_indicies();
-	//output->reverse_verticies();
+	output->board_select_data->reverse_indicies();
 	std::map< Hexagon*, GameboardChunk* > &curr_chunk_map = *(this->chunk_map);
 	curr_chunk_map[base_hex] = output;
 
-	// TODO: This needs to be rewritten...
-	// Really you should pass the function a hex, and it should return all the VBO pointers needed...
-
-	//GLuint vec_vboId;
-	// generate a new VBO and get the associated ID
-	glGenBuffersARB(1, &(output->vbo_id));
-	// bind VBO in order to use
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB, output->vbo_id);
-	// upload data to VBO
-	glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(output->board_vertex_data->data()) * output->board_vertex_data->indicies_size() * 3, output->board_vertex_data->data(), GL_STATIC_DRAW_ARB);
-	//std::map< Hexagon*, GLuint > &curr_vbo_ids = *(output->vbo_ids);
-	//curr_vbo_ids[base_hex] = vec_vboId;
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
-
-	//GLuint color_vboId;
-	// generate a new VBO and get the associated ID
-	glGenBuffersARB(1, &(output->vbo_color));
-	// bind VBO in order to use
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB, output->vbo_color);
-	// upload data to VBO
-	glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(output->board_vertex_data->color_data()) * output->board_vertex_data->indicies_size() * 3, output->board_vertex_data->color_data(), GL_STATIC_DRAW_ARB);
-	//std::map< Hexagon*, GLuint > &curr_vbo_colors = *(output->vbo_colors);
-	//curr_vbo_colors[base_hex] = color_vboId;
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
-
-	//GLuint ind_vboId;
-	// generate a new VBO and get the associated ID
-	glGenBuffersARB(1, &(output->vbo_indicie));
-	// bind VBO in order to use
-	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, output->vbo_indicie);
-	// upload data to VBO
-	glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, sizeof(output->board_vertex_data->indicies_data()) * output->board_vertex_data->indicies_size(), output->board_vertex_data->indicies_data(), GL_STATIC_DRAW_ARB);
-	//std::map< Hexagon*, GLuint > &curr_vbo_indicies = *(output->vbo_indicies);
-	//curr_vbo_indicies[base_hex] = ind_vboId;
-	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
-
-
-	/*int* indicies = output->indicies_data();
-	float* render_data =  output->data();
-
-	for(int i = 0; i < output->indicies_size(); i ++) {
-		std::cout << indicies[i] << " ";
-		if(i % 2 != 0) {
-			std::cout << "- ";
-		}
-	}
-	std::cout << std::endl << std::endl;*/
+	output->write_VBO_data();
 
 	return output;
 }
@@ -163,5 +117,14 @@ GameboardChunk* Gameboard::get_render_data(Hexagon* base_hex) {
 RoundVector< RoundVector< Hexagon* >* >* Gameboard::get_hexagon_list() {
 	// TODO: This should return a copy... so things do get added without being added to the other constructs
 	return this->hexagon_list;
+}
+
+void Gameboard::clear() {
+	std::map< Hexagon*, GameboardChunk* > &curr_chunk_map = *(this->chunk_map);
+	for(std::map< Hexagon*, GameboardChunk* >::iterator itr = curr_chunk_map.begin(); itr != curr_chunk_map.end(); itr++) {
+		delete (*itr).second;
+	}
+
+	this->chunk_map->clear();
 }
 

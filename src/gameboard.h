@@ -19,6 +19,8 @@ class Gameboard {
 		RoundVector< RoundVector< Hexagon* >* >* get_hexagon_list();
 
 		GameboardChunk* get_render_data(Hexagon* base_hex);
+
+		void clear();
 };
 
 

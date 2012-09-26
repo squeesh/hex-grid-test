@@ -57,8 +57,8 @@ class Controller {
 
 		void tick();
 
-		void generate_render_data(Hexagon*, double, double, UniqueDataVector< GLfloat >*);
-		UniqueDataVector< GLfloat >* get_render_data(Hexagon*);
+		//void generate_render_data(Hexagon*, double, double, UniqueDataVector< GLfloat >*);
+		//UniqueDataVector< GLfloat >* get_render_data(Hexagon*);
 
 		void render();
 		void render_for_select();
@@ -92,10 +92,10 @@ class Controller {
 		//std::map< Hexagon*, std::vector< int >* >* hexagon_indicies;
 
 		//std::map< Hexagon*, UniqueDataVector< GLfloat >* >* line_vertex_data;
-		std::map< Hexagon*, UniqueDataVector< GLfloat >* >* triangle_vertex_data;
-		std::map< Hexagon*, GLuint >* vbo_ids;
+		//std::map< Hexagon*, UniqueDataVector< GLfloat >* >* triangle_vertex_data;
+		/*std::map< Hexagon*, GLuint >* vbo_ids;
 		std::map< Hexagon*, GLuint >* vbo_colors;
-		std::map< Hexagon*, GLuint >* vbo_indicies;
+		std::map< Hexagon*, GLuint >* vbo_indicies;*/
 
 		Gameboard* gameboard;
 };
