@@ -65,12 +65,6 @@ Gameboard::Gameboard() {
 }
 
 
-/*GameboardChunk* Gameboard::at(Hexagon* hex) {
-	std::map< Hexagon*, GameboardChunk* > &chunk = *(this->chunk_map);
-	return chunk[hex];
-}*/
-
-
 void Gameboard::push_back(Hexagon* hex) {
 	int total_size = 0;
 	for(int i = 0; i < this->hexagon_list->size(); i++) {
@@ -80,25 +74,10 @@ void Gameboard::push_back(Hexagon* hex) {
 	int i = (int)(total_size % GlobalConsts::BOARD_WIDTH);
 
 	this->hexagon_list->at(i)->push_back(hex);
-
-	//int j = this->hexagon_list->at(i)->size()-1;
-
-	/*std::map< Hexagon*, std::vector< int >* > &curr_indicies = *(this->hexagon_indicies);
-	curr_indicies[hex] = new std::vector< int >();
-	curr_indicies[hex]->push_back(i);
-	curr_indicies[hex]->push_back(j);*/
-
-	//std::map< Hexagon*, GameboardChunk* > &chunk = *(this->chunk_map);
-	//chunk[hex] = NULL;
 }
 
 
 GameboardChunk* Gameboard::get_render_data(Hexagon* base_hex) {
-	/*std::vector< double >* coord_vect = new std::vector< double >();
-	coord_vect->reserve(2);
-	coord_vect->push_back(base_x);
-	coord_vect->push_back(base_y);*/
-
 	GameboardChunk* output = NULL;
 	std::map< Hexagon*, GameboardChunk* > &chunk = *(this->chunk_map);
 

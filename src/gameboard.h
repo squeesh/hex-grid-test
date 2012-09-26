@@ -12,7 +12,6 @@ class Gameboard {
 	public:
 		Gameboard();
 
-		//GameboardChunk* at(Hexagon*);
 		void push_back(Hexagon*);
 		int count(Hexagon*);
 

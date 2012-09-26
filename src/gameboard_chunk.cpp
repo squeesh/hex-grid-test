@@ -79,6 +79,8 @@ void GameboardChunk::generate_render_data(Hexagon* curr_hex, double x, double y)
 
 
 void GameboardChunk::write_VBO_data() {
+	// TODO: very messy looking... this can be cleaned further...
+
 	// generate a new VBO and get the associated ID
 	glGenBuffersARB(1, &(this->vbo_hex_vert));
 	// bind VBO in order to use
