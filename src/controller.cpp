@@ -17,7 +17,7 @@ Controller::Controller(void) {
 	this->rotation   = GlobalConsts::START_ROTATION;
 	this->view_range = GlobalConsts::START_VIEW_RANGE;
 
-	this->hexagon_list = NULL;
+	//this->hexagon_list = NULL;
 
 	this->scroll_map[GlobalConsts::LEFT]    = false;
 	this->scroll_map[GlobalConsts::RIGHT]   = false;
@@ -32,9 +32,9 @@ Controller::Controller(void) {
 		this->old_mouse_pos[i]["y"] 	= 0;
 	}
 
-	this->hexagon_list = new RoundVector< RoundVector< Hexagon* >* >();
-	this->hexagon_list->reserve(GlobalConsts::BOARD_WIDTH);
-	this->hexagon_indicies = new std::map< Hexagon*, std::vector< int >* >();
+	//this->hexagon_list = new RoundVector< RoundVector< Hexagon* >* >();
+	//this->hexagon_list->reserve(GlobalConsts::BOARD_WIDTH);
+	//this->hexagon_indicies = new std::map< Hexagon*, std::vector< int >* >();
 	this->init_board_render_cache();
 	this->gameboard = new Gameboard();
 
@@ -100,7 +100,7 @@ Controller* Controller::get_controller() {
 
 void Controller::push_hexagon(Hexagon *hex) {
 	// assumption: the hex being passed in is not currently in hexagon_list
-	int total_size = 0;
+	/*int total_size = 0;
 	for(int i = 0; i < this->hexagon_list->size(); i++) {
 		total_size += this->hexagon_list->at(i)->size();
 	}
@@ -109,15 +109,17 @@ void Controller::push_hexagon(Hexagon *hex) {
 
 	this->hexagon_list->at(i)->push_back(hex);
 
-	int j = this->hexagon_list->at(i)->size()-1;
+	int j = this->hexagon_list->at(i)->size()-1;*/
 
-	std::map< Hexagon*, std::vector< int >* > &curr_indicies = *(this->hexagon_indicies);
+	/*std::map< Hexagon*, std::vector< int >* > &curr_indicies = *(this->hexagon_indicies);
 	curr_indicies[hex] = new std::vector< int >();
 	curr_indicies[hex]->push_back(i);
-	curr_indicies[hex]->push_back(j);
+	curr_indicies[hex]->push_back(j);*/
+
+	this->gameboard->push_back(hex);
 }
 
-Hexagon* Controller::pop_hexagon() {
+/*Hexagon* Controller::pop_hexagon() {
 	int total_size = 0;
 	for(int i = 0; i < this->hexagon_list->size(); i++) {
 		total_size += this->hexagon_list->at(i)->size();
@@ -128,10 +130,10 @@ Hexagon* Controller::pop_hexagon() {
 	Hexagon *last_hex = this->hexagon_list->at(i)->back();
 	this->hexagon_list->at(i)->pop_back();
 	return last_hex;
-}
+}*/
 
 Hexagon* Controller::get_hexagon(int i, int j) {
-    return this->hexagon_list->at(i)->at(j);
+    return this->gameboard->get_hexagon_list()->at(i)->at(j);
 }
 
 void Controller::zoom_map(double zoom_amount) {
@@ -205,12 +207,12 @@ void Controller::resize(long width, long height) {
 }
 
 void Controller::init_board() {
-	for(int i = 0; i < GlobalConsts::BOARD_WIDTH; i++) {
+	/*for(int i = 0; i < GlobalConsts::BOARD_WIDTH; i++) {
 	    RoundVector< Hexagon* >* curr_vect = new RoundVector< Hexagon* >();
 		curr_vect->reserve(GlobalConsts::BOARD_HEIGHT);
 
 		this->hexagon_list->push_back(curr_vect);
-	}
+	}*/
 }
 
 void Controller::py_init_board() {
@@ -272,10 +274,10 @@ UniqueDataVector< GLfloat >* Controller::get_render_data(Hexagon* base_hex) {
 	double base_x = 0;
 	double base_y = 0;
 
-	std::vector< double >* coord_vect = new std::vector< double >();
+	/*std::vector< double >* coord_vect = new std::vector< double >();
 	coord_vect->reserve(2);
 	coord_vect->push_back(base_x);
-	coord_vect->push_back(base_y);
+	coord_vect->push_back(base_y);*/
 
 	UniqueDataVector< GLfloat >* output = NULL;
 
@@ -404,7 +406,7 @@ void Controller::render_for_select() {
 
         for(int i = neg_x_view; i <= pos_x_view; i++) {
             for(int j = neg_y_view; j <= pos_y_view; j++) {
-                Hexagon* curr_hex = this->hexagon_list->at(i)->at(j);
+                Hexagon* curr_hex = this->gameboard->get_hexagon_list()->at(i)->at(j);
                 glLoadName(curr_hex->name);
 
                 double x = i * 1.5 * this->COS_60;
@@ -456,9 +458,9 @@ void Controller::render() {
         triangle_color_data->reserve(array_size);
 
         int tri_count = 0;
-	std::map< Hexagon*, GLuint > &curr_vbo_ids = *(this->vbo_ids);
+	/*std::map< Hexagon*, GLuint > &curr_vbo_ids = *(this->vbo_ids);
 	std::map< Hexagon*, GLuint > &curr_vbo_colors = *(this->vbo_colors);
-	std::map< Hexagon*, GLuint > &curr_vbo_indicies = *(this->vbo_indicies);
+	std::map< Hexagon*, GLuint > &curr_vbo_indicies = *(this->vbo_indicies);*/
 
 	GLuint vec_vboId;
 	GLuint color_vboId;
@@ -466,7 +468,7 @@ void Controller::render() {
 
         for(int j = neg_y_view; j <= pos_y_view; j++) {
             for(int i = neg_x_view; i <= pos_x_view; i++) {
-                Hexagon* curr_hex = this->hexagon_list->at(i)->at(j);
+                Hexagon* curr_hex = this->gameboard->get_hexagon_list()->at(i)->at(j);
                 glLoadName(curr_hex->name);
 
                 double x = i * 1.5 * this->COS_60;
@@ -517,13 +519,23 @@ void Controller::render() {
 			glPushMatrix();
 			glTranslatef(x, y, 0);
 
-			UniqueDataVector< GLfloat >* render_triangle_chunk = get_render_data(curr_hex);
+			//std::cout << "board: " << this->gameboard << std::endl;
+			GameboardChunk* curr_chunk = this->gameboard->get_render_data(curr_hex);
+			//std::cout << "curr_chunk: " << curr_chunk << std::endl;
+			UniqueDataVector< GLfloat >* render_triangle_chunk = curr_chunk->board_vertex_data;
+			//std::cout << "render_triangle_chunk: " << render_triangle_chunk << std::endl;		
+
+			//UniqueDataVector< GLfloat >* render_triangle_chunk = get_render_data(curr_hex);
 
 			int* triangle_indicies = render_triangle_chunk->indicies_data();
 
-			vec_vboId = curr_vbo_ids[curr_hex];
+			vec_vboId = curr_chunk->vbo_id;
+			color_vboId = curr_chunk->vbo_color;
+			ind_vboId = curr_chunk->vbo_indicie;
+
+			/*vec_vboId = curr_vbo_ids[curr_hex];
 			color_vboId = curr_vbo_colors[curr_hex];
-			ind_vboId = curr_vbo_indicies[curr_hex];
+			ind_vboId = curr_vbo_indicies[curr_hex];*/
 
 			glEnableClientState(GL_VERTEX_ARRAY);             // activate vertex coords array
 			glEnableClientState(GL_COLOR_ARRAY);
@@ -798,9 +810,9 @@ Hexagon* Controller::get_selected_hex() {
 }
 
 Hexagon* Controller::get_hex_by_name(long name) {
-	for(int i = 0; i < this->hexagon_list->size(); i++) {
-		for(int j = 0; j < this->hexagon_list->at(i)->size(); j++) {
-			Hexagon* curr_hex = this->hexagon_list->at(i)->at(j);
+	for(int i = 0; i < this->gameboard->get_hexagon_list()->size(); i++) {
+		for(int j = 0; j < this->gameboard->get_hexagon_list()->at(i)->size(); j++) {
+			Hexagon* curr_hex = this->gameboard->get_hexagon_list()->at(i)->at(j);
 
 			if(curr_hex->name == name) {
 				return curr_hex;

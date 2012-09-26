@@ -41,7 +41,7 @@ class Controller {
 		void py_init_board();
 
 		void push_hexagon(Hexagon *hex);
-		Hexagon* pop_hexagon();
+		//Hexagon* pop_hexagon();
 		Hexagon* get_hexagon(int i, int j);
 
 		void zoom_map(double);
@@ -88,8 +88,8 @@ class Controller {
 		void set_selected_hex(Hexagon* curr_hex);
 		Hexagon* get_selected_hex();
 
-		RoundVector< RoundVector< Hexagon* >* >* hexagon_list;
-		std::map< Hexagon*, std::vector< int >* >* hexagon_indicies;
+		//RoundVector< RoundVector< Hexagon* >* >* hexagon_list;
+		//std::map< Hexagon*, std::vector< int >* >* hexagon_indicies;
 
 		//std::map< Hexagon*, UniqueDataVector< GLfloat >* >* line_vertex_data;
 		std::map< Hexagon*, UniqueDataVector< GLfloat >* >* triangle_vertex_data;
@@ -100,7 +100,6 @@ class Controller {
 		Gameboard* gameboard;
 };
 
-//extern PFNGLGENBUFFERSARB glGenBuffersARB;
 
 #endif
 

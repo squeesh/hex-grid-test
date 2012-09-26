@@ -11,10 +11,10 @@ extern "C" {
 		curr_ctrl->push_hexagon(hex);
 	}
 
-	Hexagon* Controller_pop_hexagon() {
+	/*Hexagon* Controller_pop_hexagon() {
 		Controller* curr_ctrl = Controller_get_controller();
 		return curr_ctrl->pop_hexagon();
-	}
+	}*/
 
 	Hexagon* Controller_get_hexagon(int i, int j) {
 		Controller* curr_ctrl = Controller_get_controller();

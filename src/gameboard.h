@@ -1,16 +1,24 @@
 #ifndef GAMEBOARD_H
 #define GAMEBOARD_H
 
-class GameboardChunk {
-	//private:
 
-};
+class Gameboard {
+	private:
+		RoundVector< RoundVector< Hexagon* >* >* hexagon_list;
+		std::map< Hexagon*, GameboardChunk* >* chunk_map;
 
+		GameboardChunk* generate_chunk(Hexagon*);
 
-class Gameboard : public std::map< Hexagon*, GameboardChunk* > {
 	public:
 		Gameboard();
-		GameboardChunk* at(Hexagon*);
+
+		//GameboardChunk* at(Hexagon*);
+		void push_back(Hexagon*);
+		int count(Hexagon*);
+
+		RoundVector< RoundVector< Hexagon* >* >* get_hexagon_list();
+
+		GameboardChunk* get_render_data(Hexagon* base_hex);
 };
 
 
