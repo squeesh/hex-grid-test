@@ -58,3 +58,20 @@ PyObject* py_call_func(PyObject *py_obj, char* func_name, PyObject* py_obj_1, Py
 /***************/
 
 
+bool color_changed(std::vector< double >* color_a, std::vector< double >* color_b) {
+	if(color_a->size() != color_b->size()) {
+		return true;
+	}
+
+	if(color_a->size() == 0 && color_b->size() == 0) {
+		return false;
+	}
+
+	return (color_a->at(0) != color_b->at(0)) || (color_a->at(1) != color_b->at(1)) || (color_a->at(2) != color_b->at(2));
+}
+
+
+bool color_changed(double red_a, double green_a, double blue_a, double red_b, double green_b, double blue_b) {
+	return (red_a != red_b) || (green_a != green_b) || (blue_a != blue_b);
+}
+

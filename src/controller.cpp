@@ -426,7 +426,7 @@ void Controller::mouse_left_click(int x, int y) {
 		}
 
 		this->set_selected_hex(curr_hex);
-		this->reset_board_render_cache();
+		//this->reset_board_render_cache();
 	}
 
 	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["down"] 	= 1;
@@ -502,11 +502,11 @@ void Controller::key_up(unsigned char key, int x, int y) {
 }
 
 void Controller::set_selected_hex(Hexagon* curr_hex) {
-    if(this->selected_hex) {
-        this->selected_hex->clear_select_color();
-    }
-    this->selected_hex = curr_hex;
-    this->selected_hex->set_select_color(1.0, 1.0, 0.0);
+	if(this->selected_hex) {
+		this->selected_hex->clear_select_color();
+	}
+	this->selected_hex = curr_hex;
+	this->selected_hex->set_select_color(1.0, 1.0, 0.0);
 }
 
 Hexagon* Controller::get_selected_hex() {

@@ -52,11 +52,11 @@ GameboardChunk* Gameboard::generate_chunk(Hexagon* base_hex) {
 	std::map< Hexagon*, GameboardChunk* > &curr_chunk_map = *(this->chunk_map);
 	curr_chunk_map[base_hex] = output;
 
-	std::cout << "writing..." << std::endl;
+	//std::cout << "writing..." << std::endl;
 
 	output->write_VBO_data();
 
-	std::cout << "returning: " << output << std::endl;
+	//std::cout << "returning: " << output << std::endl;
 
 	return output;
 }
@@ -99,6 +99,7 @@ GameboardChunk* Gameboard::get_render_data(Hexagon* base_hex) {
 	} 
 
 	if(chunk[base_hex]->regenerate) {
+		chunk[base_hex]->clear();
 		output = this->generate_chunk(base_hex);
 		output->regenerate = false;	
 	} else {
@@ -126,9 +127,11 @@ void Gameboard::clear() {
 
 	this->chunk_map->clear();*/
 
+	std::cout << "no call this func!" << std::endl;
+	
 	std::map< Hexagon*, GameboardChunk* > &curr_chunk_map = *(this->chunk_map);
 	for(std::map< Hexagon*, GameboardChunk* >::iterator itr = curr_chunk_map.begin(); itr != curr_chunk_map.end(); itr++) {
-		(*itr).second->clear();
+		(*itr).second->regenerate = true;
 	}
 }
 

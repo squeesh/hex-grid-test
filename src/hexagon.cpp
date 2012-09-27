@@ -72,14 +72,16 @@ void Hexagon::base_init() {
 		this->set_vertex(this->VERTEX_POSITIONS->at(i), new Vertex(0, 0, 0, 0));
 	}
 
-	this->hex_color = NULL;
-	this->set_hex_color(0, 1, 0);
-
 	this->name_count++;
 	this->name = this->name_count;
 
 	this->last_x = 0;
 	this->last_y = 0;
+
+	this->parent_chunk = NULL;
+
+	this->hex_color = NULL;
+	this->set_hex_color(0, 1, 0);
 }
 
 Hexagon::Hexagon() {
@@ -107,14 +109,27 @@ void Hexagon::set_border_color(std::vector<double> rgb) {
 }
 
 void Hexagon::set_select_color(double red, double green, double blue) {
+	bool changed = false;
+
 	if(!this->select_color) {
 		this->select_color = new std::vector< double >();
-	} 
+		changed = true;
+	} else {
+		// assume this will be 3 in length if we have a pointer...
+		changed = color_changed(
+			red, green, blue, 
+			this->select_color->at(0), this->select_color->at(1), this->select_color->at(2)
+		);
+	}
 
 	this->select_color->clear();
 	this->select_color->push_back(red);
 	this->select_color->push_back(green);
 	this->select_color->push_back(blue);
+
+	if(this->parent_chunk && changed) {
+		this->parent_chunk->regenerate = true;
+	}
 }
 
 void Hexagon::set_select_color(std::vector<double> rgb) {
@@ -126,9 +141,17 @@ void Hexagon::set_select_color(std::vector<double> rgb) {
 }
 
 void Hexagon::clear_select_color() {
+	bool changed = false;
+
 	if(this->select_color) {
 		delete this->select_color;
 		this->select_color = NULL;
+		// assume pointer was 3 in length...
+		changed = true;
+	}
+
+	if(this->parent_chunk && changed) {
+		this->parent_chunk->regenerate = true;
 	}
 }
 
@@ -145,6 +168,10 @@ void Hexagon::set_hex_color(double red, double green, double blue) {
 	this->hex_color->push_back(red);
 	this->hex_color->push_back(green);
 	this->hex_color->push_back(blue);
+
+	/*if(this->parent_chunk) {
+		this->parent_chunk->regenerate = true;
+	}*/
 }
 
 void Hexagon::set_hex_color(std::vector<double> rgb) {
@@ -220,6 +247,61 @@ void Hexagon::render_for_select(double x, double y) {
 			glVertex3f(x + ROT_COORDS->at(i)->at(0), y + ROT_COORDS->at(i)->at(1), curr_vert->get_height());
 		}
 	glEnd();
+}
+
+
+void Hexagon::generate_vertex_data(double x, double y, UniqueDataVector< GLfloat >* vertex_data, UniqueDataVector< GLfloat >* select_data) {
+	Vertex* curr_vert = NULL;
+	std::vector< double >* curr_color;
+
+	// Generate verticies for hex guts
+	curr_color = this->get_hex_color();
+
+	for(int i = 1; i < 5; i++) {
+		curr_vert = this->verticies[this->VERTEX_POSITIONS->at(0)];
+
+		vertex_data->push_back(
+			x + Hexagon::ROT_COORDS->at(0)->at(0), y + Hexagon::ROT_COORDS->at(0)->at(1), curr_vert->get_height(),
+			curr_color->at(0), curr_color->at(1), curr_color->at(2)
+		);
+
+		curr_vert = this->verticies[this->VERTEX_POSITIONS->at(i)];
+
+		vertex_data->push_back(
+			x + Hexagon::ROT_COORDS->at(i)->at(0), y + Hexagon::ROT_COORDS->at(i)->at(1), curr_vert->get_height(),
+			curr_color->at(0), curr_color->at(1), curr_color->at(2)
+		);
+
+		curr_vert = this->verticies[this->VERTEX_POSITIONS->at(i+1)];
+
+		vertex_data->push_back(
+			x + Hexagon::ROT_COORDS->at(i+1)->at(0), y + Hexagon::ROT_COORDS->at(i+1)->at(1), curr_vert->get_height(),
+			curr_color->at(0), curr_color->at(1), curr_color->at(2)
+		);
+	}
+
+	curr_color = this->get_select_color();
+
+        for(int i = 2; i < 6; i++) {
+		curr_vert = this->verticies[this->VERTEX_POSITIONS->at(i)];
+
+                if(curr_color) {
+		    select_data->push_back(
+			Hexagon::ROT_COORDS->at(0)->at(0) * 0.8 + x, Hexagon::ROT_COORDS->at(0)->at(1) * 0.8 + y, this->verticies[this->VERTEX_POSITIONS->at(0)]->get_height() + 0.1,
+			curr_color->at(0), curr_color->at(1), curr_color->at(2)
+		    );
+
+		    select_data->push_back(
+			Hexagon::ROT_COORDS->at(i-1)->at(0) * 0.8 + x, Hexagon::ROT_COORDS->at(i-1)->at(1) * 0.8 + y, this->verticies[this->VERTEX_POSITIONS->at(i-1)]->get_height() + 0.1,
+			curr_color->at(0), curr_color->at(1), curr_color->at(2)
+		    );
+
+		    select_data->push_back(
+			Hexagon::ROT_COORDS->at(i)->at(0) * 0.8 + x, Hexagon::ROT_COORDS->at(i)->at(1) * 0.8 + y, this->verticies[this->VERTEX_POSITIONS->at(i)]->get_height() + 0.1,
+			curr_color->at(0), curr_color->at(1), curr_color->at(2)
+		    );
+                }
+	}
 }
 
 

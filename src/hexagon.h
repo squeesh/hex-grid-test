@@ -1,6 +1,8 @@
 #ifndef HEXAGON_H
 #define HEXAGON_H
 
+class GameboardChunk;
+
 
 class Hexagon {
 	private:
@@ -19,6 +21,8 @@ class Hexagon {
 
 		int name;
 		static int name_count;
+
+		GameboardChunk* parent_chunk;
 
 		static RoundVector< RoundVector<double>* >* rendered_verticies;
 		std::map<const char*, Vertex*, cmp_str> verticies;
@@ -53,7 +57,9 @@ class Hexagon {
 		void set_neighbor(const char* position, Hexagon* neighbor_hex);
 		Hexagon* get_neighbor(const char* position);
 
-		void render_for_select(double x, double y);	
+		void render_for_select(double x, double y);
+
+		void generate_vertex_data(double, double, UniqueDataVector< GLfloat >*, UniqueDataVector< GLfloat >*);
 };
 
 #endif

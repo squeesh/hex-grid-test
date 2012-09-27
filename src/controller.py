@@ -94,12 +94,15 @@ class Controller(object):
 
         for hex in Hexagon.get_all_hexagons():
             height = hex.get_height()
-            height_percent = height / 10.0;
+            height_percent = abs(height / 5.0);
 
-            if height > 0:
-                hex.set_hex_color(height_percent, 0.7, height_percent)
+            if height_percent > 1.0:
+                height_percent = 1.0
+
+            if height > 0.0:
+                hex.set_hex_color(height_percent, 0.5 + height_percent / 2.0, height_percent)
             else:
-                hex.set_hex_color(-height_percent, 0.7 + height_percent, 0)
+                hex.set_hex_color(height_percent / 2.0, 0.5 - height_percent / 2.0, 0)
 
 #        for hex in Hexagon.get_all_hexagons():
 #            if not hex.is_pathable():

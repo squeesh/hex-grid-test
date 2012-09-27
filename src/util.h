@@ -21,6 +21,10 @@ struct cmp_coord {
 };
 
 
+bool color_changed(std::vector< double >* color_a, std::vector< double >* color_b);
+bool color_changed(double red_a, double green_a, double blue_a, double red_b, double green_b, double blue_b);
+
+
 template <typename T>
 class RoundVector : public std::vector<T> {
 	public:
