@@ -14,9 +14,12 @@ class GameboardChunk {
 		UniqueDataVector< GLfloat >* board_vertex_data;
 		UniqueDataVector< GLfloat >* board_select_data;
 
+		bool regenerate;
+
 		GameboardChunk();
 		~GameboardChunk();
 
+		void clear();
 		void generate_render_data(Hexagon*, float, float);
 
 		void write_VBO_data();

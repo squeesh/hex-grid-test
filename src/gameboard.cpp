@@ -8,7 +8,9 @@ GameboardChunk* Gameboard::generate_chunk(Hexagon* base_hex) {
 
 	std::cout << "Gameboard::generating: " << base_hex << std::endl;
 
-	GameboardChunk* output = new GameboardChunk();
+	std::map< Hexagon*, GameboardChunk* > &chunk = *(this->chunk_map);
+	GameboardChunk* output = chunk[base_hex];
+	//GameboardChunk* output = new GameboardChunk();
 
 	double x = base_x;
 	double y = base_y;
@@ -92,9 +94,13 @@ GameboardChunk* Gameboard::get_render_data(Hexagon* base_hex) {
 	std::map< Hexagon*, GameboardChunk* > &chunk = *(this->chunk_map);
 
 	if(this->chunk_map->count(base_hex) == 0) {
-		output = this->generate_chunk(base_hex);
-
+		GameboardChunk* output = new GameboardChunk();
 		chunk[base_hex] = output;
+	} 
+
+	if(chunk[base_hex]->regenerate) {
+		output = this->generate_chunk(base_hex);
+		output->regenerate = false;	
 	} else {
 		output = chunk[base_hex];
 	}
@@ -109,11 +115,20 @@ RoundVector< RoundVector< Hexagon* >* >* Gameboard::get_hexagon_list() {
 }
 
 void Gameboard::clear() {
-	std::map< Hexagon*, GameboardChunk* > &curr_chunk_map = *(this->chunk_map);
+	// Possibly fixed a bug... It seems deleteing the chunks then regenerating them wasn't working as intended
+	// due to concurrency on windows? Memory was flagged for deletion, but would be deleted when it wasn't safe...
+	// so instead of deleteing... we now keep our assigned opengl memory locations and just rewrite to it...
+
+	/*std::map< Hexagon*, GameboardChunk* > &curr_chunk_map = *(this->chunk_map);
 	for(std::map< Hexagon*, GameboardChunk* >::iterator itr = curr_chunk_map.begin(); itr != curr_chunk_map.end(); itr++) {
 		delete (*itr).second;
 	}
 
-	this->chunk_map->clear();
+	this->chunk_map->clear();*/
+
+	std::map< Hexagon*, GameboardChunk* > &curr_chunk_map = *(this->chunk_map);
+	for(std::map< Hexagon*, GameboardChunk* >::iterator itr = curr_chunk_map.begin(); itr != curr_chunk_map.end(); itr++) {
+		(*itr).second->clear();
+	}
 }
 

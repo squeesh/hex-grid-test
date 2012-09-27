@@ -5,12 +5,21 @@ GameboardChunk::GameboardChunk() {
 	this->board_select_data = new UniqueDataVector< GLfloat >();
 
 	this->vbo_hex_vert = 0;
-    this->vbo_hex_color = 0;
-    this->vbo_hex_indicie = 0;
+	this->vbo_hex_color = 0;
+	this->vbo_hex_indicie = 0;
 
-    this->vbo_sel_vert = 0;
-    this->vbo_sel_color = 0;
-    this->vbo_sel_indicie = 0;
+	this->vbo_sel_vert = 0;
+	this->vbo_sel_color = 0;
+	this->vbo_sel_indicie = 0;
+
+	glGenBuffersARB(1, &(this->vbo_hex_vert));
+	glGenBuffersARB(1, &(this->vbo_hex_color));
+	glGenBuffersARB(1, &(this->vbo_hex_indicie));
+	glGenBuffersARB(1, &(this->vbo_sel_vert));
+	glGenBuffersARB(1, &(this->vbo_sel_color));
+	glGenBuffersARB(1, &(this->vbo_sel_indicie));
+
+	this->regenerate = true;
 }
 
 
@@ -27,6 +36,16 @@ GameboardChunk::~GameboardChunk() {
 	glDeleteBuffersARB(1, &(this->vbo_sel_vert));
 	glDeleteBuffersARB(1, &(this->vbo_sel_color));
 	glDeleteBuffersARB(1, &(this->vbo_sel_indicie));
+}
+
+
+void GameboardChunk::clear() {
+	delete this->board_vertex_data;
+	delete this->board_select_data;
+
+	this->board_vertex_data = new UniqueDataVector< GLfloat >();
+	this->board_select_data = new UniqueDataVector< GLfloat >();
+	this->regenerate = true;
 }
 
 
@@ -93,7 +112,7 @@ void GameboardChunk::write_VBO_data() {
 
 	// generate a new VBO and get the associated ID
 
-	glGenBuffersARB(1, &(this->vbo_hex_vert));
+	//glGenBuffersARB(1, &(this->vbo_hex_vert));
 	std::cout << "vbo_hex_vert:    " << this->vbo_hex_vert << " | " << this->board_vertex_data << " | " << this->board_vertex_data->indicies_size() * 3 << std::endl;
 
 	// bind VBO in order to use
@@ -104,7 +123,7 @@ void GameboardChunk::write_VBO_data() {
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 
 		// generate a new VBO and get the associated ID
-	glGenBuffersARB(1, &(this->vbo_hex_color));
+	//glGenBuffersARB(1, &(this->vbo_hex_color));
 	std::cout << "vbo_hex_color:   " << this->vbo_hex_color << " | " << this->board_vertex_data << " | " << this->board_vertex_data->indicies_size() * 3 << std::endl;
 
 	// bind VBO in order to use
@@ -115,7 +134,7 @@ void GameboardChunk::write_VBO_data() {
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 
 		// generate a new VBO and get the associated ID
-	glGenBuffersARB(1, &(this->vbo_hex_indicie));
+	//glGenBuffersARB(1, &(this->vbo_hex_indicie));
 	std::cout << "vbo_hex_indicie: " << this->vbo_hex_indicie << " | " << this->board_vertex_data << " | " << this->board_vertex_data->indicies_size() << std::endl;
 
 	// bind VBO in order to use
@@ -128,7 +147,7 @@ void GameboardChunk::write_VBO_data() {
 	//-------------------------------------
 
 		// generate a new VBO and get the associated ID
-	glGenBuffersARB(1, &(this->vbo_sel_vert));
+	//glGenBuffersARB(1, &(this->vbo_sel_vert));
 	std::cout << "vbo_sel_vert:    " << this->vbo_sel_vert << " | " << this->board_select_data << " | " << this->board_select_data->indicies_size() * 3 << std::endl;
 
 	// bind VBO in order to use
@@ -139,7 +158,7 @@ void GameboardChunk::write_VBO_data() {
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 
 		// generate a new VBO and get the associated ID
-	glGenBuffersARB(1, &(this->vbo_sel_color));
+	//glGenBuffersARB(1, &(this->vbo_sel_color));
 	std::cout << "vbo_sel_color:   " << this->vbo_sel_color << " | " << this->board_select_data << " | " << this->board_select_data->indicies_size() * 3 << std::endl;
 
 	// bind VBO in order to use
@@ -150,7 +169,7 @@ void GameboardChunk::write_VBO_data() {
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 
 		// generate a new VBO and get the associated ID
-	glGenBuffersARB(1, &(this->vbo_sel_indicie));
+	//glGenBuffersARB(1, &(this->vbo_sel_indicie));
 	std::cout << "vbo_sel_indicie: " << this->vbo_sel_indicie << " | " << this->board_select_data << " | " << this->board_select_data->indicies_size() * 3 << std::endl;
 
 	// bind VBO in order to use
