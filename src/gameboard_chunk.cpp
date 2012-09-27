@@ -3,24 +3,34 @@
 GameboardChunk::GameboardChunk() {
 	this->board_vertex_data = new UniqueDataVector< GLfloat >();
 	this->board_select_data = new UniqueDataVector< GLfloat >();
+
+	this->vbo_hex_vert = 0;
+    this->vbo_hex_color = 0;
+    this->vbo_hex_indicie = 0;
+
+    this->vbo_sel_vert = 0;
+    this->vbo_sel_color = 0;
+    this->vbo_sel_indicie = 0;
 }
 
 
 GameboardChunk::~GameboardChunk() {
+    std::cout << "deleting: " << this << std::endl;
+
 	delete this->board_vertex_data;
 	delete this->board_select_data;
 
-	glDeleteBuffers(1, &(this->vbo_hex_vert));
-	glDeleteBuffers(1, &(this->vbo_hex_color));
-	glDeleteBuffers(1, &(this->vbo_hex_indicie));
+	glDeleteBuffersARB(1, &(this->vbo_hex_vert));
+	glDeleteBuffersARB(1, &(this->vbo_hex_color));
+	glDeleteBuffersARB(1, &(this->vbo_hex_indicie));
 
-	glDeleteBuffers(1, &(this->vbo_sel_vert));
-	glDeleteBuffers(1, &(this->vbo_sel_color));
-	glDeleteBuffers(1, &(this->vbo_sel_indicie));
+	glDeleteBuffersARB(1, &(this->vbo_sel_vert));
+	glDeleteBuffersARB(1, &(this->vbo_sel_color));
+	glDeleteBuffersARB(1, &(this->vbo_sel_indicie));
 }
 
 
-void GameboardChunk::generate_render_data(Hexagon* curr_hex, double x, double y) {
+void GameboardChunk::generate_render_data(Hexagon* curr_hex, float x, float y) {
 	Vertex* curr_vert = NULL;
 	std::vector< double >* curr_color;
 
@@ -82,7 +92,10 @@ void GameboardChunk::write_VBO_data() {
 	// TODO: very messy looking... this can be cleaned further...
 
 	// generate a new VBO and get the associated ID
+
 	glGenBuffersARB(1, &(this->vbo_hex_vert));
+	std::cout << "vbo_hex_vert:    " << this->vbo_hex_vert << " | " << this->board_vertex_data << " | " << this->board_vertex_data->indicies_size() * 3 << std::endl;
+
 	// bind VBO in order to use
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, this->vbo_hex_vert);
 	// upload data to VBO
@@ -90,8 +103,10 @@ void GameboardChunk::write_VBO_data() {
 		sizeof(this->board_vertex_data->data()) * this->board_vertex_data->indicies_size() * 3, this->board_vertex_data->data(), GL_STATIC_DRAW_ARB);
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 
-	// generate a new VBO and get the associated ID
+		// generate a new VBO and get the associated ID
 	glGenBuffersARB(1, &(this->vbo_hex_color));
+	std::cout << "vbo_hex_color:   " << this->vbo_hex_color << " | " << this->board_vertex_data << " | " << this->board_vertex_data->indicies_size() * 3 << std::endl;
+
 	// bind VBO in order to use
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, this->vbo_hex_color);
 	// upload data to VBO
@@ -99,8 +114,10 @@ void GameboardChunk::write_VBO_data() {
 		sizeof(this->board_vertex_data->color_data()) * this->board_vertex_data->indicies_size() * 3, this->board_vertex_data->color_data(), GL_STATIC_DRAW_ARB);
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 
-	// generate a new VBO and get the associated ID
+		// generate a new VBO and get the associated ID
 	glGenBuffersARB(1, &(this->vbo_hex_indicie));
+	std::cout << "vbo_hex_indicie: " << this->vbo_hex_indicie << " | " << this->board_vertex_data << " | " << this->board_vertex_data->indicies_size() << std::endl;
+
 	// bind VBO in order to use
 	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, this->vbo_hex_indicie);
 	// upload data to VBO
@@ -110,8 +127,10 @@ void GameboardChunk::write_VBO_data() {
 
 	//-------------------------------------
 
-	// generate a new VBO and get the associated ID
+		// generate a new VBO and get the associated ID
 	glGenBuffersARB(1, &(this->vbo_sel_vert));
+	std::cout << "vbo_sel_vert:    " << this->vbo_sel_vert << " | " << this->board_select_data << " | " << this->board_select_data->indicies_size() * 3 << std::endl;
+
 	// bind VBO in order to use
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, this->vbo_sel_vert);
 	// upload data to VBO
@@ -119,8 +138,10 @@ void GameboardChunk::write_VBO_data() {
 		sizeof(this->board_select_data->data()) * this->board_select_data->indicies_size() * 3, this->board_select_data->data(), GL_STATIC_DRAW_ARB);
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 
-	// generate a new VBO and get the associated ID
+		// generate a new VBO and get the associated ID
 	glGenBuffersARB(1, &(this->vbo_sel_color));
+	std::cout << "vbo_sel_color:   " << this->vbo_sel_color << " | " << this->board_select_data << " | " << this->board_select_data->indicies_size() * 3 << std::endl;
+
 	// bind VBO in order to use
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, this->vbo_sel_color);
 	// upload data to VBO
@@ -128,8 +149,10 @@ void GameboardChunk::write_VBO_data() {
 		sizeof(this->board_select_data->color_data()) * this->board_select_data->indicies_size() * 3, this->board_select_data->color_data(), GL_STATIC_DRAW_ARB);
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 
-	// generate a new VBO and get the associated ID
+		// generate a new VBO and get the associated ID
 	glGenBuffersARB(1, &(this->vbo_sel_indicie));
+	std::cout << "vbo_sel_indicie: " << this->vbo_sel_indicie << " | " << this->board_select_data << " | " << this->board_select_data->indicies_size() * 3 << std::endl;
+
 	// bind VBO in order to use
 	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, this->vbo_sel_indicie);
 	// upload data to VBO

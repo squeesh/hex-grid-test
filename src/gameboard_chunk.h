@@ -17,7 +17,7 @@ class GameboardChunk {
 		GameboardChunk();
 		~GameboardChunk();
 
-		void generate_render_data(Hexagon*, double, double);
+		void generate_render_data(Hexagon*, float, float);
 
 		void write_VBO_data();
 
