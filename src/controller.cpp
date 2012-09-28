@@ -247,10 +247,36 @@ void Controller::render() {
 	int neg_y_view = this->y_offset - this->view_range / 2.0 - GlobalConsts::BOARD_CHUNK_SIZE;
 	int pos_y_view = this->y_offset + this->view_range / 2.0;
 
-        for(int j = neg_y_view; j <= pos_y_view; j++) {
-            for(int i = neg_x_view; i <= pos_x_view; i++) {
+	if(neg_y_view < 0) {
+		neg_y_view += (-neg_y_view) % GlobalConsts::BOARD_CHUNK_SIZE;
+	} else {
+		neg_y_view -=  neg_y_view % GlobalConsts::BOARD_CHUNK_SIZE;
+	}
+
+	if(pos_y_view < 0) {
+		pos_y_view += (-pos_y_view) % GlobalConsts::BOARD_CHUNK_SIZE;
+	} else {
+		pos_y_view -=  pos_y_view % GlobalConsts::BOARD_CHUNK_SIZE;
+	}
+
+	int temp = neg_x_view;
+
+	if(neg_x_view < 0) {
+		neg_x_view += (-neg_x_view) % GlobalConsts::BOARD_CHUNK_SIZE;
+	} else {
+		neg_x_view -=  neg_x_view % GlobalConsts::BOARD_CHUNK_SIZE;
+	}
+
+	if(pos_x_view < 0) {
+		pos_x_view += (-pos_x_view) % GlobalConsts::BOARD_CHUNK_SIZE;
+	} else {
+		pos_x_view -=  pos_x_view % GlobalConsts::BOARD_CHUNK_SIZE;
+	}
+
+        for(int j = neg_y_view; j <= pos_y_view; j+=GlobalConsts::BOARD_CHUNK_SIZE) {
+            for(int i = neg_x_view; i <= pos_x_view; i+=GlobalConsts::BOARD_CHUNK_SIZE) {
                 Hexagon* curr_hex = this->gameboard->get_hexagon_list()->at(i)->at(j);
-                glLoadName(curr_hex->name);
+                //glLoadName(curr_hex->name);
 
                 double x = i * 1.5 * this->COS_60;
                 double y = j * 1.0 * this->SIN_60;
