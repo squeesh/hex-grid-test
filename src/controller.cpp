@@ -295,15 +295,15 @@ void Controller::render() {
 			glEnableClientState(GL_COLOR_ARRAY);
 
 			// bind VBOs for vertex array and index array
-			glBindBufferARB(GL_ARRAY_BUFFER_ARB, curr_chunk->vbo_hex_vert);         // for vertex coordinates
+			glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_hex_vert);         // for vertex coordinates
 			glVertexPointer(3, GL_FLOAT, 0, 0);               // last param is offset, not ptr
 
 			// color VBO
-			glBindBuffer(GL_ARRAY_BUFFER_ARB, curr_chunk->vbo_hex_color);
+			glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_hex_color);
     			glColorPointer(3, GL_FLOAT, 0, 0);
 
 			// bind indicie VBO
-			glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, curr_chunk->vbo_hex_indicie);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curr_chunk->vbo_hex_indicie);
 
 			// front facing polys
 			glPolygonMode(GL_FRONT, GL_FILL);
@@ -327,15 +327,15 @@ void Controller::render() {
 			glEnableClientState(GL_COLOR_ARRAY);
 
 			// bind VBOs for vertex array and index array
-			glBindBufferARB(GL_ARRAY_BUFFER_ARB, curr_chunk->vbo_sel_vert);         // for vertex coordinates
+			glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_sel_vert);         // for vertex coordinates
 			glVertexPointer(3, GL_FLOAT, 0, 0);               // last param is offset, not ptr
 
 			// color VBO
-			glBindBuffer(GL_ARRAY_BUFFER_ARB, curr_chunk->vbo_sel_color);
+			glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_sel_color);
     			glColorPointer(3, GL_FLOAT, 0, 0);
 
 			// bind indicie VBO
-			glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, curr_chunk->vbo_sel_indicie);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curr_chunk->vbo_sel_indicie);
 
 			// front facing polys
 			glPolygonMode(GL_FRONT, GL_FILL);
@@ -345,8 +345,8 @@ void Controller::render() {
 			glDisableClientState(GL_VERTEX_ARRAY);
 
 			// bind with 0, so, switch back to normal pointer operation
-			glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
-			glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 			glPopMatrix();
 		}
