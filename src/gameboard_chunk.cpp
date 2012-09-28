@@ -58,75 +58,45 @@ void GameboardChunk::generate_render_data(Hexagon* curr_hex, double x, double y)
 void GameboardChunk::write_VBO_data() {
 	// TODO: very messy looking... this can be cleaned further...
 
-	// generate a new VBO and get the associated ID
+	std::cout << "VBO Start | " << sizeof(this->board_vertex_data->data()) << " | " << this->board_vertex_data->vector_size() << " | " << this->board_vertex_data->indicies_size() << std::endl;
 
-	//glGenBuffers(1, &(this->vbo_hex_vert));
-	//std::cout << "vbo_hex_vert:    " << this->vbo_hex_vert << " | " << this->board_vertex_data << " | " << this->board_vertex_data->indicies_size() * 3 << std::endl;
-
-	// bind VBO in order to use
+	std::cout << "A: " << this->vbo_hex_vert << " | " << sizeof(this->board_vertex_data->data()) * this->board_vertex_data->vector_size() << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_hex_vert);
-	// upload data to VBO
 	glBufferData(GL_ARRAY_BUFFER, 
-		sizeof(this->board_vertex_data->data()) * this->board_vertex_data->indicies_size() * 3, this->board_vertex_data->data(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+		sizeof(this->board_vertex_data->data()) * this->board_vertex_data->vector_size(), this->board_vertex_data->data(), GL_STATIC_DRAW);
 
-		// generate a new VBO and get the associated ID
-	//glGenBuffers(1, &(this->vbo_hex_color));
-	//std::cout << "vbo_hex_color:   " << this->vbo_hex_color << " | " << this->board_vertex_data << " | " << this->board_vertex_data->indicies_size() * 3 << std::endl;
-
-	// bind VBO in order to use
+	std::cout << "B: " << this->vbo_hex_color << " | " << sizeof(this->board_vertex_data->color_data()) * this->board_vertex_data->color_size() << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_hex_color);
-	// upload data to VBO
 	glBufferData(GL_ARRAY_BUFFER, 
-		sizeof(this->board_vertex_data->color_data()) * this->board_vertex_data->indicies_size() * 3, this->board_vertex_data->color_data(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+		sizeof(this->board_vertex_data->color_data()) * this->board_vertex_data->color_size(), this->board_vertex_data->color_data(), GL_STATIC_DRAW);
 
-		// generate a new VBO and get the associated ID
-	//glGenBuffers(1, &(this->vbo_hex_indicie));
-	//std::cout << "vbo_hex_indicie: " << this->vbo_hex_indicie << " | " << this->board_vertex_data << " | " << this->board_vertex_data->indicies_size() << std::endl;
-
-	// bind VBO in order to use
+	std::cout << "C: " << this->vbo_hex_indicie << " | " << sizeof(this->board_vertex_data->indicies_data()) * this->board_vertex_data->indicies_size() << std::endl;
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_hex_indicie);
-	// upload data to VBO
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
 		sizeof(this->board_vertex_data->indicies_data()) * this->board_vertex_data->indicies_size(), this->board_vertex_data->indicies_data(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	//-------------------------------------
 
-		// generate a new VBO and get the associated ID
-	//glGenBuffers(1, &(this->vbo_sel_vert));
-	//std::cout << "vbo_sel_vert:    " << this->vbo_sel_vert << " | " << this->board_select_data << " | " << this->board_select_data->indicies_size() * 3 << std::endl;
 
-	// bind VBO in order to use
+	std::cout << "D: " << this->vbo_sel_vert << " | " << sizeof(this->board_select_data->data()) * this->board_select_data->vector_size() << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_sel_vert);
-	// upload data to VBO
 	glBufferData(GL_ARRAY_BUFFER, 
-		sizeof(this->board_select_data->data()) * this->board_select_data->indicies_size() * 3, this->board_select_data->data(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+		sizeof(this->board_select_data->data()) * this->board_select_data->vector_size(), this->board_select_data->data(), GL_STATIC_DRAW);
 
-		// generate a new VBO and get the associated ID
-	//glGenBuffers(1, &(this->vbo_sel_color));
-	//std::cout << "vbo_sel_color:   " << this->vbo_sel_color << " | " << this->board_select_data << " | " << this->board_select_data->indicies_size() * 3 << std::endl;
-
-	// bind VBO in order to use
+	std::cout << "E: " << this->vbo_sel_color << " | " << sizeof(this->board_select_data->color_data()) * this->board_select_data->color_size() << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_sel_color);
-	// upload data to VBO
 	glBufferData(GL_ARRAY_BUFFER, 
-		sizeof(this->board_select_data->color_data()) * this->board_select_data->indicies_size() * 3, this->board_select_data->color_data(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+		sizeof(this->board_select_data->color_data()) * this->board_select_data->color_size(), this->board_select_data->color_data(), GL_STATIC_DRAW);
 
-		// generate a new VBO and get the associated ID
-	//glGenBuffers(1, &(this->vbo_sel_indicie));
-	//std::cout << "vbo_sel_indicie: " << this->vbo_sel_indicie << " | " << this->board_select_data << " | " << this->board_select_data->indicies_size() * 3 << std::endl;
-
-	// bind VBO in order to use
+	std::cout << "F: " << this->vbo_sel_indicie << " | " << sizeof(this->board_select_data->indicies_data()) * this->board_select_data->indicies_size() << std::endl;
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_sel_indicie);
-	// upload data to VBO
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
 		sizeof(this->board_select_data->indicies_data()) * this->board_select_data->indicies_size(), this->board_select_data->indicies_data(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+	std::cout << "VBO End" << std::endl;
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 

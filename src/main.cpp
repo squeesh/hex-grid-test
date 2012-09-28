@@ -95,26 +95,10 @@ void timer(int value) {
 
 
 int main(int argc, char** argv) {
-
-	Py_Initialize();
-
-	curr_ctrl = Controller::get_controller();
-	curr_ctrl->py_init_board();
-
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(RESOLUTION[0], RESOLUTION[1]);
 	glutCreateWindow("Hex Grid Thing...");
-	glutDisplayFunc(display);
-
-	glutIdleFunc(display);
-	glutTimerFunc(SLEEP_TIME, timer, 0);
-
-	glutReshapeFunc(reshape);
-	glutKeyboardFunc(key_pressed);
-	glutKeyboardUpFunc(key_released);
-	glutMouseFunc(mouse_click);
-	glutMotionFunc(mouse_drag);
 
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
@@ -124,10 +108,23 @@ int main(int argc, char** argv) {
 	}
 	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 
+	Py_Initialize();
+
+	curr_ctrl = Controller::get_controller();
+	curr_ctrl->py_init_board();
+	
+	glutDisplayFunc(display);
+	glutIdleFunc(display);
+	glutTimerFunc(SLEEP_TIME, timer, 0);
+
+	glutReshapeFunc(reshape);
+	glutKeyboardFunc(key_pressed);
+	glutKeyboardUpFunc(key_released);
+	glutMouseFunc(mouse_click);
+	glutMotionFunc(mouse_drag);
 
 	curr_ctrl->init_gl(RESOLUTION[0], RESOLUTION[1]);
 	//curr_ctrl->init_board(BOARD_WIDTH, BOARD_HEIGHT);
-
 
 	glutMainLoop();
 

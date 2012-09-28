@@ -166,7 +166,9 @@ class UniqueDataVector {
 
 		T* at(int);
 		int push_back(T, T, T, T, T, T);
-		int size();
+		int index_size();
+		int vector_size();
+		int color_size();
 		int indicies_size();
 		int get_index(T, T, T);
 		int get_index(std::vector<T>*);
@@ -265,8 +267,18 @@ int UniqueDataVector<T>::push_back(T x, T y, T z, T r, T g, T b) {
 }*/
 
 template <typename T>
-int UniqueDataVector<T>::size() {
+int UniqueDataVector<T>::index_size() {
 	return this->index_data->size();
+}
+
+template <typename T>
+int UniqueDataVector<T>::vector_size() {
+	return this->vector_data->size();
+}
+
+template <typename T>
+int UniqueDataVector<T>::color_size() {
+	return this->color->size();
 }
 
 template <typename T>
