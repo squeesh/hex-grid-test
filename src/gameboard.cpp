@@ -47,6 +47,30 @@ GameboardChunk* Gameboard::generate_chunk(Hexagon* base_hex) {
 
 	//std::cout << "reverse..." << std::endl;
 
+	/*int* temp = output->board_vertex_data->indicies->data();
+
+	std::cout << "size: " << output->board_vertex_data->indicies->size() << std::endl;
+	std::cout << "cap:  " << output->board_vertex_data->indicies->capacity() << std::endl;
+
+	for(int i = 0; i < output->board_vertex_data->indicies->size(); i+=3) {
+		std::cout << temp[i] << ", " << temp[i+1] << ", " << temp[i+2] << std::endl;
+	}*/
+	/*std::cout << std::endl << std::endl;
+	std::cout << "------" << std::endl << std::endl;
+
+	output->board_vertex_data->reverse_indicies();
+	temp = output->board_vertex_data->indicies->data();
+
+	for(int i = 0; i < output->board_vertex_data->indicies->size(); i++) {
+		if(i % 3 == 0) {
+			std::cout << std::endl;
+		}
+
+		std::cout << temp[i] << ", ";
+	}
+	std::cout << std::endl << std::endl;*/
+
+	//output->board_vertex_data->reverse_indicies();
 	output->board_vertex_data->reverse_indicies();
 	output->board_select_data->reverse_indicies();
 	std::map< Hexagon*, GameboardChunk* > &curr_chunk_map = *(this->chunk_map);
