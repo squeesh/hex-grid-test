@@ -4,7 +4,7 @@
 
 class Vertex {
 	private:
-		Color* color;
+		std::vector< double >* color;
 		double height;
 
 	public:
@@ -12,7 +12,7 @@ class Vertex {
 
 		void set_color(double red, double green, double blue);
 		void set_color(std::vector<double> rgb);
-		std::vector<double> get_color();
+		std::vector<double>* get_color();
 
 		void set_height(double height);
 		double get_height();

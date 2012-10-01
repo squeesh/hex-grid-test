@@ -243,7 +243,7 @@ void Hexagon::render_for_select(double x, double y) {
 		for(int i = 0; i < 6; i++) {
 			Vertex* curr_vert = this->verticies[this->VERTEX_POSITIONS->at(i)];
 
-			glColor3dv(curr_vert->get_color().data());
+			glColor3dv(curr_vert->get_color()->data());
 			glVertex3f(x + ROT_COORDS->at(i)->at(0), y + ROT_COORDS->at(i)->at(1), curr_vert->get_height());
 		}
 	glEnd();

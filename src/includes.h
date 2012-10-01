@@ -13,7 +13,7 @@
 
 #include "util.h"
 #include "global_consts.h"
-#include "color.h"
+//#include "color.h"
 #include "vertex.h"
 #include "hexagon.h"
 #include "gameboard_chunk.h"
