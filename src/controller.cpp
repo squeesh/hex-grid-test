@@ -1,5 +1,7 @@
 #include "includes.h"
 
+#include <GL/freeglut.h>
+
 Controller* Controller::curr_ctrl = NULL;
 
 
@@ -227,6 +229,20 @@ void Controller::render() {
 	// TODO: Do something about duplicated code...
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
+
+
+	bool blending = false;
+
+	glEnable(GL_BLEND);
+	glColor4f(1, 0, 0, 1);
+	glRasterPos2f(100, 100);
+
+	char* text = "Test";
+
+	while (*text) {
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, *text);
+		text++;
+	}
 
 	double eye_x = this->x_offset * 1.5 * this->COS_60;
 	double eye_y = this->y_offset * 1.0 * this->SIN_60;
