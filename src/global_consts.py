@@ -5,7 +5,7 @@
 class GlobalConsts(object):
     PATH_SHOW_SEARCH    = True
 
-    GENERATE_HILLS = False
+    GENERATE_HILLS = True
     GENERATE_MOUNTAINS = GENERATE_HILLS
 
 #    GENERATE_MOUNTAINS = True

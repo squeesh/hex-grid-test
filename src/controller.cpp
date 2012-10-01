@@ -129,7 +129,7 @@ void Controller::init_gl(long width, long height) {
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45.0, this->width/((double) this->height), 0.1, 1000.0);
+	gluPerspective(45.0, this->width/((double) this->height),-1.0, 1000.0);
 	glMatrixMode(GL_MODELVIEW);
 
 	//glEnable(GL_LINE_SMOOTH);
@@ -227,22 +227,40 @@ void Controller::render_for_select() {
 
 void Controller::render() {
 	// TODO: Do something about duplicated code...
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glMatrixMode(GL_PROJECTION);
+	//gluOrtho2D(0, 1024, 0, 768);
+	
+	glPushMatrix();
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+			glLoadIdentity();
+			glOrtho(0, 1024, 0, 768, -1.0f, 1.0f);
+			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+				glLoadIdentity();
+				//glPushAttrib(GL_DEPTH_TEST);
+				//glDisable(GL_DEPTH_TEST);
+				glColor3f(1, 0, 0);
+				glRasterPos2i(50, 50);
+	
+				std::string Str = "test";
+
+				for (int i=0; i<Str.size(); i++)
+				{
+					glutBitmapCharacter(GLUT_BITMAP_9_BY_15, Str[i]);
+				}
+				//glPopAttrib();
+				glMatrixMode(GL_PROJECTION);
+			glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+	glPopMatrix();
 	glLoadIdentity();
+ 
+	//glFlush();
 
-
-	bool blending = false;
-
-	glEnable(GL_BLEND);
-	glColor4f(1, 0, 0, 1);
-	glRasterPos2f(100, 100);
-
-	char* text = "Test";
-
-	while (*text) {
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, *text);
-		text++;
-	}
 
 	double eye_x = this->x_offset * 1.5 * this->COS_60;
 	double eye_y = this->y_offset * 1.0 * this->SIN_60;
