@@ -244,6 +244,7 @@ GLuint UniqueDataVector<T>::push_back(T x, T y, T z, T r, T g, T b) {
 		this->color->push_back(r);
 		this->color->push_back(g);
 		this->color->push_back(b);
+		//this->color->push_back(1.0);
 
 		index = (GLuint)(this->vector_data->size() / 3.0) - 1;
 		this->indicies->push_back(index);

@@ -1,8 +1,12 @@
 #ifndef GAMEBOARD_CHUNK_H
 #define GAMEBOARD_CHUNK_H
 
+
+
 class GameboardChunk {
 	public:
+		class GenerationException : public std::exception {};
+
 		GLuint vbo_hex_vert;
 		GLuint vbo_hex_color;
 		GLuint vbo_hex_indicie;

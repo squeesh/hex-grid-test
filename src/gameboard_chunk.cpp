@@ -58,49 +58,55 @@ void GameboardChunk::generate_render_data(Hexagon* curr_hex, double x, double y)
 void GameboardChunk::write_VBO_data() {
 	// TODO: very messy looking... this can be cleaned further...
 
-	//std::cout << "VBO Start" << std::endl;
+	std::cout << "VBO Start: " << glGetError() << " | " << GL_NO_ERROR << std::endl;
 
-	std::cout << "VBO Start | " << sizeof(this->board_vertex_data->data()) << " | " << this->board_vertex_data->vector_size() << " | " << this->board_vertex_data->indicies_size() << std::endl;
+	//std::cout << "VBO Start | " << sizeof(this->board_vertex_data->data()) << " | " << this->board_vertex_data->vector_size() << " | " << this->board_vertex_data->indicies_size() << std::endl;
 
-	std::cout << "A: " << this->vbo_hex_vert << " | " << sizeof(this->board_vertex_data->data()) * this->board_vertex_data->vector_size() << std::endl;
+	std::cout << "A: " << this->vbo_hex_vert << " | " << sizeof(this->board_vertex_data->data()) * this->board_vertex_data->vector_size() << " | " << glGetError() << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_hex_vert);
-	glBufferData(GL_ARRAY_BUFFER, 
-		sizeof(this->board_vertex_data->data()) * this->board_vertex_data->vector_size(), this->board_vertex_data->data(), GL_STATIC_DRAW);
+	int hex_vert_size = sizeof(this->board_vertex_data->data()) * this->board_vertex_data->vector_size();
+	glBufferData(GL_ARRAY_BUFFER, hex_vert_size, NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, hex_vert_size, this->board_vertex_data->data());
 
-	std::cout << "B: " << this->vbo_hex_color << " | " << sizeof(this->board_vertex_data->color_data()) * this->board_vertex_data->color_size() << std::endl;
+	std::cout << "B: " << this->vbo_hex_color << " | " << sizeof(this->board_vertex_data->color_data()) * this->board_vertex_data->color_size() << " | " << glGetError() << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_hex_color);
-	glBufferData(GL_ARRAY_BUFFER, 
-		sizeof(this->board_vertex_data->color_data()) * this->board_vertex_data->color_size(), this->board_vertex_data->color_data(), GL_STATIC_DRAW);
+	int hex_color_size = sizeof(this->board_vertex_data->color_data()) * this->board_vertex_data->color_size();
+	glBufferData(GL_ARRAY_BUFFER, hex_color_size, NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, hex_color_size, this->board_vertex_data->color_data());
 
-	std::cout << "C: " << this->vbo_hex_indicie << " | " << sizeof(this->board_vertex_data->indicies_data()) * this->board_vertex_data->indicies_size() << std::endl;
+	std::cout << "C: " << this->vbo_hex_indicie << " | " << sizeof(this->board_vertex_data->indicies_data()) * this->board_vertex_data->indicies_size() << " | " << glGetError() << std::endl;
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_hex_indicie);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
-		sizeof(this->board_vertex_data->indicies_data()) * this->board_vertex_data->indicies_size(), this->board_vertex_data->indicies_data(), GL_STATIC_DRAW);
+	int hex_indicie_size = sizeof(this->board_vertex_data->indicies_data()) * this->board_vertex_data->indicies_size();
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, hex_indicie_size, NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, hex_indicie_size, this->board_vertex_data->indicies_data());
 
 	//-------------------------------------
 
 
-	std::cout << "D: " << this->vbo_sel_vert << " | " << sizeof(this->board_select_data->data()) * this->board_select_data->vector_size() << std::endl;
+	std::cout << "D: " << this->vbo_sel_vert << " | " << sizeof(this->board_select_data->data()) * this->board_select_data->vector_size() << " | " << glGetError() << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_sel_vert);
-	glBufferData(GL_ARRAY_BUFFER, 
-		sizeof(this->board_select_data->data()) * this->board_select_data->vector_size(), this->board_select_data->data(), GL_STATIC_DRAW);
+	int sel_vert_size = sizeof(this->board_select_data->data()) * this->board_select_data->vector_size();
+	glBufferData(GL_ARRAY_BUFFER, sel_vert_size, NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sel_vert_size, this->board_select_data->data());
 
-	std::cout << "E: " << this->vbo_sel_color << " | " << sizeof(this->board_select_data->color_data()) * this->board_select_data->color_size() << std::endl;
+	std::cout << "E: " << this->vbo_sel_color << " | " << sizeof(this->board_select_data->color_data()) * this->board_select_data->color_size() << " | " << glGetError() << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_sel_color);
-	glBufferData(GL_ARRAY_BUFFER, 
-		sizeof(this->board_select_data->color_data()) * this->board_select_data->color_size(), this->board_select_data->color_data(), GL_STATIC_DRAW);
+	int sel_color_size = sizeof(this->board_select_data->color_data()) * this->board_select_data->color_size();
+	glBufferData(GL_ARRAY_BUFFER, sel_color_size, NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sel_color_size, this->board_select_data->color_data());
 
-	std::cout << "F: " << this->vbo_sel_indicie << " | " << sizeof(this->board_select_data->indicies_data()) * this->board_select_data->indicies_size() << std::endl;
+	std::cout << "F: " << this->vbo_sel_indicie << " | " << sizeof(this->board_select_data->indicies_data()) * this->board_select_data->indicies_size() << " | " << glGetError() << std::endl;
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_sel_indicie);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
-		sizeof(this->board_select_data->indicies_data()) * this->board_select_data->indicies_size(), this->board_select_data->indicies_data(), GL_STATIC_DRAW);
+	int sel_indicie_size = sizeof(this->board_select_data->indicies_data()) * this->board_select_data->indicies_size();
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sel_indicie_size, NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sel_indicie_size, this->board_select_data->indicies_data());
 
-	std::cout << "VBO End" << std::endl;
+	std::cout << "VBO End" << " | " << glGetError() << std::endl;
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	std::cout << "VBO Stop" << std::endl;
+	std::cout << "VBO Stop: " << glGetError() << " | " << GL_NO_ERROR << std::endl << std::endl;
 
 }
 

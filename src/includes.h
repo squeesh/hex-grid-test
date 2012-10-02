@@ -10,6 +10,10 @@
 //#include <GL/glu.h>
 #include <GL/glew.h>
 #include <Python.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 
 #include "util.h"
 #include "global_consts.h"
