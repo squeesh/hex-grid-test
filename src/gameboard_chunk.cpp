@@ -5,18 +5,18 @@ GameboardChunk::GameboardChunk() {
 	this->board_select_data = new UniqueDataVector< GLfloat >();
 
 	this->vbo_hex_vert = 0;
-	this->vbo_hex_color = 0;
+	//this->vbo_hex_color = 0;
 	this->vbo_hex_indicie = 0;
 
 	this->vbo_sel_vert = 0;
-	this->vbo_sel_color = 0;
+	//this->vbo_sel_color = 0;
 	this->vbo_sel_indicie = 0;
 
 	glGenBuffers(1, &(this->vbo_hex_vert));
-	glGenBuffers(1, &(this->vbo_hex_color));
+	//glGenBuffers(1, &(this->vbo_hex_color));
 	glGenBuffers(1, &(this->vbo_hex_indicie));
 	glGenBuffers(1, &(this->vbo_sel_vert));
-	glGenBuffers(1, &(this->vbo_sel_color));
+	//glGenBuffers(1, &(this->vbo_sel_color));
 	glGenBuffers(1, &(this->vbo_sel_indicie));
 
 	this->regenerate = true;
@@ -30,11 +30,11 @@ GameboardChunk::~GameboardChunk() {
 	delete this->board_select_data;
 
 	glDeleteBuffers(1, &(this->vbo_hex_vert));
-	glDeleteBuffers(1, &(this->vbo_hex_color));
+	//glDeleteBuffers(1, &(this->vbo_hex_color));
 	glDeleteBuffers(1, &(this->vbo_hex_indicie));
 
 	glDeleteBuffers(1, &(this->vbo_sel_vert));
-	glDeleteBuffers(1, &(this->vbo_sel_color));
+	//glDeleteBuffers(1, &(this->vbo_sel_color));
 	glDeleteBuffers(1, &(this->vbo_sel_indicie));
 }
 
@@ -68,11 +68,11 @@ void GameboardChunk::write_VBO_data() {
 	glBufferData(GL_ARRAY_BUFFER, hex_vert_size, NULL, GL_STATIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, hex_vert_size, this->board_vertex_data->data());
 
-	std::cout << "B: " << this->vbo_hex_color << " | " << sizeof(this->board_vertex_data->color_data()) * this->board_vertex_data->color_size() << " | " << glGetError() << std::endl;
+	/*std::cout << "B: " << this->vbo_hex_color << " | " << sizeof(this->board_vertex_data->color_data()) * this->board_vertex_data->color_size() << " | " << glGetError() << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_hex_color);
 	int hex_color_size = sizeof(this->board_vertex_data->color_data()) * this->board_vertex_data->color_size();
 	glBufferData(GL_ARRAY_BUFFER, hex_color_size, NULL, GL_STATIC_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, hex_color_size, this->board_vertex_data->color_data());
+	glBufferSubData(GL_ARRAY_BUFFER, 0, hex_color_size, this->board_vertex_data->color_data());*/
 
 	std::cout << "C: " << this->vbo_hex_indicie << " | " << sizeof(this->board_vertex_data->indicies_data()) * this->board_vertex_data->indicies_size() << " | " << glGetError() << std::endl;
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_hex_indicie);
@@ -89,11 +89,11 @@ void GameboardChunk::write_VBO_data() {
 	glBufferData(GL_ARRAY_BUFFER, sel_vert_size, NULL, GL_STATIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sel_vert_size, this->board_select_data->data());
 
-	std::cout << "E: " << this->vbo_sel_color << " | " << sizeof(this->board_select_data->color_data()) * this->board_select_data->color_size() << " | " << glGetError() << std::endl;
+	/*std::cout << "E: " << this->vbo_sel_color << " | " << sizeof(this->board_select_data->color_data()) * this->board_select_data->color_size() << " | " << glGetError() << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_sel_color);
 	int sel_color_size = sizeof(this->board_select_data->color_data()) * this->board_select_data->color_size();
 	glBufferData(GL_ARRAY_BUFFER, sel_color_size, NULL, GL_STATIC_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sel_color_size, this->board_select_data->color_data());
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sel_color_size, this->board_select_data->color_data());*/
 
 	std::cout << "F: " << this->vbo_sel_indicie << " | " << sizeof(this->board_select_data->indicies_data()) * this->board_select_data->indicies_size() << " | " << glGetError() << std::endl;
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_sel_indicie);

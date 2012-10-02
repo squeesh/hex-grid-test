@@ -322,28 +322,29 @@ void Controller::render() {
                     y += 0.5 * this->SIN_60;
                 }
 
-		if(i % GlobalConsts::BOARD_CHUNK_SIZE == 0 && j % GlobalConsts::BOARD_CHUNK_SIZE == 0) {
-			/*glPushMatrix();
+		if(i % (GlobalConsts::BOARD_CHUNK_SIZE) == 0 && j % (GlobalConsts::BOARD_CHUNK_SIZE) == 0) {
+			glPushMatrix();
 			glTranslatef(x, y, 0);
 
-			this->debug_hex = curr_hex;*/
+			this->debug_hex = curr_hex;
 			GameboardChunk* curr_chunk = this->gameboard->get_render_data(curr_hex);
 
-			/*glEnableClientState(GL_VERTEX_ARRAY);             // activate vertex coords array
+			glEnableClientState(GL_VERTEX_ARRAY);             // activate vertex coords array
 			glEnableClientState(GL_COLOR_ARRAY);
 
 			// bind VBOs for vertex array and index array
 			glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_hex_vert);         // for vertex coordinates
-			glVertexPointer(3, GL_FLOAT, 0, 0);               // last param is offset, not ptr
+			glVertexPointer(3, GL_FLOAT, sizeof(GLfloat)*6, 0);               // last param is offset, not ptr
 
 			// color VBO
-			glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_hex_color);
-    			glColorPointer(3, GL_FLOAT, 0, 0);
+			//glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_hex_color);
+    			glColorPointer(3, GL_FLOAT, sizeof(GLfloat)*6, (void*)(sizeof(GLfloat)*3));
 
 			// bind indicie VBO
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curr_chunk->vbo_hex_indicie);
 
 			// front facing polys
+			//glColor3f(0, 1, 0);
 			glPolygonMode(GL_FRONT, GL_FILL);
 			glDrawElements(GL_TRIANGLES, curr_chunk->board_vertex_data->indicies_size(), GL_UNSIGNED_INT, 0);
 
@@ -351,11 +352,11 @@ void Controller::render() {
 			glDisableClientState(GL_COLOR_ARRAY);
 
 			// draw back facing black lines
-			glCullFace(GL_FRONT);
+			/*glCullFace(GL_FRONT);
 			glPolygonMode(GL_BACK,  GL_LINE);
 			glColor3f(0, 0, 0);
 			glDrawElements(GL_TRIANGLES, curr_chunk->board_vertex_data->indicies_size(), GL_UNSIGNED_INT, 0);
-			glCullFace(GL_BACK);
+			glCullFace(GL_BACK);*/
 
 			glDisableClientState(GL_VERTEX_ARRAY);            // deactivate vertex array
 
@@ -366,11 +367,11 @@ void Controller::render() {
 
 			// bind VBOs for vertex array and index array
 			glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_sel_vert);         // for vertex coordinates
-			glVertexPointer(3, GL_FLOAT, 0, 0);               // last param is offset, not ptr
+			glVertexPointer(3, GL_FLOAT, sizeof(GLfloat)*6, 0);               // last param is offset, not ptr
 
 			// color VBO
-			glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_sel_color);
-    			glColorPointer(3, GL_FLOAT, 0, 0);
+			//glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_sel_color);
+    			glColorPointer(3, GL_FLOAT, sizeof(GLfloat)*6, (void*)(sizeof(GLfloat)*3));
 
 			// bind indicie VBO
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curr_chunk->vbo_sel_indicie);
@@ -386,7 +387,7 @@ void Controller::render() {
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-			glPopMatrix();*/
+			glPopMatrix();
 		}
             }
         }

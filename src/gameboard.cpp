@@ -47,26 +47,23 @@ GameboardChunk* Gameboard::generate_chunk(Hexagon* base_hex) {
 
 	//std::cout << "reverse..." << std::endl;
 
-	/*int* temp = output->board_vertex_data->indicies->data();
+	/*GLfloat* temp_v = output->board_vertex_data->vector_data->data();
 
+	std::cout << "size: " << output->board_vertex_data->vector_data->size() << std::endl;
+	//std::cout << "cap:  " << output->board_vertex_data->indicies->capacity() << std::endl;
+
+	for(int i = 0; i < output->board_vertex_data->vector_data->size(); i+=3) {
+		std::cout << temp_v[i] << ", " << temp_v[i+1] << ", " << temp_v[i+2] << std::endl;
+	}
+	std::cout << std::endl << std::endl;
+	std::cout << "------" << std::endl << std::endl;
 	std::cout << "size: " << output->board_vertex_data->indicies->size() << std::endl;
-	std::cout << "cap:  " << output->board_vertex_data->indicies->capacity() << std::endl;
+
+	//output->board_vertex_data->reverse_indicies();
+	GLuint* temp_i = output->board_vertex_data->indicies->data();
 
 	for(int i = 0; i < output->board_vertex_data->indicies->size(); i+=3) {
-		std::cout << temp[i] << ", " << temp[i+1] << ", " << temp[i+2] << std::endl;
-	}*/
-	/*std::cout << std::endl << std::endl;
-	std::cout << "------" << std::endl << std::endl;
-
-	output->board_vertex_data->reverse_indicies();
-	temp = output->board_vertex_data->indicies->data();
-
-	for(int i = 0; i < output->board_vertex_data->indicies->size(); i++) {
-		if(i % 3 == 0) {
-			std::cout << std::endl;
-		}
-
-		std::cout << temp[i] << ", ";
+		std::cout << temp_i[i] << ", " << temp_i[i+1] << ", " << temp_i[i+2] << std::endl;
 	}
 	std::cout << std::endl << std::endl;*/
 

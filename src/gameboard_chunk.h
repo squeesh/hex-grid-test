@@ -8,11 +8,11 @@ class GameboardChunk {
 		class GenerationException : public std::exception {};
 
 		GLuint vbo_hex_vert;
-		GLuint vbo_hex_color;
+		//GLuint vbo_hex_color;
 		GLuint vbo_hex_indicie;
 
 		GLuint vbo_sel_vert;
-		GLuint vbo_sel_color;
+		//GLuint vbo_sel_color;
 		GLuint vbo_sel_indicie;
 
 		UniqueDataVector< GLfloat >* board_vertex_data;
