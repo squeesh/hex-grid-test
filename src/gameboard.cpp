@@ -119,24 +119,8 @@ GameboardChunk* Gameboard::get_render_data(Hexagon* base_hex) {
 	if(chunk[base_hex]->regenerate) {
 		chunk[base_hex]->clear();
 		output = this->generate_chunk(base_hex);
+		output->write_VBO_data();
 
-		bool error = false;
-		int count = 0;
-
-		//do {
-			//Controller::set_segfault_hanlder();
-
-			error = false;
-			
-			try {
-				output->write_VBO_data();
-			} catch(GameboardChunk::GenerationException *e) {
-				std::cout << "error..." << std::endl;
-				error = true;
-				
-			}
-			count++;
-		//} while(error && count < 100);
 		output->regenerate = false;	
 	} else {
 		output = chunk[base_hex];

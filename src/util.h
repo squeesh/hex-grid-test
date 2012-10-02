@@ -158,7 +158,7 @@ class UniqueDataVector {
 		
 		//std::vector<T> *color;
 		std::map< std::vector<T>*, GLuint, cmp_coord<T> > *index_data;
-		//std::vector< std::vector<T> *> *index_data_keys;
+		std::vector< std::vector<T> *> *index_data_keys;
 		
 	public:
 		std::vector<T> *vector_data;
@@ -189,7 +189,7 @@ UniqueDataVector<T>::UniqueDataVector() {
     this->vector_data = new std::vector<T>();
     //this->color = new std::vector<T>();
     this->index_data = new std::map< std::vector<T>*, GLuint, cmp_coord<T> >();
-    //this->index_data_keys = new std::vector< std::vector<T> *>();
+    this->index_data_keys = new std::vector< std::vector<T> *>(); // for easy garbage collection index_data
     this->indicies = new std::vector< GLuint >();
 }
 
@@ -200,11 +200,11 @@ UniqueDataVector<T>::~UniqueDataVector() {
     //delete this->color;
     delete this->indicies;
 
-    /*std::vector< std::vector<T> *> &curr_vec = *(this->index_data_keys);
+    std::vector< std::vector<T> *> &curr_vec = *(this->index_data_keys);
     for(int i = 0; i < this->index_data_keys->size(); i++) {
         delete curr_vec[i];
     }
-    delete this->index_data_keys;*/
+    delete this->index_data_keys;
 }
 
 template <typename T>
@@ -251,7 +251,7 @@ GLuint UniqueDataVector<T>::push_back(T x, T y, T z, T r, T g, T b) {
 		index = (GLuint)(this->vector_data->size() / 8.0) - 1;
 		this->indicies->push_back(index);
 		curr_index_data[curr_coords] = index;
-		//this->index_data_keys->push_back(curr_coords);
+		this->index_data_keys->push_back(curr_coords);
 	} else {	
 		index = this->get_index(curr_coords);
 		this->indicies->push_back(index);
