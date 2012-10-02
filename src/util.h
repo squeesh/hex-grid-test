@@ -245,7 +245,10 @@ GLuint UniqueDataVector<T>::push_back(T x, T y, T z, T r, T g, T b) {
 		this->vector_data->push_back(g);
 		this->vector_data->push_back(b);
 
-		index = (GLuint)(this->vector_data->size() / 6.0) - 1;
+		this->vector_data->push_back(0);
+		this->vector_data->push_back(0);
+
+		index = (GLuint)(this->vector_data->size() / 8.0) - 1;
 		this->indicies->push_back(index);
 		curr_index_data[curr_coords] = index;
 		//this->index_data_keys->push_back(curr_coords);

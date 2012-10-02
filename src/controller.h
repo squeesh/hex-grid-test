@@ -100,11 +100,6 @@ class Controller {
 		std::map< Hexagon*, GLuint >* vbo_indicies;*/
 
 		Gameboard* gameboard;
-
-		static void segfault_sigaction(int signal, siginfo_t *si, void *arg);
-		static void set_segfault_hanlder();
-
-		static struct sigaction sa;
 };
 
 

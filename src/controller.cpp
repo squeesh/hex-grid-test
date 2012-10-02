@@ -9,8 +9,6 @@ Controller* Controller::curr_ctrl = NULL;
 const double Controller::COS_60 = std::cos(60.0 / 360.0 * 2.0 * M_PI);
 const double Controller::SIN_60 = std::sin(60.0 / 360.0 * 2.0 * M_PI);
 
-struct sigaction Controller::sa;
-
 
 Controller::Controller(void) {
 	this->x_offset = 0.0;
@@ -334,11 +332,11 @@ void Controller::render() {
 
 			// bind VBOs for vertex array and index array
 			glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_hex_vert);         // for vertex coordinates
-			glVertexPointer(3, GL_FLOAT, sizeof(GLfloat)*6, 0);               // last param is offset, not ptr
+			glVertexPointer(3, GL_FLOAT, sizeof(GLfloat)*8, 0);               // last param is offset, not ptr
 
 			// color VBO
 			//glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_hex_color);
-    			glColorPointer(3, GL_FLOAT, sizeof(GLfloat)*6, (void*)(sizeof(GLfloat)*3));
+    			glColorPointer(3, GL_FLOAT, sizeof(GLfloat)*8, (void*)(sizeof(GLfloat)*3));
 
 			// bind indicie VBO
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curr_chunk->vbo_hex_indicie);
@@ -352,11 +350,11 @@ void Controller::render() {
 			glDisableClientState(GL_COLOR_ARRAY);
 
 			// draw back facing black lines
-			/*glCullFace(GL_FRONT);
+			glCullFace(GL_FRONT);
 			glPolygonMode(GL_BACK,  GL_LINE);
 			glColor3f(0, 0, 0);
 			glDrawElements(GL_TRIANGLES, curr_chunk->board_vertex_data->indicies_size(), GL_UNSIGNED_INT, 0);
-			glCullFace(GL_BACK);*/
+			glCullFace(GL_BACK);
 
 			glDisableClientState(GL_VERTEX_ARRAY);            // deactivate vertex array
 
@@ -367,11 +365,11 @@ void Controller::render() {
 
 			// bind VBOs for vertex array and index array
 			glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_sel_vert);         // for vertex coordinates
-			glVertexPointer(3, GL_FLOAT, sizeof(GLfloat)*6, 0);               // last param is offset, not ptr
+			glVertexPointer(3, GL_FLOAT, sizeof(GLfloat)*8, 0);               // last param is offset, not ptr
 
 			// color VBO
 			//glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_sel_color);
-    			glColorPointer(3, GL_FLOAT, sizeof(GLfloat)*6, (void*)(sizeof(GLfloat)*3));
+    			glColorPointer(3, GL_FLOAT, sizeof(GLfloat)*8, (void*)(sizeof(GLfloat)*3));
 
 			// bind indicie VBO
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curr_chunk->vbo_sel_indicie);
@@ -591,54 +589,4 @@ Hexagon* Controller::get_hex_by_name(long name) {
 
 	return NULL;
 }
-
-void Controller::segfault_sigaction(int signal, siginfo_t *si, void *arg)
-{
-	//Controller* curr_ctrl = Controller::_get_controller();
-
-	//printf("Caught segfault at address %p\n", si->si_addr);
-	printf("Caught segfault at address %p\n", si->si_addr);
-	/*std::cout << "hex: " << curr_ctrl->debug_hex << std::endl;
-
-	std::map< Hexagon*, GameboardChunk* > &chunk_map = *(curr_ctrl->gameboard->chunk_map);
-	GameboardChunk* chunk = chunk_map[curr_ctrl->debug_hex];
-
-	std::cout << "A: " << chunk->vbo_hex_vert    << " | " << sizeof(chunk->board_vertex_data->data()) * chunk->board_vertex_data->vector_size() << std::endl;
-	std::cout << "B: " << chunk->vbo_hex_color   << " | " << sizeof(chunk->board_vertex_data->color_data()) * chunk->board_vertex_data->color_size() << std::endl;
-	std::cout << "C: " << chunk->vbo_hex_indicie << " | " << sizeof(chunk->board_vertex_data->indicies_data()) * chunk->board_vertex_data->indicies_size() << std::endl;
-
-	chunk_map[curr_ctrl->debug_hex]->clear();
-	chunk = curr_ctrl->gameboard->generate_chunk(curr_ctrl->debug_hex);
-
-	std::cout << "A: " << chunk->vbo_hex_vert    << " | " << sizeof(chunk->board_vertex_data->data()) * chunk->board_vertex_data->vector_size() << std::endl;
-	std::cout << "B: " << chunk->vbo_hex_color   << " | " << sizeof(chunk->board_vertex_data->color_data()) * chunk->board_vertex_data->color_size() << std::endl;
-	std::cout << "C: " << chunk->vbo_hex_indicie << " | " << sizeof(chunk->board_vertex_data->indicies_data()) * chunk->board_vertex_data->indicies_size() << std::endl;*/
-
-
-	//sigaction(SIGSEGV, &(Controller::sa), NULL);
-	//Controller::set_segfault_hanlder();
-	throw new GameboardChunk::GenerationException();
-
-	//exit(0);
-
-	//return 0;
-}
-
-void Controller::set_segfault_hanlder() {
-	/*memset(&(Controller::sa), 0, sizeof(struct sigaction));
-	Controller::sa.sa_handler = Controller::segfault_sigaction;
-	sigemptyset(&(Controller::sa).sa_mask);
-	//Controller::sa.sa_sigaction = Controller::segfault_sigaction;
-	Controller::sa.sa_flags   = SA_RESETHAND;
-	//Controller::sa.sa_flags   = SA_SIGINFO;
-	sigaction(SIGSEGV, &(Controller::sa), NULL);*/
-
-	//memset(&(Controller::sa), 0, sizeof(struct sigaction));
-	sigemptyset(&(Controller::sa).sa_mask);
-	sa.sa_sigaction = Controller::segfault_sigaction;
-	sa.sa_flags   = SA_SIGINFO;
-
-	sigaction(SIGSEGV, &(Controller::sa), NULL);
-}
-
 

@@ -4,7 +4,6 @@
 #include <GL/freeglut.h>
 
 
-
 static Controller* curr_ctrl = NULL;
 const int RESOLUTION[] = {1024, 768};
 
@@ -95,25 +94,7 @@ void timer(int value) {
 }
 
 
-void segfault_sigaction(int signal, siginfo_t *si, void *arg)
-{
-    printf("Caught segfault at address %p\n", si->si_addr);
-    //exit(0);
-}
-
-
 int main(int argc, char** argv) {
-	int *foo = NULL;
-	/*struct sigaction sa;
-
-	memset(&sa, 0, sizeof(struct sigaction));
-	sigemptyset(&sa.sa_mask);
-	sa.sa_sigaction = segfault_sigaction;
-	sa.sa_flags   = SA_SIGINFO;
-
-	sigaction(SIGSEGV, &sa, NULL);*/
-	//Controller::set_segfault_hanlder();
-
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(RESOLUTION[0], RESOLUTION[1]);
