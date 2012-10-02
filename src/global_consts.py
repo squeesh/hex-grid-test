@@ -5,7 +5,7 @@
 class GlobalConsts(object):
     PATH_SHOW_SEARCH    = True
 
-    GENERATE_HILLS = True
+    GENERATE_HILLS = False
     GENERATE_MOUNTAINS = GENERATE_HILLS
 
 #    GENERATE_MOUNTAINS = True
@@ -16,14 +16,14 @@ class GlobalConsts(object):
 #    BOARD_HEIGHT = 80
 #    BOARD_WIDTH  = 120
 
-#    BOARD_HEIGHT = 256
-#    BOARD_WIDTH  = 256
+    BOARD_HEIGHT = 256
+    BOARD_WIDTH  = 256
 
 #    BOARD_HEIGHT = int(BOARD_HEIGHT * 0.5)
 #    BOARD_WIDTH  = int(BOARD_WIDTH  * 0.5)
 
-#    BOARD_CHUNK_SIZE = 64 # MUST be in multiples of 2
-    BOARD_CHUNK_SIZE = 10 # MUST be in multiples of 2
+    BOARD_CHUNK_SIZE = 16 # MUST be in multiples of 2
+#    BOARD_CHUNK_SIZE = 10 # MUST be in multiples of 2
 
     MIN_ZOOM = 0.5
     MAX_ZOOM = 17.0

@@ -2,6 +2,9 @@
 
 #include <time.h>
 #include <GL/freeglut.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 
 static Controller* curr_ctrl = NULL;
@@ -94,7 +97,39 @@ void timer(int value) {
 }
 
 
+void segfault_sigaction(int signal, siginfo_t *si, void *arg)
+{
+	printf("Caught segfault at address %p\n", si->si_addr);
+	std::cout << "hex: " << curr_ctrl->debug_hex << std::endl;
+
+	std::map< Hexagon*, GameboardChunk* > &chunk_map = *(curr_ctrl->gameboard->chunk_map);
+	GameboardChunk* chunk = chunk_map[curr_ctrl->debug_hex];
+
+	std::cout << "A: " << chunk->vbo_hex_vert    << " | " << sizeof(chunk->board_vertex_data->data()) * chunk->board_vertex_data->vector_size() << std::endl;
+	std::cout << "B: " << chunk->vbo_hex_color   << " | " << sizeof(chunk->board_vertex_data->color_data()) * chunk->board_vertex_data->color_size() << std::endl;
+	std::cout << "C: " << chunk->vbo_hex_indicie << " | " << sizeof(chunk->board_vertex_data->indicies_data()) * chunk->board_vertex_data->indicies_size() << std::endl;
+
+	chunk = curr_ctrl->gameboard->generate_chunk(curr_ctrl->debug_hex);
+
+	std::cout << "A: " << chunk->vbo_hex_vert    << " | " << sizeof(chunk->board_vertex_data->data()) * chunk->board_vertex_data->vector_size() << std::endl;
+	std::cout << "B: " << chunk->vbo_hex_color   << " | " << sizeof(chunk->board_vertex_data->color_data()) * chunk->board_vertex_data->color_size() << std::endl;
+	std::cout << "C: " << chunk->vbo_hex_indicie << " | " << sizeof(chunk->board_vertex_data->indicies_data()) * chunk->board_vertex_data->indicies_size() << std::endl;
+
+	exit(0);
+}
+
+
 int main(int argc, char** argv) {
+	int *foo = NULL;
+	struct sigaction sa;
+
+	memset(&sa, 0, sizeof(struct sigaction));
+	sigemptyset(&sa.sa_mask);
+	sa.sa_sigaction = segfault_sigaction;
+	sa.sa_flags   = SA_SIGINFO;
+
+	sigaction(SIGSEGV, &sa, NULL);
+
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(RESOLUTION[0], RESOLUTION[1]);

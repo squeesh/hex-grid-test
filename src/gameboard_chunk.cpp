@@ -58,19 +58,21 @@ void GameboardChunk::generate_render_data(Hexagon* curr_hex, double x, double y)
 void GameboardChunk::write_VBO_data() {
 	// TODO: very messy looking... this can be cleaned further...
 
-	//std::cout << "VBO Start | " << sizeof(this->board_vertex_data->data()) << " | " << this->board_vertex_data->vector_size() << " | " << this->board_vertex_data->indicies_size() << std::endl;
+	//std::cout << "VBO Start" << std::endl;
 
-	//std::cout << "A: " << this->vbo_hex_vert << " | " << sizeof(this->board_vertex_data->data()) * this->board_vertex_data->vector_size() << std::endl;
+	std::cout << "VBO Start | " << sizeof(this->board_vertex_data->data()) << " | " << this->board_vertex_data->vector_size() << " | " << this->board_vertex_data->indicies_size() << std::endl;
+
+	std::cout << "A: " << this->vbo_hex_vert << " | " << sizeof(this->board_vertex_data->data()) * this->board_vertex_data->vector_size() << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_hex_vert);
 	glBufferData(GL_ARRAY_BUFFER, 
 		sizeof(this->board_vertex_data->data()) * this->board_vertex_data->vector_size(), this->board_vertex_data->data(), GL_STATIC_DRAW);
 
-	//std::cout << "B: " << this->vbo_hex_color << " | " << sizeof(this->board_vertex_data->color_data()) * this->board_vertex_data->color_size() << std::endl;
+	std::cout << "B: " << this->vbo_hex_color << " | " << sizeof(this->board_vertex_data->color_data()) * this->board_vertex_data->color_size() << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_hex_color);
 	glBufferData(GL_ARRAY_BUFFER, 
 		sizeof(this->board_vertex_data->color_data()) * this->board_vertex_data->color_size(), this->board_vertex_data->color_data(), GL_STATIC_DRAW);
 
-	//std::cout << "C: " << this->vbo_hex_indicie << " | " << sizeof(this->board_vertex_data->indicies_data()) * this->board_vertex_data->indicies_size() << std::endl;
+	std::cout << "C: " << this->vbo_hex_indicie << " | " << sizeof(this->board_vertex_data->indicies_data()) * this->board_vertex_data->indicies_size() << std::endl;
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_hex_indicie);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
 		sizeof(this->board_vertex_data->indicies_data()) * this->board_vertex_data->indicies_size(), this->board_vertex_data->indicies_data(), GL_STATIC_DRAW);
@@ -78,25 +80,28 @@ void GameboardChunk::write_VBO_data() {
 	//-------------------------------------
 
 
-	//std::cout << "D: " << this->vbo_sel_vert << " | " << sizeof(this->board_select_data->data()) * this->board_select_data->vector_size() << std::endl;
+	std::cout << "D: " << this->vbo_sel_vert << " | " << sizeof(this->board_select_data->data()) * this->board_select_data->vector_size() << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_sel_vert);
 	glBufferData(GL_ARRAY_BUFFER, 
 		sizeof(this->board_select_data->data()) * this->board_select_data->vector_size(), this->board_select_data->data(), GL_STATIC_DRAW);
 
-	//std::cout << "E: " << this->vbo_sel_color << " | " << sizeof(this->board_select_data->color_data()) * this->board_select_data->color_size() << std::endl;
+	std::cout << "E: " << this->vbo_sel_color << " | " << sizeof(this->board_select_data->color_data()) * this->board_select_data->color_size() << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_sel_color);
 	glBufferData(GL_ARRAY_BUFFER, 
 		sizeof(this->board_select_data->color_data()) * this->board_select_data->color_size(), this->board_select_data->color_data(), GL_STATIC_DRAW);
 
-	//std::cout << "F: " << this->vbo_sel_indicie << " | " << sizeof(this->board_select_data->indicies_data()) * this->board_select_data->indicies_size() << std::endl;
+	std::cout << "F: " << this->vbo_sel_indicie << " | " << sizeof(this->board_select_data->indicies_data()) * this->board_select_data->indicies_size() << std::endl;
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_sel_indicie);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
 		sizeof(this->board_select_data->indicies_data()) * this->board_select_data->indicies_size(), this->board_select_data->indicies_data(), GL_STATIC_DRAW);
 
-	//std::cout << "VBO End" << std::endl;
+	std::cout << "VBO End" << std::endl;
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	std::cout << "VBO Stop" << std::endl;
+
 }
 
 

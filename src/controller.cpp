@@ -323,6 +323,7 @@ void Controller::render() {
 			glPushMatrix();
 			glTranslatef(x, y, 0);
 
+			this->debug_hex = curr_hex;
 			GameboardChunk* curr_chunk = this->gameboard->get_render_data(curr_hex);
 
 			glEnableClientState(GL_VERTEX_ARRAY);             // activate vertex coords array

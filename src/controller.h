@@ -27,6 +27,8 @@ class Controller {
 		std::set<Hexagon*>* get_neighbors_in_radius(Hexagon*, int, std::set<Hexagon*>*);
 
 	public:
+		Hexagon* debug_hex; // for debugging...
+
 		bool print_flag;
 
 		static const double COS_60;
