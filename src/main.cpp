@@ -20,7 +20,14 @@ void display() {
     time_t curr_seconds = time(NULL);
 	if(SHOW_FPS) {
 		if(curr_seconds > seconds) {
-			std::cout << "fps: " << fps << std::endl;
+			std::cout << "FPS: " << fps << std::endl;
+
+			curr_ctrl->print_string.clear();
+			curr_ctrl->print_string += std::string("FPS: ");
+			std::stringstream temp;
+			temp << fps;
+			curr_ctrl->print_string += temp.str();
+
 			seconds = curr_seconds;
 			fps = 0;
 		}

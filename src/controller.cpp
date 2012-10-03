@@ -35,6 +35,8 @@ Controller::Controller(void) {
 	this->gameboard = new Gameboard();
 
 	this->print_flag = false;
+
+	this->print_string = std::string();
 }
 
 Controller* Controller::_get_controller() {
@@ -226,42 +228,50 @@ void Controller::render_for_select() {
 }
 
 
-void Controller::render() {
-	// TODO: Do something about duplicated code...
+void Controller::render_string(int x, int y, std::string curr_string) {
+	std::vector< GLfloat >* default_color = new std::vector< GLfloat >();
+	default_color->push_back(0);
+	default_color->push_back(0);
+	default_color->push_back(0);
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glMatrixMode(GL_PROJECTION);
-	//gluOrtho2D(0, 1024, 0, 768);
-	
+	this->render_string(x, y, curr_string, default_color);
+
+	delete default_color;
+}
+
+
+void Controller::render_string(int x, int y, std::string curr_string, std::vector< GLfloat >* color) {
 	glPushMatrix();
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
 			glLoadIdentity();
-			glOrtho(0, 1024, 0, 768, -1.0f, 1.0f);
+			glOrtho(0, this->width, 0, this->height, -1.0f, 1.0f);
 			glMatrixMode(GL_MODELVIEW);
 			glPushMatrix();
 				glLoadIdentity();
-				//glPushAttrib(GL_DEPTH_TEST);
-				//glDisable(GL_DEPTH_TEST);
-				glColor3f(1, 0, 0);
-				glRasterPos2i(50, 50);
-	
-				std::string Str = "test";
-
-				for (int i=0; i<Str.size(); i++)
-				{
-					glutBitmapCharacter(GLUT_BITMAP_9_BY_15, Str[i]);
-				}
-				//glPopAttrib();
+				glColor3fv(color->data());
+				glRasterPos2i(x, this->height - y);
+				glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)curr_string.data());
 				glMatrixMode(GL_PROJECTION);
 			glPopMatrix();
 			glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
 	glPopMatrix();
-	glLoadIdentity();
- 
-	//glFlush();
+}
 
+void Controller::render() {
+	// TODO: Do something about duplicated code...
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	std::vector< GLfloat >* color = new std::vector< GLfloat >();
+	color->push_back(1);
+	color->push_back(1);
+	color->push_back(0);
+	this->render_string(20, 20, this->print_string, color);
+	delete color;
+
+	glLoadIdentity();
 
 	double eye_x = this->x_offset * 1.5 * this->COS_60;
 	double eye_y = this->y_offset * 1.0 * this->SIN_60;
@@ -324,7 +334,7 @@ void Controller::render() {
 			glPushMatrix();
 			glTranslatef(x, y, 0);
 
-			this->debug_hex = curr_hex;
+			//this->debug_hex = curr_hex;
 			GameboardChunk* curr_chunk = this->gameboard->get_render_data(curr_hex);
 
 			glEnableClientState(GL_VERTEX_ARRAY);             // activate vertex coords array

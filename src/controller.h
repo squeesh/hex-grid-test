@@ -27,7 +27,9 @@ class Controller {
 		std::set<Hexagon*>* get_neighbors_in_radius(Hexagon*, int, std::set<Hexagon*>*);
 
 	public:
-		Hexagon* debug_hex; // for debugging...
+		//Hexagon* debug_hex; // for debugging...
+
+		std::string print_string;
 
 		bool print_flag;
 
@@ -61,6 +63,9 @@ class Controller {
 
 		//void generate_render_data(Hexagon*, double, double, UniqueDataVector< GLfloat >*);
 		//UniqueDataVector< GLfloat >* get_render_data(Hexagon*);
+
+		void render_string(int, int, std::string);
+		void render_string(int, int, std::string, std::vector< GLfloat >*);
 
 		void render();
 		void render_for_select();

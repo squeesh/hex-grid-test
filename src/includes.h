@@ -5,7 +5,8 @@
 #include <map>
 #include <cmath>
 #include <set>
-#include <string.h>
+#include <string>
+#include <sstream>
 //#include <GL/gl.h>
 //#include <GL/glu.h>
 #include <GL/glew.h>
