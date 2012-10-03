@@ -331,11 +331,11 @@ void Controller::render() {
                 }
 
 		if(i % (GlobalConsts::BOARD_CHUNK_SIZE) == 0 && j % (GlobalConsts::BOARD_CHUNK_SIZE) == 0) {
-			glPushMatrix();
-			glTranslatef(x, y, 0);
-
 			//this->debug_hex = curr_hex;
 			GameboardChunk* curr_chunk = this->gameboard->get_render_data(curr_hex);
+
+			glPushMatrix();
+			glTranslatef(x, y, 0);
 
 			glEnableClientState(GL_VERTEX_ARRAY);             // activate vertex coords array
 			glEnableClientState(GL_COLOR_ARRAY);
