@@ -107,14 +107,6 @@ int main(int argc, char** argv) {
 	glutInitWindowSize(RESOLUTION[0], RESOLUTION[1]);
 	glutCreateWindow("Hex Grid Thing...");
 
-	GLenum err = glewInit();
-	if (GLEW_OK != err)
-	{
-		/* Problem: glewInit failed, something is seriously wrong. */
-		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-	}
-	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
-
 	Py_Initialize();
 
 	curr_ctrl = Controller::get_controller();
