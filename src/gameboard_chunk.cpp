@@ -6,17 +6,17 @@ GameboardChunk::GameboardChunk(Hexagon* base_hex) {
 	this->board_terrain_data = NULL;
 	this->board_select_data = NULL;
 	
-	this->vbo_terrain_vert = 0;
+	/*this->vbo_terrain_vert = 0;
 	this->vbo_terrain_indicie = 0;
 
 	this->vbo_select_vert = 0;
-	this->vbo_select_indicie = 0;
+	this->vbo_select_indicie = 0;*/
 
-	glGenBuffers(1, &(this->vbo_terrain_vert));
+	/*glGenBuffers(1, &(this->vbo_terrain_vert));
 	glGenBuffers(1, &(this->vbo_terrain_indicie));
 
 	glGenBuffers(1, &(this->vbo_select_vert));
-	glGenBuffers(1, &(this->vbo_select_indicie));
+	glGenBuffers(1, &(this->vbo_select_indicie));*/
 
 	this->regenerate_terrain = true;
 	this->regenerate_select = true;
@@ -34,11 +34,11 @@ GameboardChunk::~GameboardChunk() {
 		delete this->board_select_data;
 	}
 
-	glDeleteBuffers(1, &(this->vbo_terrain_vert));
+	/*glDeleteBuffers(1, &(this->vbo_terrain_vert));
 	glDeleteBuffers(1, &(this->vbo_terrain_indicie));
 
 	glDeleteBuffers(1, &(this->vbo_select_vert));
-	glDeleteBuffers(1, &(this->vbo_select_indicie));
+	glDeleteBuffers(1, &(this->vbo_select_indicie));*/
 }
 
 
@@ -138,50 +138,15 @@ void GameboardChunk::verify_render_data() {
 }
 
 void GameboardChunk::write_VBO_data() {
-	GLsizeiptr hex_vert_size = sizeof(GLfloat) * this->board_terrain_data->vector_size();
-
-	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_terrain_vert);
-	glBufferData(GL_ARRAY_BUFFER, hex_vert_size, NULL, GL_STATIC_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, hex_vert_size, this->board_terrain_data->vector_data());
-
-	GLsizeiptr hex_indicie_size = sizeof(GLuint) * this->board_terrain_data->indicies_size();
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_terrain_indicie);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, hex_indicie_size, NULL, GL_STATIC_DRAW);
-	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, hex_indicie_size, this->board_terrain_data->indicies_data());
-
-	//-------------------------------------
-
-	GLsizeiptr sel_vert_size = sizeof(GLfloat) * this->board_select_data->vector_size();
-
-	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_select_vert);
-	glBufferData(GL_ARRAY_BUFFER, sel_vert_size, NULL, GL_STATIC_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sel_vert_size, this->board_select_data->vector_data());
-
-	GLsizeiptr sel_indicie_size = sizeof(GLuint) * this->board_select_data->indicies_size();
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_select_indicie);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sel_indicie_size, NULL, GL_STATIC_DRAW);
-	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sel_indicie_size, this->board_select_data->indicies_data());
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	this->board_terrain_data->write_VBO_data(GL_STATIC_DRAW);
+	this->board_select_data->write_VBO_data(GL_STATIC_DRAW);
 }
 
 void GameboardChunk::render() {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 
-	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_terrain_vert);
-
-	// vertex VBO
-	glVertexPointer(3, GL_FLOAT, this->board_terrain_data->VERTEX_STRIDE, (void*)(this->board_terrain_data->VERTEX_OFFSET));
-
-	// color VBO
-	glColorPointer( 3, GL_FLOAT, this->board_terrain_data->COLOR_STRIDE,  (void*)(this->board_terrain_data->COLOR_OFFSET));
-
-	// bind indicie VBO
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_terrain_indicie);
+	this->board_terrain_data->bind_for_draw(GL_FLOAT);
 
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glDrawElements(GL_TRIANGLES, this->board_terrain_data->indicies_size(), GL_UNSIGNED_INT, 0);
@@ -203,16 +168,7 @@ void GameboardChunk::render() {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 
-	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_select_vert);
-
-	// vertex VBO
-	glVertexPointer(3, GL_FLOAT, this->board_select_data->VERTEX_STRIDE, (void*)(this->board_select_data->VERTEX_OFFSET));
-
-	// color VBO
-	glColorPointer( 3, GL_FLOAT, this->board_select_data->COLOR_STRIDE,  (void*)(this->board_select_data->COLOR_OFFSET));
-
-	// bind indicie VBO
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_select_indicie);
+	this->board_select_data->bind_for_draw(GL_FLOAT);
 
 	// front facing polys
 	glPolygonMode(GL_FRONT, GL_FILL);

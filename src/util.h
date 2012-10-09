@@ -162,6 +162,9 @@ class UniqueDataVector {
 		std::vector<T> *vectors;
 		std::vector< GLuint > *indicies;
 
+		GLuint vbo_vert;
+		GLuint vbo_indicie;
+
 		static const int VERTEX_STRIDE;
 		static const int COLOR_STRIDE;
 
@@ -173,37 +176,49 @@ class UniqueDataVector {
 
 		T* at(int);
 		GLuint push_back(T, T, T, T, T, T);
-		//int index_size();
+
 		int vector_size();
 		int indicies_size();
-		//GLuint get_index(T, T, T);
+
 		GLuint get_index(std::vector<T>*);
 		T* vector_data();
 		GLuint* indicies_data();
 		void reserve(int);
 		void reverse_indicies();
 		void reverse_verticies();
+
+		void write_VBO_data(GLenum gl_mode);
+		void bind_for_draw(GLenum gl_mode);
 };
 
 template <typename T>
 UniqueDataVector<T>::UniqueDataVector() {
-    this->vectors = new std::vector<T>();
-    this->index_data = new std::map< std::vector<T>*, GLuint, cmp_coord<T> >();
-    this->index_data_keys = new std::vector< std::vector<T> *>(); // for easy garbage collection index_data
-    this->indicies = new std::vector< GLuint >();
+	this->vectors = new std::vector<T>();
+	this->index_data = new std::map< std::vector<T>*, GLuint, cmp_coord<T> >();
+	this->index_data_keys = new std::vector< std::vector<T> *>(); // for easy garbage collection index_data
+	this->indicies = new std::vector< GLuint >();
+
+	this->vbo_vert = 0;
+	this->vbo_indicie = 0;
+
+	glGenBuffers(1, &(this->vbo_vert));
+	glGenBuffers(1, &(this->vbo_indicie));
 }
 
 template <typename T>
 UniqueDataVector<T>::~UniqueDataVector() {
-    delete this->vectors;
-    delete this->index_data;
-    delete this->indicies;
+	delete this->vectors;
+	delete this->index_data;
+	delete this->indicies;
 
-    std::vector< std::vector<T> *> &curr_vec = *(this->index_data_keys);
-    for(int i = 0; i < this->index_data_keys->size(); i++) {
-        delete curr_vec[i];
-    }
-    delete this->index_data_keys;
+	std::vector< std::vector<T> *> &curr_vec = *(this->index_data_keys);
+	for(int i = 0; i < this->index_data_keys->size(); i++) {
+	delete curr_vec[i];
+	}
+	delete this->index_data_keys;
+
+	glDeleteBuffers(1, &(this->vbo_vert));
+	glDeleteBuffers(1, &(this->vbo_indicie));
 }
 
 template <typename T>
@@ -272,40 +287,15 @@ GLuint UniqueDataVector<T>::push_back(T x, T y, T z, T r, T g, T b) {
 	this->data[index+2] = z;
 }*/
 
-/*template <typename T>
-int UniqueDataVector<T>::index_size() {
-	return this->index_data->size();
-}*/
-
 template <typename T>
 int UniqueDataVector<T>::vector_size() {
 	return this->vectors->size();
 }
 
-/*template <typename T>
-int UniqueDataVector<T>::color_size() {
-	return this->color->size();
-}*/
-
 template <typename T>
 int UniqueDataVector<T>::indicies_size() {
 	return this->indicies->size();
 }
-
-/*template <typename T>
-GLuint UniqueDataVector<T>::get_index(T x, T y, T z) {
-	std::vector<T>* curr_coords = new std::vector<T>();
-	curr_coords->push_back(x);
-	curr_coords->push_back(y);
-	curr_coords->push_back(z);
-
-	//std::cout << "count: " << this->index_data.count(curr_coords) << std::endl;
-
-	GLuint output = this->get_index(curr_coords);
-	delete curr_coords;
-
-	return output;
-}*/
 
 template <typename T>
 GLuint UniqueDataVector<T>::get_index(std::vector<T>* curr_coords) {
@@ -342,6 +332,35 @@ void UniqueDataVector<T>::reverse_verticies() {
 	std::reverse(this->vectors->begin(), this->vectors->end()); 
 }
 
+template <typename T>
+void UniqueDataVector<T>::write_VBO_data(GLenum gl_mode) {
+	GLsizeiptr vert_size = sizeof(T) * this->vector_size();
+
+	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_vert);
+	glBufferData(GL_ARRAY_BUFFER, vert_size, NULL, gl_mode);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, vert_size, this->vector_data());
+
+	GLsizeiptr indicie_size = sizeof(GLuint) * this->indicies_size();
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_indicie);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicie_size, NULL, gl_mode);
+	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indicie_size, this->indicies_data());
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+template <typename T>
+void UniqueDataVector<T>::bind_for_draw(GLenum gl_mode) {
+	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_vert);
+
+	// vertex VBO
+	glVertexPointer(3, gl_mode, this->VERTEX_STRIDE, (void*)(this->VERTEX_OFFSET));
+	glColorPointer(3, gl_mode, this->COLOR_STRIDE,  (void*)(this->COLOR_OFFSET));
+
+	// bind indicie VBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_indicie);
+}
 
 template <typename T>
 const int UniqueDataVector<T>::VERTEX_STRIDE = sizeof(T) * 8;
