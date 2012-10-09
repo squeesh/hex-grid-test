@@ -158,7 +158,6 @@ class UniqueDataVector {
 		std::map< std::vector<T>*, GLuint, cmp_coord<T> > *index_data;
 		std::vector< std::vector<T> *> *index_data_keys;
 		
-	public:
 		std::vector<T> *vectors;
 		std::vector< GLuint > *indicies;
 
@@ -171,6 +170,7 @@ class UniqueDataVector {
 		static const int VERTEX_OFFSET;
 		static const int COLOR_OFFSET;
 
+	public:
 		UniqueDataVector();
 		~UniqueDataVector();
 

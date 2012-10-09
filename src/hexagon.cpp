@@ -2,7 +2,6 @@
 
 
 int Hexagon::name_count = 0;
-RoundVector< RoundVector<double>* >* Hexagon::rendered_verticies = NULL;
 
 RoundVector< RoundVector<double>* >* get_rot_coords() {
 	double rot_data[][2] = {
@@ -289,21 +288,58 @@ void Hexagon::generate_select_data(double x, double y, UniqueDataVector< GLfloat
 
                 if(curr_color) {
 		    select_data->push_back(
-			Hexagon::ROT_COORDS->at(0)->at(0) * 0.8 + x, Hexagon::ROT_COORDS->at(0)->at(1) * 0.8 + y, this->verticies[this->VERTEX_POSITIONS->at(0)]->get_height() + 0.1,
+			Hexagon::ROT_COORDS->at(0  )->at(0) + x, Hexagon::ROT_COORDS->at(0  )->at(1) + y, this->verticies[this->VERTEX_POSITIONS->at(0  )]->get_height() + 0.01,
 			curr_color->at(0), curr_color->at(1), curr_color->at(2)
 		    );
 
 		    select_data->push_back(
-			Hexagon::ROT_COORDS->at(i-1)->at(0) * 0.8 + x, Hexagon::ROT_COORDS->at(i-1)->at(1) * 0.8 + y, this->verticies[this->VERTEX_POSITIONS->at(i-1)]->get_height() + 0.1,
+			Hexagon::ROT_COORDS->at(i-1)->at(0) + x, Hexagon::ROT_COORDS->at(i-1)->at(1) + y, this->verticies[this->VERTEX_POSITIONS->at(i-1)]->get_height() + 0.01,
 			curr_color->at(0), curr_color->at(1), curr_color->at(2)
 		    );
 
 		    select_data->push_back(
-			Hexagon::ROT_COORDS->at(i)->at(0) * 0.8 + x, Hexagon::ROT_COORDS->at(i)->at(1) * 0.8 + y, this->verticies[this->VERTEX_POSITIONS->at(i)]->get_height() + 0.1,
+			Hexagon::ROT_COORDS->at(i  )->at(0) + x, Hexagon::ROT_COORDS->at(i  )->at(1) + y, this->verticies[this->VERTEX_POSITIONS->at(i  )]->get_height() + 0.01,
 			curr_color->at(0), curr_color->at(1), curr_color->at(2)
 		    );
                 }
 	}
 }
 
+
+void Hexagon::generate_object_data(double x, double y, UniqueDataVector< GLfloat >* object_data) {
+	Controller* curr_ctrl = Controller::_get_controller();
+
+	std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(curr_ctrl->gameboard->board_object_map);
+	if(curr_board_object_map[this]) {
+		object_data->push_back(
+		       -0.5 + x, y, this->get_height(),
+			0, 0, 1
+		);
+
+		object_data->push_back(
+		       -0.5 + x, y, this->get_height() + 2.0,
+			0, 0, 1
+		);
+
+		object_data->push_back(
+			0.5 + x, y, this->get_height() + 2.0,
+			0, 0, 1
+		);
+
+		object_data->push_back(
+			0.5 + x, y, this->get_height() + 2.0,
+			0, 0, 1
+		);
+
+		object_data->push_back(
+			0.5 + x, y, this->get_height() ,
+			0, 0, 1
+		);
+
+		object_data->push_back(
+		       -0.5 + x, y, this->get_height(),
+			0, 0, 1
+		);
+	}
+}
 

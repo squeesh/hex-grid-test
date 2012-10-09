@@ -5,6 +5,7 @@ GameboardChunk::GameboardChunk(Hexagon* base_hex) {
 
 	this->board_terrain_data = NULL;
 	this->board_select_data = NULL;
+	this->board_object_data = NULL;
 	
 	/*this->vbo_terrain_vert = 0;
 	this->vbo_terrain_indicie = 0;
@@ -20,6 +21,7 @@ GameboardChunk::GameboardChunk(Hexagon* base_hex) {
 
 	this->regenerate_terrain = true;
 	this->regenerate_select = true;
+	this->regenerate_object = true;
 }
 
 
@@ -61,6 +63,15 @@ void GameboardChunk::clear_select() {
 	this->regenerate_select = true;
 }
 
+void GameboardChunk::clear_object() {
+	if(this->board_object_data) {
+		delete this->board_object_data;
+	}
+
+	this->board_object_data = new UniqueDataVector< GLfloat >();
+	this->regenerate_object = true;
+}
+
 void GameboardChunk::generate_render_data(Hexagon* curr_hex, double x, double y) {
 	// TODO: I don't like this logic being here.. this should be moved out...
 	if(this->regenerate_terrain) {
@@ -69,6 +80,10 @@ void GameboardChunk::generate_render_data(Hexagon* curr_hex, double x, double y)
 
 	if(this->regenerate_select) {
 		curr_hex->generate_select_data(x, y, this->board_select_data);
+	} 
+
+	if(this->regenerate_object) {
+		curr_hex->generate_object_data(x, y, this->board_object_data);
 	} 
 
 	curr_hex->parent_chunk = this;
@@ -116,11 +131,15 @@ void GameboardChunk::generate_chunk_data() {
 	if(this->regenerate_select) {
 		this->board_select_data->reverse_indicies();
 	}
+
+	if(this->regenerate_object) {
+		this->board_object_data->reverse_indicies();
+	}
 }
 
 
 void GameboardChunk::verify_render_data() {
-	if(this->regenerate_terrain || this->regenerate_select) {
+	if(this->regenerate_terrain || this->regenerate_select || this->regenerate_object) {
 		if(this->regenerate_terrain) {
 			this->clear_terrain();
 		}
@@ -129,17 +148,23 @@ void GameboardChunk::verify_render_data() {
 			this->clear_select();
 		}
 
+		if(this->regenerate_object) {
+			this->clear_object();
+		}
+
 		this->generate_chunk_data();
 		this->write_VBO_data();
 
 		this->regenerate_terrain = false;
 		this->regenerate_select = false;
+		this->regenerate_object = false;
 	}
 }
 
 void GameboardChunk::write_VBO_data() {
 	this->board_terrain_data->write_VBO_data(GL_STATIC_DRAW);
 	this->board_select_data->write_VBO_data(GL_STATIC_DRAW);
+	this->board_object_data->write_VBO_data(GL_STATIC_DRAW);
 }
 
 void GameboardChunk::render() {
@@ -148,7 +173,7 @@ void GameboardChunk::render() {
 
 	this->board_terrain_data->bind_for_draw(GL_FLOAT);
 
-	glPolygonMode(GL_FRONT, GL_FILL);
+	// front facing polys
 	glDrawElements(GL_TRIANGLES, this->board_terrain_data->indicies_size(), GL_UNSIGNED_INT, 0);
 
 	// turn off color array so that we can draw black lines
@@ -156,7 +181,6 @@ void GameboardChunk::render() {
 
 	// draw back facing black lines
 	glCullFace(GL_FRONT);
-	glPolygonMode(GL_BACK,  GL_LINE);
 	glColor3f(0, 0, 0);
 	glDrawElements(GL_TRIANGLES, this->board_terrain_data->indicies_size(), GL_UNSIGNED_INT, 0);
 	glCullFace(GL_BACK);
@@ -170,12 +194,26 @@ void GameboardChunk::render() {
 
 	this->board_select_data->bind_for_draw(GL_FLOAT);
 
-	// front facing polys
-	glPolygonMode(GL_FRONT, GL_FILL);
 	glDrawElements(GL_TRIANGLES, this->board_select_data->indicies_size(), GL_UNSIGNED_INT, 0);
 
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	//----------------------------------------
+
+	glDisable(GL_CULL_FACE);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	this->board_object_data->bind_for_draw(GL_FLOAT);
+
+	glDrawElements(GL_TRIANGLES, this->board_object_data->indicies_size(), GL_UNSIGNED_INT, 0);
+
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glEnable(GL_CULL_FACE);
+
+	//----------------------------------------
 
 	// bind with 0, so, switch back to normal pointer operation
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

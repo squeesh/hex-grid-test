@@ -122,6 +122,9 @@ void Controller::init_gl(long width, long height) {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable( GL_BLEND );
 
+	glPolygonMode(GL_FRONT, GL_FILL);
+	glPolygonMode(GL_BACK,  GL_LINE);
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(45.0, this->width/((double) this->height),-1.0, 1000.0);
@@ -159,8 +162,9 @@ void Controller::resize(long width, long height) {
 
 void Controller::init_board() {
 	py_call_func(this->controller_py, "init_board");
-	Hexagon* curr_hex = this->get_hexagon(0, 0);
-	this->gameboard->board_objects->push_back(new BoardObject(curr_hex));
+
+	this->gameboard->bind_obj_hex(new BoardObject(NULL), this->get_hexagon(0, 0));
+	this->gameboard->bind_obj_hex(new BoardObject(NULL), this->get_hexagon(3, 7));
 }
 
 

@@ -8,7 +8,7 @@ class Gameboard {
 		std::map< Hexagon*, GameboardChunk* >* chunk_map;
 
 	public:
-		std::vector< BoardObject* >* board_objects;
+		std::map< Hexagon*, BoardObject* >* board_object_map;
 
 		Gameboard();
 
@@ -21,6 +21,8 @@ class Gameboard {
 		void render(int, int, int, int);
 
 		void clear();
+
+		void bind_obj_hex(BoardObject*, Hexagon*);
 };
 
 

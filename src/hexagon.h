@@ -24,7 +24,6 @@ class Hexagon {
 
 		GameboardChunk* parent_chunk;
 
-		static RoundVector< RoundVector<double>* >* rendered_verticies;
 		std::map<const char*, Vertex*, cmp_str> verticies;
 
 		double last_x;
@@ -61,6 +60,7 @@ class Hexagon {
 
 		void generate_vertex_data(double, double, UniqueDataVector< GLfloat >*);
 		void generate_select_data(double, double, UniqueDataVector< GLfloat >*);
+		void generate_object_data(double, double, UniqueDataVector< GLfloat >*);
 };
 
 #endif

@@ -15,9 +15,11 @@ class GameboardChunk {
 
 		UniqueDataVector< GLfloat >* board_terrain_data;
 		UniqueDataVector< GLfloat >* board_select_data;
+		UniqueDataVector< GLfloat >* board_object_data;
 
 		void clear_terrain();
 		void clear_select();
+		void clear_object();
 
 		void generate_chunk_data();
 		void generate_render_data(Hexagon*, double, double);
@@ -27,6 +29,7 @@ class GameboardChunk {
 	public:
 		bool regenerate_terrain;
 		bool regenerate_select;
+		bool regenerate_object;
 
 		GameboardChunk(Hexagon*);
 		~GameboardChunk();

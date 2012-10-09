@@ -13,7 +13,7 @@ Gameboard::Gameboard() {
 	}
 
 	this->chunk_map = new std::map< Hexagon*, GameboardChunk* >();
-	this->board_objects = new std::vector< BoardObject* >();
+	this->board_object_map = new std::map< Hexagon*,BoardObject* >();
 }
 
 
@@ -101,4 +101,16 @@ void Gameboard::clear() {
 		(*itr).second->regenerate = true;
 	}*/
 }
+
+
+void Gameboard::bind_obj_hex(BoardObject* curr_obj, Hexagon* curr_hex) {
+	if(curr_obj->base_hex) {
+		this->board_object_map->erase(curr_obj->base_hex);
+	}
+
+	std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(this->board_object_map);
+	curr_board_object_map[curr_hex] = curr_obj;
+	curr_obj->base_hex = curr_hex;
+}
+
 
