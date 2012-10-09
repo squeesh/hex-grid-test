@@ -70,11 +70,11 @@ void Gameboard::render(int x_start, int x_stop, int y_start, int y_stop) {
 
 		// bind VBOs for vertex data
 		glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_terrain_vert);
-		glVertexPointer(3, GL_FLOAT, sizeof(GLfloat)*8, 0);
+		glVertexPointer(3, GL_FLOAT, curr_chunk->board_terrain_data->VERTEX_STRIDE, (void*)(curr_chunk->board_terrain_data->VERTEX_OFFSET));
 
 		// color VBO
 		//glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_hex_color);
-		glColorPointer(3, GL_FLOAT, sizeof(GLfloat)*8, (void*)(sizeof(GLfloat)*3));
+		glColorPointer( 3, GL_FLOAT, curr_chunk->board_terrain_data->COLOR_STRIDE,  (void*)(curr_chunk->board_terrain_data->COLOR_OFFSET));
 
 		// bind indicie VBO
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curr_chunk->vbo_terrain_indicie);
@@ -103,11 +103,11 @@ void Gameboard::render(int x_start, int x_stop, int y_start, int y_stop) {
 
 		// bind VBOs for vertex array and index array
 		glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_select_vert);
-		glVertexPointer(3, GL_FLOAT, sizeof(GLfloat)*8, 0);
+		glVertexPointer(3, GL_FLOAT, curr_chunk->board_select_data->VERTEX_STRIDE, (void*)(curr_chunk->board_select_data->VERTEX_OFFSET));
 
 		// color VBO
 		//glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_sel_color);
-		glColorPointer(3, GL_FLOAT, sizeof(GLfloat)*8, (void*)(sizeof(GLfloat)*3));
+		glColorPointer( 3, GL_FLOAT, curr_chunk->board_select_data->COLOR_STRIDE,  (void*)(curr_chunk->board_select_data->COLOR_OFFSET));
 
 		// bind indicie VBO
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curr_chunk->vbo_select_indicie);

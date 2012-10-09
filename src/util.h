@@ -162,6 +162,11 @@ class UniqueDataVector {
 		std::vector<T> *vectors;
 		std::vector< GLuint > *indicies;
 
+		static const int VERTEX_STRIDE;
+		static const int COLOR_STRIDE;
+
+		static const int VERTEX_OFFSET;
+		static const int COLOR_OFFSET;
 
 		UniqueDataVector();
 		~UniqueDataVector();
@@ -337,5 +342,15 @@ void UniqueDataVector<T>::reverse_verticies() {
 	std::reverse(this->vectors->begin(), this->vectors->end()); 
 }
 
+
+template <typename T>
+const int UniqueDataVector<T>::VERTEX_STRIDE = sizeof(T) * 8;
+template <typename T>
+const int UniqueDataVector<T>::COLOR_STRIDE  = sizeof(T) * 8;
+
+template <typename T>
+const int UniqueDataVector<T>::VERTEX_OFFSET = sizeof(T) * 0;
+template <typename T>
+const int UniqueDataVector<T>::COLOR_OFFSET  = sizeof(T) * 3;
 
 #endif
