@@ -3,7 +3,7 @@
 #    You will get circular imports...
 
 class GlobalConsts(object):
-    PATH_SHOW_SEARCH    = True
+    PATH_SHOW_SEARCH    = False
 
     GENERATE_HILLS = True
     GENERATE_MOUNTAINS = GENERATE_HILLS

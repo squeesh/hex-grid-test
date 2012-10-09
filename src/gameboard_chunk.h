@@ -7,6 +7,14 @@ class GameboardChunk {
 	private:
 		Hexagon* base_hex;
 
+		void clear_vertex();
+		void clear_select();
+
+		void generate_chunk_data();
+		void generate_render_data(Hexagon*, double, double);
+
+		void write_VBO_data();
+
 	public:
 		GLuint vbo_hex_vert;
 		GLuint vbo_hex_indicie;
@@ -23,16 +31,7 @@ class GameboardChunk {
 		GameboardChunk(Hexagon*);
 		~GameboardChunk();
 
-		void clear_vertex();
-		void clear_select();
-
-		void generate_chunk_data();
-		void generate_render_data(Hexagon*, double, double);
-
 		void verify_render_data();
-
-		void write_VBO_data();
-
 };
 
 #endif

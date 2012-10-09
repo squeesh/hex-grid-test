@@ -23,6 +23,7 @@
 #include "hexagon.h"
 #include "gameboard_chunk.h"
 #include "gameboard.h"
+#include "board_object.h"
 #include "controller.h"
 
 
