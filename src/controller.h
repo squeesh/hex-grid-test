@@ -62,9 +62,6 @@ class Controller {
 		void render();
 		void render_for_select();
 
-		void init_board_render_cache();
-		void reset_board_render_cache();
-
 		void push_hexagon(Hexagon *hex);
 		void set_selected_hex(Hexagon* curr_hex);
 		Hexagon* get_selected_hex();
@@ -76,12 +73,15 @@ class Controller {
 
 		void mouse_left_click(int x, int y);
 		void mouse_left_release(int x, int y);
+		void mouse_middle_click(int x, int y);
+		void mouse_middle_release(int x, int y);
 		void mouse_right_click(int x, int y);
 		void mouse_right_release(int x, int y);
 		void mouse_scroll_up(int x, int y);
 		void mouse_scroll_down(int x, int y);
 
 		void mouse_left_drag(int x, int y);
+		void mouse_middle_drag(int x, int y);
 		void mouse_right_drag(int x, int y);
 
 		void key_down(unsigned char key, int x, int y);

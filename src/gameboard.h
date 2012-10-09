@@ -20,8 +20,6 @@ class Gameboard {
 		GameboardChunk* get_chunk(Hexagon* base_hex);
 		void render(int, int, int, int);
 
-		void clear();
-
 		void bind_obj_hex(BoardObject*, Hexagon*);
 };
 

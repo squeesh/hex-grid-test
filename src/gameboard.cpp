@@ -47,59 +47,33 @@ GameboardChunk* Gameboard::get_chunk(Hexagon* base_hex) {
 
 
 void Gameboard::render(int x_start, int x_stop, int y_start, int y_stop) {
+    // draw game board
+    for(int j = y_start; j <= y_stop; j+=GlobalConsts::BOARD_CHUNK_SIZE) {
+        for(int i = x_start; i <= x_stop; i+=GlobalConsts::BOARD_CHUNK_SIZE) {
+            Hexagon* curr_hex = this->hexagon_list->at(i)->at(j);
+            GameboardChunk* curr_chunk = this->get_chunk(curr_hex);
 
-	// draw game board
-        for(int j = y_start; j <= y_stop; j+=GlobalConsts::BOARD_CHUNK_SIZE) {
-            for(int i = x_start; i <= x_stop; i+=GlobalConsts::BOARD_CHUNK_SIZE) {
-                Hexagon* curr_hex = this->hexagon_list->at(i)->at(j);
-		GameboardChunk* curr_chunk = this->get_chunk(curr_hex);
+            double x = i * 1.5 * Controller::COS_60;
+            double y = j * 1.0 * Controller::SIN_60;
 
-                double x = i * 1.5 * Controller::COS_60;
-                double y = j * 1.0 * Controller::SIN_60;
-
-                if(i % 2 != 0) {
-                    y += 0.5 * Controller::SIN_60;
-                }
-
-		glPushMatrix();
-		glTranslatef(x, y, 0);
-
-		curr_chunk->render();
-
-		glPopMatrix();
+            if(i % 2 != 0) {
+                y += 0.5 * Controller::SIN_60;
             }
-        }
 
-	// render objects on the game board
-	/*for(int i = 0; i < this->board_objects->size(); i++) {
-		this->board_objects->at(i)->render();
-	}*/
+            glPushMatrix();
+            glTranslatef(x, y, 0);
+
+            curr_chunk->render();
+
+            glPopMatrix();
+        }
+    }
 }
 
 
 RoundVector< RoundVector< Hexagon* >* >* Gameboard::get_hexagon_list() {
 	// TODO: This should return a copy... so things do get added without being added to the other constructs
 	return this->hexagon_list;
-}
-
-void Gameboard::clear() {
-	// Possibly fixed a bug... It seems deleteing the chunks then regenerating them wasn't working as intended
-	// due to concurrency on windows? Memory was flagged for deletion, but would be deleted when it wasn't safe...
-	// so instead of deleteing... we now keep our assigned opengl memory locations and just rewrite to it...
-
-	/*std::map< Hexagon*, GameboardChunk* > &curr_chunk_map = *(this->chunk_map);
-	for(std::map< Hexagon*, GameboardChunk* >::iterator itr = curr_chunk_map.begin(); itr != curr_chunk_map.end(); itr++) {
-		delete (*itr).second;
-	}
-
-	this->chunk_map->clear();*/
-
-	std::cout << "no call this func!" << std::endl;
-	
-	/*std::map< Hexagon*, GameboardChunk* > &curr_chunk_map = *(this->chunk_map);
-	for(std::map< Hexagon*, GameboardChunk* >::iterator itr = curr_chunk_map.begin(); itr != curr_chunk_map.end(); itr++) {
-		(*itr).second->regenerate = true;
-	}*/
 }
 
 

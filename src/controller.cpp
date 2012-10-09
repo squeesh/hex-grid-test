@@ -31,7 +31,6 @@ Controller::Controller(void) {
 		this->old_mouse_pos[i]["y"] 	= 0;
 	}
 
-	this->init_board_render_cache();
 	this->gameboard = new Gameboard();
 
 	this->print_flag = false;
@@ -164,7 +163,7 @@ void Controller::init_board() {
 	py_call_func(this->controller_py, "init_board");
 
 	this->gameboard->bind_obj_hex(new BoardObject(NULL), this->get_hexagon(0, 0));
-	this->gameboard->bind_obj_hex(new BoardObject(NULL), this->get_hexagon(3, 7));
+	//this->gameboard->bind_obj_hex(new BoardObject(NULL), this->get_hexagon(3, 7));
 }
 
 
@@ -329,17 +328,6 @@ void Controller::render_for_select() {
 }
 
 
-void Controller::init_board_render_cache() {
-}
-
-
-void Controller::reset_board_render_cache() {
-	this->gameboard->clear();
-
-	this->init_board_render_cache();
-}
-
-
 void Controller::push_hexagon(Hexagon *hex) {
 	this->gameboard->push_back(hex);
 }
@@ -460,50 +448,67 @@ void Controller::mouse_left_click(int x, int y) {
 	Hexagon* curr_hex = this->get_clicked_hex(x, this->height-y);
 
 	if(curr_hex && curr_hex->is_pathable()) {
-		if(this->get_selected_hex()) {
-			py_call_func(this->controller_py, "find_path", this->get_selected_hex(), curr_hex);
-		}
-
 		this->set_selected_hex(curr_hex);
-		//this->reset_board_render_cache();
 	}
 
 	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["down"] 	= 1;
-	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["x"]	= x;
-	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["y"] 	= y;
+	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["x"]      = x;
+	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["y"] 	    = y;
 }
 
 void Controller::mouse_left_release(int x, int y) {
 	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["down"] 	= 0;
-	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["x"]	= x;
-	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["y"] 	= y;
+	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["x"]	    = x;
+	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["y"] 	    = y;
+}
+
+void Controller::mouse_middle_click(int x, int y) {
+    this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["down"] = 1;
+    this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["x"]    = x;
+    this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["y"]    = y;
+}
+
+void Controller::mouse_middle_release(int x, int y) {
+    this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["down"] = 0;
+    this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["x"]    = x;
+    this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["y"]    = y;
 }
 
 void Controller::mouse_right_click(int x, int y) {
+    Hexagon* curr_hex = this->get_clicked_hex(x, this->height-y);
+
+    if(curr_hex && curr_hex->is_pathable()) {
+        if(this->get_selected_hex()) {
+            py_call_func(this->controller_py, "find_path", this->get_selected_hex(), curr_hex);
+        }
+    }
+
 	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["down"] 	= 1;
-	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["x"]	= x;
-	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["y"] 	= y;
+	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["x"]	    = x;
+	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["y"]     = y;
 }
 
 void Controller::mouse_right_release(int x, int y) {
 	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["down"] 	= 0;
-	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["x"]	= x;
+	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["x"]	    = x;
 	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["y"] 	= y;
 }
 
 void Controller::mouse_left_drag(int x, int y) {
+}
 
+void Controller::mouse_middle_drag(int x, int y) {
+    int x_diff = x - this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["x"];
+    int y_diff = y - this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["y"];
+
+    this->x_offset -= x_diff / 30.0 * this->zoom;
+    this->y_offset += y_diff / 30.0 * this->zoom;
+
+    this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["x"] = x;
+    this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["y"] = y;
 }
 
 void Controller::mouse_right_drag(int x, int y) {
-	int x_diff = x - this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["x"];
-	int y_diff = y - this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["y"];
-
-	this->x_offset -= x_diff / 30.0 * this->zoom;
-	this->y_offset += y_diff / 30.0 * this->zoom;
-
-	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["x"] = x;
-	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["y"] = y;
 }
 
 void Controller::mouse_scroll_up(int x, int y) {

@@ -49,11 +49,12 @@ void key_pressed(unsigned char key, int x, int y) {
         case 27:
             exit(0);
             break;
-	case ' ':
-	    curr_ctrl->print_flag = true;
+        case ' ':
+            curr_ctrl->print_flag = true;
+            break;
         default:
-	    curr_ctrl->key_down(key, x, y);
-	    break;
+            curr_ctrl->key_down(key, x, y);
+            break;
     }
 }
 
@@ -66,7 +67,9 @@ void mouse_click(int button, int state, int x, int y) {
         case GLUT_DOWN:
 		if(button == GlobalConsts::MOUSE_LEFT) {
 			curr_ctrl->mouse_left_click(x, y);
-		} else if(button == GlobalConsts::MOUSE_RIGHT) {
+		} else if(button == GlobalConsts::MOUSE_MIDDLE) {
+            curr_ctrl->mouse_middle_click(x, y);
+        } else if(button == GlobalConsts::MOUSE_RIGHT) {
 			curr_ctrl->mouse_right_click(x, y);
 		} else if(button == GlobalConsts::MOUSE_SCROLL_UP) {
 			curr_ctrl->mouse_scroll_up(x, y);
@@ -77,7 +80,9 @@ void mouse_click(int button, int state, int x, int y) {
 	case GLUT_UP:
 		if(button == GlobalConsts::MOUSE_LEFT) {
 			curr_ctrl->mouse_left_release(x, y);
-		} else if(button == GlobalConsts::MOUSE_RIGHT) {
+		} else if(button == GlobalConsts::MOUSE_MIDDLE) {
+            curr_ctrl->mouse_middle_release(x, y);
+        } else if(button == GlobalConsts::MOUSE_RIGHT) {
 			curr_ctrl->mouse_right_release(x, y);
 		}
 		break;
@@ -86,11 +91,11 @@ void mouse_click(int button, int state, int x, int y) {
 }
 
 void mouse_drag(int x, int y) {
-	//std::cout << "drag: " << x << " | " << y << std::endl;
-
 	if(curr_ctrl->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["down"]) {
 		curr_ctrl->mouse_left_drag(x, y);
-	} else if(curr_ctrl->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["down"]) {
+	} else if(curr_ctrl->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["down"]) {
+        curr_ctrl->mouse_middle_drag(x, y);
+    } else if(curr_ctrl->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["down"]) {
 		curr_ctrl->mouse_right_drag(x, y);
 	}
 }
