@@ -51,11 +51,6 @@ extern "C" {
 		curr_ctrl->resize(width, height);
 	}
 
-	void Controller_init_board() {
-		Controller* curr_ctrl = Controller_get_controller();
-		curr_ctrl->init_board();
-	}
-
 	void Controller_tick() {
 		Controller* curr_ctrl = Controller_get_controller();
 		curr_ctrl->tick();

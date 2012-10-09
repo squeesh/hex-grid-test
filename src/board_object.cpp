@@ -8,3 +8,8 @@ BoardObject::BoardObject(Hexagon* base_hex) {
 	this->color->push_back(1);
 }
 
+
+void BoardObject::render() {
+
+}
+

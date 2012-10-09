@@ -42,11 +42,6 @@ class Controller {
 		static Controller* get_controller();
 
 		void init_board();
-		void py_init_board();
-
-		void push_hexagon(Hexagon *hex);
-		//Hexagon* pop_hexagon();
-		Hexagon* get_hexagon(int i, int j);
 
 		void zoom_map(double);
 
@@ -61,9 +56,6 @@ class Controller {
 
 		void tick();
 
-		//void generate_render_data(Hexagon*, double, double, UniqueDataVector< GLfloat >*);
-		//UniqueDataVector< GLfloat >* get_render_data(Hexagon*);
-
 		void render_string(int, int, std::string);
 		void render_string(int, int, std::string, std::vector< GLfloat >*);
 
@@ -73,11 +65,14 @@ class Controller {
 		void init_board_render_cache();
 		void reset_board_render_cache();
 
+		void push_hexagon(Hexagon *hex);
+		void set_selected_hex(Hexagon* curr_hex);
+		Hexagon* get_selected_hex();
+		Hexagon* get_hex_by_name(long name);
+		Hexagon* get_hexagon(int i, int j);
 		Hexagon* get_clicked_hex(double x, double y);
 
 		std::set< Hexagon* >* get_neighbors_in_radius(Hexagon*, int);
-
-		Hexagon* get_hex_by_name(long name);
 
 		void mouse_left_click(int x, int y);
 		void mouse_left_release(int x, int y);
@@ -91,18 +86,6 @@ class Controller {
 
 		void key_down(unsigned char key, int x, int y);
 		void key_up(unsigned char key, int x, int y);
-
-		void set_selected_hex(Hexagon* curr_hex);
-		Hexagon* get_selected_hex();
-
-		//RoundVector< RoundVector< Hexagon* >* >* hexagon_list;
-		//std::map< Hexagon*, std::vector< int >* >* hexagon_indicies;
-
-		//std::map< Hexagon*, UniqueDataVector< GLfloat >* >* line_vertex_data;
-		//std::map< Hexagon*, UniqueDataVector< GLfloat >* >* triangle_vertex_data;
-		/*std::map< Hexagon*, GLuint >* vbo_ids;
-		std::map< Hexagon*, GLuint >* vbo_colors;
-		std::map< Hexagon*, GLuint >* vbo_indicies;*/
 
 		Gameboard* gameboard;
 };

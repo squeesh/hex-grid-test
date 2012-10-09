@@ -7,6 +7,8 @@ class BoardObject {
 		std::vector< double >* color;
 
 		BoardObject(Hexagon*);
+
+		void render();
 };
 
 #endif

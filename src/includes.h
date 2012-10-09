@@ -21,9 +21,9 @@
 //#include "color.h"
 #include "vertex.h"
 #include "hexagon.h"
+#include "board_object.h"
 #include "gameboard_chunk.h"
 #include "gameboard.h"
-#include "board_object.h"
 #include "controller.h"
 
 

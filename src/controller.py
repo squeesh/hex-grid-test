@@ -55,8 +55,6 @@ class Controller(object):
         #controller_lib.Controller_set_MAX_PATHABLE_SLOPE(c_double(self.MAX_PATHABLE_SLOPE))
 
         print 'Creating Board...'
-        controller_lib.Controller_init_board()
-
         for j in range(GlobalConsts.BOARD_HEIGHT):
             for i in range(GlobalConsts.BOARD_WIDTH):
                 x = i * 1.5

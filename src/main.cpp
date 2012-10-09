@@ -123,7 +123,7 @@ int main(int argc, char** argv) {
 	glutMotionFunc(mouse_drag);
 
 	curr_ctrl->init_gl(RESOLUTION[0], RESOLUTION[1]);
-	curr_ctrl->py_init_board();
+	curr_ctrl->init_board();
 	//curr_ctrl->init_board(BOARD_WIDTH, BOARD_HEIGHT);
 
 	glutMainLoop();

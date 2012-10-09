@@ -75,14 +75,6 @@ Controller* Controller::get_controller() {
 	return Controller::curr_ctrl;
 }
 
-void Controller::push_hexagon(Hexagon *hex) {
-	this->gameboard->push_back(hex);
-}
-
-
-Hexagon* Controller::get_hexagon(int i, int j) {
-    return this->gameboard->get_hexagon_list()->at(i)->at(j);
-}
 
 void Controller::zoom_map(double zoom_amount) {
 	if(zoom_amount > 1) {
@@ -166,10 +158,9 @@ void Controller::resize(long width, long height) {
 }
 
 void Controller::init_board() {
-}
-
-void Controller::py_init_board() {
 	py_call_func(this->controller_py, "init_board");
+	Hexagon* curr_hex = this->get_hexagon(0, 0);
+	this->gameboard->board_objects->push_back(new BoardObject(curr_hex));
 }
 
 
@@ -329,87 +320,8 @@ void Controller::render() {
 		pos_x_view -=  pos_x_view % GlobalConsts::BOARD_CHUNK_SIZE;
 	}
 
-        for(int j = neg_y_view; j <= pos_y_view; j+=GlobalConsts::BOARD_CHUNK_SIZE) {
-            for(int i = neg_x_view; i <= pos_x_view; i+=GlobalConsts::BOARD_CHUNK_SIZE) {
-                Hexagon* curr_hex = this->gameboard->get_hexagon_list()->at(i)->at(j);
-                //glLoadName(curr_hex->name);
 
-                double x = i * 1.5 * this->COS_60;
-                double y = j * 1.0 * this->SIN_60;
-
-                if(i % 2 != 0) {
-                    y += 0.5 * this->SIN_60;
-                }
-
-		if(i % (GlobalConsts::BOARD_CHUNK_SIZE) == 0 && j % (GlobalConsts::BOARD_CHUNK_SIZE) == 0) {
-			//this->debug_hex = curr_hex;
-			GameboardChunk* curr_chunk = this->gameboard->get_render_data(curr_hex);
-
-			glPushMatrix();
-			glTranslatef(x, y, 0);
-
-			glEnableClientState(GL_VERTEX_ARRAY);             // activate vertex coords array
-			glEnableClientState(GL_COLOR_ARRAY);
-
-			// bind VBOs for vertex array and index array
-			glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_hex_vert);         // for vertex coordinates
-			glVertexPointer(3, GL_FLOAT, sizeof(GLfloat)*8, 0);               // last param is offset, not ptr
-
-			// color VBO
-			//glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_hex_color);
-    			glColorPointer(3, GL_FLOAT, sizeof(GLfloat)*8, (void*)(sizeof(GLfloat)*3));
-
-			// bind indicie VBO
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curr_chunk->vbo_hex_indicie);
-
-			// front facing polys
-			//glColor3f(0, 1, 0);
-			glPolygonMode(GL_FRONT, GL_FILL);
-			glDrawElements(GL_TRIANGLES, curr_chunk->board_vertex_data->indicies_size(), GL_UNSIGNED_INT, 0);
-
-			// turn off color array so that we can draw black lines
-			glDisableClientState(GL_COLOR_ARRAY);
-
-			// draw back facing black lines
-			glCullFace(GL_FRONT);
-			glPolygonMode(GL_BACK,  GL_LINE);
-			glColor3f(0, 0, 0);
-			glDrawElements(GL_TRIANGLES, curr_chunk->board_vertex_data->indicies_size(), GL_UNSIGNED_INT, 0);
-			glCullFace(GL_BACK);
-
-			glDisableClientState(GL_VERTEX_ARRAY);            // deactivate vertex array
-
-			//----------------------------------------
-
-			glEnableClientState(GL_VERTEX_ARRAY);             // activate vertex coords array
-			glEnableClientState(GL_COLOR_ARRAY);
-
-			// bind VBOs for vertex array and index array
-			glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_sel_vert);         // for vertex coordinates
-			glVertexPointer(3, GL_FLOAT, sizeof(GLfloat)*8, 0);               // last param is offset, not ptr
-
-			// color VBO
-			//glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_sel_color);
-    			glColorPointer(3, GL_FLOAT, sizeof(GLfloat)*8, (void*)(sizeof(GLfloat)*3));
-
-			// bind indicie VBO
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curr_chunk->vbo_sel_indicie);
-
-			// front facing polys
-			glPolygonMode(GL_FRONT, GL_FILL);
-			glDrawElements(GL_TRIANGLES, curr_chunk->board_select_data->indicies_size(), GL_UNSIGNED_INT, 0);
-
-			glDisableClientState(GL_COLOR_ARRAY);
-			glDisableClientState(GL_VERTEX_ARRAY);
-
-			// bind with 0, so, switch back to normal pointer operation
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-			glPopMatrix();
-		}
-            }
-        }
+	this->gameboard->render(neg_x_view, pos_x_view, neg_y_view, pos_y_view);
 }
 
 
@@ -421,6 +333,45 @@ void Controller::reset_board_render_cache() {
 	this->gameboard->clear();
 
 	this->init_board_render_cache();
+}
+
+
+void Controller::push_hexagon(Hexagon *hex) {
+	this->gameboard->push_back(hex);
+}
+
+
+void Controller::set_selected_hex(Hexagon* curr_hex) {
+	if(this->selected_hex) {
+		this->selected_hex->clear_select_color();
+	}
+	this->selected_hex = curr_hex;
+	this->selected_hex->set_select_color(1.0, 1.0, 0.0);
+}
+
+
+Hexagon* Controller::get_selected_hex() {
+	return this->selected_hex;
+}
+
+
+Hexagon* Controller::get_hex_by_name(long name) {
+	for(int i = 0; i < this->gameboard->get_hexagon_list()->size(); i++) {
+		for(int j = 0; j < this->gameboard->get_hexagon_list()->at(i)->size(); j++) {
+			Hexagon* curr_hex = this->gameboard->get_hexagon_list()->at(i)->at(j);
+
+			if(curr_hex->name == name) {
+				return curr_hex;
+			}
+		}
+	}
+
+	return NULL;
+}
+
+
+Hexagon* Controller::get_hexagon(int i, int j) {
+    return this->gameboard->get_hexagon_list()->at(i)->at(j);
 }
 
 
@@ -583,31 +534,5 @@ void Controller::key_up(unsigned char key, int x, int y) {
     Py_XDECREF(py_str);
     Py_XDECREF(py_x);
     Py_XDECREF(py_y);
-}
-
-void Controller::set_selected_hex(Hexagon* curr_hex) {
-	if(this->selected_hex) {
-		this->selected_hex->clear_select_color();
-	}
-	this->selected_hex = curr_hex;
-	this->selected_hex->set_select_color(1.0, 1.0, 0.0);
-}
-
-Hexagon* Controller::get_selected_hex() {
-	return this->selected_hex;
-}
-
-Hexagon* Controller::get_hex_by_name(long name) {
-	for(int i = 0; i < this->gameboard->get_hexagon_list()->size(); i++) {
-		for(int j = 0; j < this->gameboard->get_hexagon_list()->at(i)->size(); j++) {
-			Hexagon* curr_hex = this->gameboard->get_hexagon_list()->at(i)->at(j);
-
-			if(curr_hex->name == name) {
-				return curr_hex;
-			}
-		}
-	}
-
-	return NULL;
 }
 
