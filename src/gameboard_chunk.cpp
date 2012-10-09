@@ -3,22 +3,22 @@
 GameboardChunk::GameboardChunk(Hexagon* base_hex) {
 	this->base_hex = base_hex;
 
-	this->board_vertex_data = NULL;
+	this->board_terrain_data = NULL;
 	this->board_select_data = NULL;
 	
-	this->vbo_hex_vert = 0;
-	this->vbo_hex_indicie = 0;
+	this->vbo_terrain_vert = 0;
+	this->vbo_terrain_indicie = 0;
 
-	this->vbo_sel_vert = 0;
-	this->vbo_sel_indicie = 0;
+	this->vbo_select_vert = 0;
+	this->vbo_select_indicie = 0;
 
-	glGenBuffers(1, &(this->vbo_hex_vert));
-	glGenBuffers(1, &(this->vbo_hex_indicie));
+	glGenBuffers(1, &(this->vbo_terrain_vert));
+	glGenBuffers(1, &(this->vbo_terrain_indicie));
 
-	glGenBuffers(1, &(this->vbo_sel_vert));
-	glGenBuffers(1, &(this->vbo_sel_indicie));
+	glGenBuffers(1, &(this->vbo_select_vert));
+	glGenBuffers(1, &(this->vbo_select_indicie));
 
-	this->regenerate_vertex = true;
+	this->regenerate_terrain = true;
 	this->regenerate_select = true;
 }
 
@@ -26,29 +26,29 @@ GameboardChunk::GameboardChunk(Hexagon* base_hex) {
 GameboardChunk::~GameboardChunk() {
 	std::cout << "deleting: " << this << std::endl;
 
-	if(this->board_vertex_data) {
-		delete this->board_vertex_data;
+	if(this->board_terrain_data) {
+		delete this->board_terrain_data;
 	}
 
 	if(this->board_select_data) {
 		delete this->board_select_data;
 	}
 
-	glDeleteBuffers(1, &(this->vbo_hex_vert));
-	glDeleteBuffers(1, &(this->vbo_hex_indicie));
+	glDeleteBuffers(1, &(this->vbo_terrain_vert));
+	glDeleteBuffers(1, &(this->vbo_terrain_indicie));
 
-	glDeleteBuffers(1, &(this->vbo_sel_vert));
-	glDeleteBuffers(1, &(this->vbo_sel_indicie));
+	glDeleteBuffers(1, &(this->vbo_select_vert));
+	glDeleteBuffers(1, &(this->vbo_select_indicie));
 }
 
 
-void GameboardChunk::clear_vertex() {
-	if(this->board_vertex_data) {
-		delete this->board_vertex_data;
+void GameboardChunk::clear_terrain() {
+	if(this->board_terrain_data) {
+		delete this->board_terrain_data;
 	}
 
-	this->board_vertex_data = new UniqueDataVector< GLfloat >();
-	this->regenerate_vertex = true;
+	this->board_terrain_data = new UniqueDataVector< GLfloat >();
+	this->regenerate_terrain = true;
 }
 
 
@@ -63,8 +63,8 @@ void GameboardChunk::clear_select() {
 
 void GameboardChunk::generate_render_data(Hexagon* curr_hex, double x, double y) {
 	// TODO: I don't like this logic being here.. this should be moved out...
-	if(this->regenerate_vertex) {
-		curr_hex->generate_vertex_data(x, y, this->board_vertex_data);
+	if(this->regenerate_terrain) {
+		curr_hex->generate_vertex_data(x, y, this->board_terrain_data);
 	} 
 
 	if(this->regenerate_select) {
@@ -109,8 +109,8 @@ void GameboardChunk::generate_chunk_data() {
 		y += x_y_diff->at(1);
 	}
 
-	if(this->regenerate_vertex) {
-		this->board_vertex_data->reverse_indicies();
+	if(this->regenerate_terrain) {
+		this->board_terrain_data->reverse_indicies();
 	}
 
 	if(this->regenerate_select) {
@@ -120,9 +120,9 @@ void GameboardChunk::generate_chunk_data() {
 
 
 void GameboardChunk::verify_render_data() {
-	if(this->regenerate_vertex || this->regenerate_select) {
-		if(this->regenerate_vertex) {
-			this->clear_vertex();
+	if(this->regenerate_terrain || this->regenerate_select) {
+		if(this->regenerate_terrain) {
+			this->clear_terrain();
 		}
 
 		if(this->regenerate_select) {
@@ -132,43 +132,43 @@ void GameboardChunk::verify_render_data() {
 		this->generate_chunk_data();
 		this->write_VBO_data();
 
-		this->regenerate_vertex = false;
+		this->regenerate_terrain = false;
 		this->regenerate_select = false;
 	}
 }
 
 void GameboardChunk::write_VBO_data() {
 	/*std::cout << "VBO Start" << std::endl;
-	std::cout << this->board_vertex_data->vector_size() << " | " << this->board_vertex_data->indicies_size() << " - " ;
+	std::cout << this->board_terrain_data->vector_size() << " | " << this->board_terrain_data->indicies_size() << " - " ;
 	std::cout << this->board_select_data->vector_size() << " | " << this->board_select_data->indicies_size() << std::endl;*/
 
-	GLsizeiptr hex_vert_size = sizeof(GLfloat) * this->board_vertex_data->vector_size();
+	GLsizeiptr hex_vert_size = sizeof(GLfloat) * this->board_terrain_data->vector_size();
 
-	//std::cout << "A: " << this->vbo_hex_vert << " | " << hex_vert_size << " | " << this->board_vertex_data->vector_data() << std::endl;
-	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_hex_vert);
+	//std::cout << "A: " << this->vbo_terrain_vert << " | " << hex_vert_size << " | " << this->board_terrain_data->vector_data() << std::endl;
+	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_terrain_vert);
 	glBufferData(GL_ARRAY_BUFFER, hex_vert_size, NULL, GL_STATIC_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, hex_vert_size, this->board_vertex_data->vector_data());
+	glBufferSubData(GL_ARRAY_BUFFER, 0, hex_vert_size, this->board_terrain_data->vector_data());
 
-	GLsizeiptr hex_indicie_size = sizeof(GLuint) * this->board_vertex_data->indicies_size();
+	GLsizeiptr hex_indicie_size = sizeof(GLuint) * this->board_terrain_data->indicies_size();
 
-	//std::cout << "C: " << this->vbo_hex_indicie << " | " << hex_indicie_size << std::endl;
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_hex_indicie);
+	//std::cout << "C: " << this->vbo_terrain_indicie << " | " << hex_indicie_size << std::endl;
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_terrain_indicie);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, hex_indicie_size, NULL, GL_STATIC_DRAW);
-	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, hex_indicie_size, this->board_vertex_data->indicies_data());
+	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, hex_indicie_size, this->board_terrain_data->indicies_data());
 
 	//-------------------------------------
 
 	GLsizeiptr sel_vert_size = sizeof(GLfloat) * this->board_select_data->vector_size();
 
-	//std::cout << "D: " << this->vbo_sel_vert << " | " << sel_vert_size << std::endl;
-	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_sel_vert);
+	//std::cout << "D: " << this->vbo_select_vert << " | " << sel_vert_size << std::endl;
+	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_select_vert);
 	glBufferData(GL_ARRAY_BUFFER, sel_vert_size, NULL, GL_STATIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sel_vert_size, this->board_select_data->vector_data());
 
 	GLsizeiptr sel_indicie_size = sizeof(GLuint) * this->board_select_data->indicies_size();
 
-	//std::cout << "F: " << this->vbo_sel_indicie << " | " << sel_indicie_size << std::endl;
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_sel_indicie);
+	//std::cout << "F: " << this->vbo_select_indicie << " | " << sel_indicie_size << std::endl;
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_select_indicie);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sel_indicie_size, NULL, GL_STATIC_DRAW);
 	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sel_indicie_size, this->board_select_data->indicies_data());
 
