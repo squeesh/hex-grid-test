@@ -138,20 +138,14 @@ void GameboardChunk::verify_render_data() {
 }
 
 void GameboardChunk::write_VBO_data() {
-	/*std::cout << "VBO Start" << std::endl;
-	std::cout << this->board_terrain_data->vector_size() << " | " << this->board_terrain_data->indicies_size() << " - " ;
-	std::cout << this->board_select_data->vector_size() << " | " << this->board_select_data->indicies_size() << std::endl;*/
-
 	GLsizeiptr hex_vert_size = sizeof(GLfloat) * this->board_terrain_data->vector_size();
 
-	//std::cout << "A: " << this->vbo_terrain_vert << " | " << hex_vert_size << " | " << this->board_terrain_data->vector_data() << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_terrain_vert);
 	glBufferData(GL_ARRAY_BUFFER, hex_vert_size, NULL, GL_STATIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, hex_vert_size, this->board_terrain_data->vector_data());
 
 	GLsizeiptr hex_indicie_size = sizeof(GLuint) * this->board_terrain_data->indicies_size();
 
-	//std::cout << "C: " << this->vbo_terrain_indicie << " | " << hex_indicie_size << std::endl;
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_terrain_indicie);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, hex_indicie_size, NULL, GL_STATIC_DRAW);
 	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, hex_indicie_size, this->board_terrain_data->indicies_data());
@@ -160,25 +154,76 @@ void GameboardChunk::write_VBO_data() {
 
 	GLsizeiptr sel_vert_size = sizeof(GLfloat) * this->board_select_data->vector_size();
 
-	//std::cout << "D: " << this->vbo_select_vert << " | " << sel_vert_size << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_select_vert);
 	glBufferData(GL_ARRAY_BUFFER, sel_vert_size, NULL, GL_STATIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sel_vert_size, this->board_select_data->vector_data());
 
 	GLsizeiptr sel_indicie_size = sizeof(GLuint) * this->board_select_data->indicies_size();
 
-	//std::cout << "F: " << this->vbo_select_indicie << " | " << sel_indicie_size << std::endl;
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_select_indicie);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sel_indicie_size, NULL, GL_STATIC_DRAW);
 	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sel_indicie_size, this->board_select_data->indicies_data());
 
-	//std::cout << "VBO End" << " | " << glGetError() << std::endl;
-
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
 
-	//std::cout << "VBO Stop: " << glGetError() << " | " << GL_NO_ERROR << std::endl << std::endl;
+void GameboardChunk::render() {
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
 
+	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_terrain_vert);
+
+	// vertex VBO
+	glVertexPointer(3, GL_FLOAT, this->board_terrain_data->VERTEX_STRIDE, (void*)(this->board_terrain_data->VERTEX_OFFSET));
+
+	// color VBO
+	glColorPointer( 3, GL_FLOAT, this->board_terrain_data->COLOR_STRIDE,  (void*)(this->board_terrain_data->COLOR_OFFSET));
+
+	// bind indicie VBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_terrain_indicie);
+
+	glPolygonMode(GL_FRONT, GL_FILL);
+	glDrawElements(GL_TRIANGLES, this->board_terrain_data->indicies_size(), GL_UNSIGNED_INT, 0);
+
+	// turn off color array so that we can draw black lines
+	glDisableClientState(GL_COLOR_ARRAY);
+
+	// draw back facing black lines
+	glCullFace(GL_FRONT);
+	glPolygonMode(GL_BACK,  GL_LINE);
+	glColor3f(0, 0, 0);
+	glDrawElements(GL_TRIANGLES, this->board_terrain_data->indicies_size(), GL_UNSIGNED_INT, 0);
+	glCullFace(GL_BACK);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	//----------------------------------------
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, this->vbo_select_vert);
+
+	// vertex VBO
+	glVertexPointer(3, GL_FLOAT, this->board_select_data->VERTEX_STRIDE, (void*)(this->board_select_data->VERTEX_OFFSET));
+
+	// color VBO
+	glColorPointer( 3, GL_FLOAT, this->board_select_data->COLOR_STRIDE,  (void*)(this->board_select_data->COLOR_OFFSET));
+
+	// bind indicie VBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo_select_indicie);
+
+	// front facing polys
+	glPolygonMode(GL_FRONT, GL_FILL);
+	glDrawElements(GL_TRIANGLES, this->board_select_data->indicies_size(), GL_UNSIGNED_INT, 0);
+
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	// bind with 0, so, switch back to normal pointer operation
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 

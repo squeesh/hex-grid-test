@@ -32,6 +32,8 @@ class GameboardChunk {
 		~GameboardChunk();
 
 		void verify_render_data();
+
+		void render();
 };
 
 #endif

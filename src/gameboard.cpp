@@ -47,6 +47,8 @@ GameboardChunk* Gameboard::get_render_data(Hexagon* base_hex) {
 
 
 void Gameboard::render(int x_start, int x_stop, int y_start, int y_stop) {
+
+	// draw game board
         for(int j = y_start; j <= y_stop; j+=GlobalConsts::BOARD_CHUNK_SIZE) {
             for(int i = x_start; i <= x_stop; i+=GlobalConsts::BOARD_CHUNK_SIZE) {
                 Hexagon* curr_hex = this->hexagon_list->at(i)->at(j);
@@ -65,67 +67,16 @@ void Gameboard::render(int x_start, int x_stop, int y_start, int y_stop) {
 		glPushMatrix();
 		glTranslatef(x, y, 0);
 
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_COLOR_ARRAY);
-
-		// bind VBOs for vertex data
-		glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_terrain_vert);
-		glVertexPointer(3, GL_FLOAT, curr_chunk->board_terrain_data->VERTEX_STRIDE, (void*)(curr_chunk->board_terrain_data->VERTEX_OFFSET));
-
-		// color VBO
-		//glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_hex_color);
-		glColorPointer( 3, GL_FLOAT, curr_chunk->board_terrain_data->COLOR_STRIDE,  (void*)(curr_chunk->board_terrain_data->COLOR_OFFSET));
-
-		// bind indicie VBO
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curr_chunk->vbo_terrain_indicie);
-
-		// front facing polys
-		//glColor3f(0, 1, 0);
-		glPolygonMode(GL_FRONT, GL_FILL);
-		glDrawElements(GL_TRIANGLES, curr_chunk->board_terrain_data->indicies_size(), GL_UNSIGNED_INT, 0);
-
-		// turn off color array so that we can draw black lines
-		glDisableClientState(GL_COLOR_ARRAY);
-
-		// draw back facing black lines
-		glCullFace(GL_FRONT);
-		glPolygonMode(GL_BACK,  GL_LINE);
-		glColor3f(0, 0, 0);
-		glDrawElements(GL_TRIANGLES, curr_chunk->board_terrain_data->indicies_size(), GL_UNSIGNED_INT, 0);
-		glCullFace(GL_BACK);
-
-		glDisableClientState(GL_VERTEX_ARRAY);
-
-		//----------------------------------------
-
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_COLOR_ARRAY);
-
-		// bind VBOs for vertex array and index array
-		glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_select_vert);
-		glVertexPointer(3, GL_FLOAT, curr_chunk->board_select_data->VERTEX_STRIDE, (void*)(curr_chunk->board_select_data->VERTEX_OFFSET));
-
-		// color VBO
-		//glBindBuffer(GL_ARRAY_BUFFER, curr_chunk->vbo_sel_color);
-		glColorPointer( 3, GL_FLOAT, curr_chunk->board_select_data->COLOR_STRIDE,  (void*)(curr_chunk->board_select_data->COLOR_OFFSET));
-
-		// bind indicie VBO
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curr_chunk->vbo_select_indicie);
-
-		// front facing polys
-		glPolygonMode(GL_FRONT, GL_FILL);
-		glDrawElements(GL_TRIANGLES, curr_chunk->board_select_data->indicies_size(), GL_UNSIGNED_INT, 0);
-
-		glDisableClientState(GL_COLOR_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
-
-		// bind with 0, so, switch back to normal pointer operation
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		curr_chunk->render();
 
 		glPopMatrix();
             }
         }
+
+	// render objects on the game board
+	/*for(int i = 0; i < this->board_objects->size(); i++) {
+		this->board_objects->at(i)->render();
+	}*/
 }
 
 
