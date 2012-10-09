@@ -128,7 +128,7 @@ void Hexagon::set_select_color(double red, double green, double blue) {
 	this->select_color->push_back(blue);
 
 	if(this->parent_chunk && changed) {
-		this->parent_chunk->regenerate = true;
+		this->parent_chunk->regenerate_select = true;
 	}
 }
 
@@ -151,7 +151,7 @@ void Hexagon::clear_select_color() {
 	}
 
 	if(this->parent_chunk && changed) {
-		this->parent_chunk->regenerate = true;
+		this->parent_chunk->regenerate_select = true;
 	}
 }
 
@@ -250,12 +250,9 @@ void Hexagon::render_for_select(double x, double y) {
 }
 
 
-void Hexagon::generate_vertex_data(double x, double y, UniqueDataVector< GLfloat >* vertex_data, UniqueDataVector< GLfloat >* select_data) {
+void Hexagon::generate_vertex_data(double x, double y, UniqueDataVector< GLfloat >* vertex_data) {
 	Vertex* curr_vert = NULL;
-	std::vector< double >* curr_color;
-
-	// Generate verticies for hex guts
-	curr_color = this->get_hex_color();
+	std::vector< double >* curr_color = this->get_hex_color();
 
 	for(int i = 1; i < 5; i++) {
 		curr_vert = this->verticies[this->VERTEX_POSITIONS->at(0)];
@@ -280,7 +277,12 @@ void Hexagon::generate_vertex_data(double x, double y, UniqueDataVector< GLfloat
 		);
 	}
 
-	curr_color = this->get_select_color();
+}
+
+
+void Hexagon::generate_select_data(double x, double y, UniqueDataVector< GLfloat >* select_data) {
+	Vertex* curr_vert = NULL;
+	std::vector< double >* curr_color = this->get_select_color();
 
         for(int i = 2; i < 6; i++) {
 		curr_vert = this->verticies[this->VERTEX_POSITIONS->at(i)];

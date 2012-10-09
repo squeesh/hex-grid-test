@@ -155,8 +155,6 @@ PyObject* py_call_func(PyObject *py_obj, char* func_name, PyObject* py_obj_1, Py
 template <typename T>
 class UniqueDataVector { 
 	private:
-		
-		//std::vector<T> *color;
 		std::map< std::vector<T>*, GLuint, cmp_coord<T> > *index_data;
 		std::vector< std::vector<T> *> *index_data_keys;
 		
@@ -172,13 +170,11 @@ class UniqueDataVector {
 		GLuint push_back(T, T, T, T, T, T);
 		//int index_size();
 		int vector_size();
-		//int color_size();
 		int indicies_size();
 		//GLuint get_index(T, T, T);
 		GLuint get_index(std::vector<T>*);
 		T* vector_data();
 		GLuint* indicies_data();
-		//T* color_data();
 		void reserve(int);
 		void reverse_indicies();
 		void reverse_verticies();
@@ -186,10 +182,7 @@ class UniqueDataVector {
 
 template <typename T>
 UniqueDataVector<T>::UniqueDataVector() {
-	std::cout << "CONSTR UniqueDataVector()" << std::endl;
-
     this->vectors = new std::vector<T>();
-    //this->color = new std::vector<T>();
     this->index_data = new std::map< std::vector<T>*, GLuint, cmp_coord<T> >();
     this->index_data_keys = new std::vector< std::vector<T> *>(); // for easy garbage collection index_data
     this->indicies = new std::vector< GLuint >();
@@ -197,11 +190,8 @@ UniqueDataVector<T>::UniqueDataVector() {
 
 template <typename T>
 UniqueDataVector<T>::~UniqueDataVector() {
-	std::cout << "DESTR ~UniqueDataVector()" << std::endl;
-
     delete this->vectors;
     delete this->index_data;
-    //delete this->color;
     delete this->indicies;
 
     std::vector< std::vector<T> *> &curr_vec = *(this->index_data_keys);
@@ -328,10 +318,6 @@ GLuint* UniqueDataVector<T>::indicies_data() {
     return this->indicies->data();
 }
 
-/*template <typename T>
-T* UniqueDataVector<T>::color_data() {
-    return this->color->data();
-}*/
 
 template <typename T>
 void UniqueDataVector<T>::reserve(int reserve) {
@@ -349,7 +335,6 @@ void UniqueDataVector<T>::reverse_indicies() {
 template <typename T>
 void UniqueDataVector<T>::reverse_verticies() {
 	std::reverse(this->vectors->begin(), this->vectors->end()); 
-	//std::reverse(this->color->begin(), this->color->end()); 
 }
 
 

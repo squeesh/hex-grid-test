@@ -5,13 +5,9 @@
 class Gameboard {
 	private:
 		RoundVector< RoundVector< Hexagon* >* >* hexagon_list;
-		
-
-		
-
-	public:
 		std::map< Hexagon*, GameboardChunk* >* chunk_map;
 
+	public:
 		Gameboard();
 
 		void push_back(Hexagon*);
@@ -19,7 +15,6 @@ class Gameboard {
 
 		RoundVector< RoundVector< Hexagon* >* >* get_hexagon_list();
 
-		GameboardChunk* generate_chunk(Hexagon*);
 		GameboardChunk* get_render_data(Hexagon* base_hex);
 
 		void clear();

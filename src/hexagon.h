@@ -57,9 +57,10 @@ class Hexagon {
 		void set_neighbor(const char* position, Hexagon* neighbor_hex);
 		Hexagon* get_neighbor(const char* position);
 
-		void render_for_select(double x, double y);
+		void render_for_select(double, double);
 
-		void generate_vertex_data(double, double, UniqueDataVector< GLfloat >*, UniqueDataVector< GLfloat >*);
+		void generate_vertex_data(double, double, UniqueDataVector< GLfloat >*);
+		void generate_select_data(double, double, UniqueDataVector< GLfloat >*);
 };
 
 #endif
