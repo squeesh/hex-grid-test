@@ -6,6 +6,8 @@ class BoardObject {
 		Hexagon* base_hex;
 		std::vector< double >* color;
 
+		bool selected;
+
 		BoardObject(Hexagon*);
 
 		void render();

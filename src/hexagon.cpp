@@ -311,35 +311,67 @@ void Hexagon::generate_object_data(double x, double y, UniqueDataVector< GLfloat
 
 	std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(curr_ctrl->gameboard->board_object_map);
 	if(curr_board_object_map[this]) {
-		object_data->push_back(
-		       -0.5 + x, y, this->get_height(),
-			0, 0, 1
-		);
+	    if(curr_board_object_map[this]->selected) {
+            object_data->push_back(
+               -0.5 + x, y, this->get_height(),
+                1, 0, 1
+            );
 
-		object_data->push_back(
-		       -0.5 + x, y, this->get_height() + 2.0,
-			0, 0, 1
-		);
+            object_data->push_back(
+               -0.5 + x, y, this->get_height() + 2.0,
+                1, 0, 1
+            );
 
-		object_data->push_back(
-			0.5 + x, y, this->get_height() + 2.0,
-			0, 0, 1
-		);
+            object_data->push_back(
+                0.5 + x, y, this->get_height() + 2.0,
+                1, 0, 1
+            );
 
-		object_data->push_back(
-			0.5 + x, y, this->get_height() + 2.0,
-			0, 0, 1
-		);
+            object_data->push_back(
+                0.5 + x, y, this->get_height() + 2.0,
+                1, 0, 1
+            );
 
-		object_data->push_back(
-			0.5 + x, y, this->get_height() ,
-			0, 0, 1
-		);
+            object_data->push_back(
+                0.5 + x, y, this->get_height() ,
+                1, 0, 1
+            );
 
-		object_data->push_back(
-		       -0.5 + x, y, this->get_height(),
-			0, 0, 1
-		);
+            object_data->push_back(
+               -0.5 + x, y, this->get_height(),
+                1, 0, 1
+            );
+	    } else {
+            object_data->push_back(
+               -0.5 + x, y, this->get_height(),
+                0, 0, 1
+            );
+
+            object_data->push_back(
+               -0.5 + x, y, this->get_height() + 2.0,
+                0, 0, 1
+            );
+
+            object_data->push_back(
+                0.5 + x, y, this->get_height() + 2.0,
+                0, 0, 1
+            );
+
+            object_data->push_back(
+                0.5 + x, y, this->get_height() + 2.0,
+                0, 0, 1
+            );
+
+            object_data->push_back(
+                0.5 + x, y, this->get_height() ,
+                0, 0, 1
+            );
+
+            object_data->push_back(
+               -0.5 + x, y, this->get_height(),
+                0, 0, 1
+            );
+	    }
 	}
 }
 

@@ -6,6 +6,8 @@ BoardObject::BoardObject(Hexagon* base_hex) {
 	this->color->push_back(0);
 	this->color->push_back(0);
 	this->color->push_back(1);
+
+	this->selected = false;
 }
 
 

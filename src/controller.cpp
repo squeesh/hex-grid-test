@@ -449,6 +449,13 @@ void Controller::mouse_left_click(int x, int y) {
 
 	if(curr_hex && curr_hex->is_pathable()) {
 		this->set_selected_hex(curr_hex);
+
+
+		std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(this->gameboard->board_object_map);
+		if(curr_board_object_map[curr_hex]) {
+            curr_board_object_map[curr_hex]->selected = true;
+            curr_hex->parent_chunk->regenerate_object = true;
+		}
 	}
 
 	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["down"] 	= 1;
