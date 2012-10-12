@@ -163,7 +163,7 @@ void Controller::init_board() {
 	py_call_func(this->controller_py, "init_board");
 
 	this->gameboard->bind_obj_hex(new BoardObject(NULL), this->get_hexagon(0, 0));
-	//this->gameboard->bind_obj_hex(new BoardObject(NULL), this->get_hexagon(3, 7));
+	this->gameboard->bind_obj_hex(new BoardObject(NULL), this->get_hexagon(3, 7));
 }
 
 
@@ -448,11 +448,13 @@ void Controller::mouse_left_click(int x, int y) {
 	Hexagon* curr_hex = this->get_clicked_hex(x, this->height-y);
 
 	if(curr_hex && curr_hex->is_pathable()) {
-		this->set_selected_hex(curr_hex);
-
-
 		std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(this->gameboard->board_object_map);
 		if(curr_board_object_map[curr_hex]) {
+		    if(curr_board_object_map[this->selected_hex]) {
+		        curr_board_object_map[this->selected_hex]->selected = false;
+		    }
+
+		    this->set_selected_hex(curr_hex);
             curr_board_object_map[curr_hex]->selected = true;
             curr_hex->parent_chunk->regenerate_object = true;
 		}
