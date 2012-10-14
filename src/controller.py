@@ -160,7 +160,11 @@ class Controller(object):
         controller_lib.Controller_resize(width, height)
 
     def key_down(self, key, x, y):
-        if key == 'w':
+        if ord(key) == 27:
+            print 'esc...'
+            controller_lib.Controller_clear_selected_hex()
+
+        elif key == 'w':
             self.set_scroll(GlobalConsts.UP)
         elif key == 's':
             self.set_scroll(GlobalConsts.DOWN)

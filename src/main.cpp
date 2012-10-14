@@ -20,7 +20,7 @@ void display() {
     time_t curr_seconds = time(NULL);
 	if(SHOW_FPS) {
 		if(curr_seconds > seconds) {
-			std::cout << "FPS: " << fps << std::endl;
+			//std::cout << "FPS: " << fps << std::endl;
 
 			curr_ctrl->print_string.clear();
 			curr_ctrl->print_string += std::string("FPS: ");
@@ -45,17 +45,7 @@ void reshape(int width, int height) {
 }
 
 void key_pressed(unsigned char key, int x, int y) {
-    switch(key) {
-        case 27:
-            exit(0);
-            break;
-        case ' ':
-            curr_ctrl->print_flag = true;
-            break;
-        default:
-            curr_ctrl->key_down(key, x, y);
-            break;
-    }
+    curr_ctrl->key_down(key, x, y);
 }
 
 void key_released(unsigned char key, int x, int y) {

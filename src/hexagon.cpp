@@ -131,6 +131,30 @@ void Hexagon::set_select_color(double red, double green, double blue) {
 	}
 }
 
+void Hexagon::set_select() {
+    this->set_select_color(1.0, 1.0, 0.0);
+
+    Controller* curr_ctrl = Controller::_get_controller();
+    std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(curr_ctrl->gameboard->board_object_map);
+
+    if(curr_board_object_map[this]) {
+        curr_board_object_map[this]->selected = true;
+        this->parent_chunk->regenerate_object = true;
+    }
+}
+
+void Hexagon::clear_select() {
+    this->clear_select_color();
+
+    Controller* curr_ctrl = Controller::_get_controller();
+    std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(curr_ctrl->gameboard->board_object_map);
+
+    if(curr_board_object_map[this]) {
+        curr_board_object_map[this]->selected = false;
+        this->parent_chunk->regenerate_object = true;
+    }
+}
+
 void Hexagon::set_select_color(std::vector<double> rgb) {
 	if(!this->select_color) {
 		this->select_color = new std::vector< double >();

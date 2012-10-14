@@ -86,6 +86,12 @@ extern "C" {
 		curr_ctrl->mouse_scroll_down(x, y);
 	}
 
+	void Controller_clear_selected_hex() {
+	    std::cout << "clear... c" << std::endl;
+	    Controller* curr_ctrl = Controller_get_controller();
+        curr_ctrl->clear_selected_hex();
+	}
+
 	Hexagon* Controller_get_selected_hex() {
 		Controller* curr_ctrl = Controller_get_controller();
 		return curr_ctrl->get_selected_hex();

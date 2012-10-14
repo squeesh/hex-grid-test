@@ -94,7 +94,7 @@ void GameboardChunk::generate_chunk_data() {
 	double base_x = 0;
 	double base_y = 0;
 
-	std::cout << "Gameboard::generating: " << this->base_hex << std::endl;
+	//std::cout << "Gameboard::generating: " << this->base_hex << std::endl;
 
 	double x = base_x;
 	double y = base_y;

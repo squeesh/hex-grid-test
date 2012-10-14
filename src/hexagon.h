@@ -41,6 +41,9 @@ class Hexagon {
 		void set_hex_color(std::vector< double > rgb);
 		std::vector< double >* get_hex_color();
 
+		void set_select();
+		void clear_select();
+
 		void set_select_color(double red, double green, double blue);
 		void set_select_color(std::vector< double > rgb);
 		void clear_select_color();

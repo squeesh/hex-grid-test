@@ -226,7 +226,7 @@ void Controller::render() {
 	color->push_back(1);
 	color->push_back(1);
 	color->push_back(0);
-	this->render_string(20, 20, this->print_string, color);
+	this->render_string(2, 20, this->print_string, color);
 	delete color;
 
 	glLoadIdentity();
@@ -335,12 +335,19 @@ void Controller::push_hexagon(Hexagon *hex) {
 
 void Controller::set_selected_hex(Hexagon* curr_hex) {
 	if(this->selected_hex) {
-		this->selected_hex->clear_select_color();
+		this->selected_hex->clear_select();
 	}
 	this->selected_hex = curr_hex;
-	this->selected_hex->set_select_color(1.0, 1.0, 0.0);
+
+	if(this->selected_hex) {
+	    this->selected_hex->set_select();
+	}
 }
 
+
+void Controller::clear_selected_hex() {
+    this->set_selected_hex(NULL);
+}
 
 Hexagon* Controller::get_selected_hex() {
 	return this->selected_hex;
@@ -448,7 +455,12 @@ void Controller::mouse_left_click(int x, int y) {
 	Hexagon* curr_hex = this->get_clicked_hex(x, this->height-y);
 
 	if(curr_hex && curr_hex->is_pathable()) {
-		std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(this->gameboard->board_object_map);
+	    std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(this->gameboard->board_object_map);
+	    if(curr_board_object_map[curr_hex]) {
+	        this->set_selected_hex(curr_hex);
+	    }
+
+		/*std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(this->gameboard->board_object_map);
 		if(curr_board_object_map[curr_hex]) {
 		    if(curr_board_object_map[this->selected_hex]) {
 		        curr_board_object_map[this->selected_hex]->selected = false;
@@ -457,7 +469,7 @@ void Controller::mouse_left_click(int x, int y) {
 		    this->set_selected_hex(curr_hex);
             curr_board_object_map[curr_hex]->selected = true;
             curr_hex->parent_chunk->regenerate_object = true;
-		}
+		}*/
 	}
 
 	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["down"] 	= 1;

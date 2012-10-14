@@ -63,6 +63,7 @@ class Controller {
 		void render_for_select();
 
 		void push_hexagon(Hexagon *hex);
+		void clear_selected_hex();
 		void set_selected_hex(Hexagon* curr_hex);
 		Hexagon* get_selected_hex();
 		Hexagon* get_hex_by_name(long name);
