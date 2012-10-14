@@ -3,7 +3,7 @@
 
 extern "C" {
 	Controller* Controller_get_controller() {
-		return Controller::_get_controller();
+		return Controller::get_controller();
 	}
 
 	void Controller_push_hexagon(Hexagon *hex) {
@@ -87,7 +87,6 @@ extern "C" {
 	}
 
 	void Controller_clear_selected_hex() {
-	    std::cout << "clear... c" << std::endl;
 	    Controller* curr_ctrl = Controller_get_controller();
         curr_ctrl->clear_selected_hex();
 	}

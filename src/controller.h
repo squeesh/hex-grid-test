@@ -38,8 +38,8 @@ class Controller {
 
 		std::map<int, std::map<const char*, int, cmp_str> > old_mouse_pos;
 
-		static Controller* _get_controller();
 		static Controller* get_controller();
+		static Controller* py_get_controller();
 
 		void init_board();
 

@@ -161,7 +161,6 @@ class Controller(object):
 
     def key_down(self, key, x, y):
         if ord(key) == 27:
-            print 'esc...'
             controller_lib.Controller_clear_selected_hex()
 
         elif key == 'w':

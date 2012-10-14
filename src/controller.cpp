@@ -38,7 +38,7 @@ Controller::Controller(void) {
 	this->print_string = std::string();
 }
 
-Controller* Controller::_get_controller() {
+Controller* Controller::get_controller() {
 	if(!Controller::curr_ctrl) {
 		std::cout << "Starting up..." << std::endl;
 		Controller::curr_ctrl = new Controller();
@@ -47,7 +47,7 @@ Controller* Controller::_get_controller() {
 	return Controller::curr_ctrl;
 }
 
-Controller* Controller::get_controller() {
+Controller* Controller::py_get_controller() {
 	if(!Controller::curr_ctrl) {
 		PyRun_SimpleString("import os, sys"); 
 		PyRun_SimpleString("sys.path.append(os.getcwd())");

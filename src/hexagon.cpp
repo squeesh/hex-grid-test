@@ -134,7 +134,7 @@ void Hexagon::set_select_color(double red, double green, double blue) {
 void Hexagon::set_select() {
     this->set_select_color(1.0, 1.0, 0.0);
 
-    Controller* curr_ctrl = Controller::_get_controller();
+    Controller* curr_ctrl = Controller::get_controller();
     std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(curr_ctrl->gameboard->board_object_map);
 
     if(curr_board_object_map[this]) {
@@ -146,7 +146,7 @@ void Hexagon::set_select() {
 void Hexagon::clear_select() {
     this->clear_select_color();
 
-    Controller* curr_ctrl = Controller::_get_controller();
+    Controller* curr_ctrl = Controller::get_controller();
     std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(curr_ctrl->gameboard->board_object_map);
 
     if(curr_board_object_map[this]) {
@@ -331,7 +331,7 @@ void Hexagon::generate_select_data(double x, double y, UniqueDataVector< GLfloat
 
 
 void Hexagon::generate_object_data(double x, double y, UniqueDataVector< GLfloat >* object_data) {
-	Controller* curr_ctrl = Controller::_get_controller();
+	Controller* curr_ctrl = Controller::get_controller();
 
 	std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(curr_ctrl->gameboard->board_object_map);
 	if(curr_board_object_map[this]) {

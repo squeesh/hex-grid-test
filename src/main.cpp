@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
 
 	Py_Initialize();
 
-	curr_ctrl = Controller::get_controller();
+	curr_ctrl = Controller::py_get_controller();
 	
 	
 	glutDisplayFunc(display);
