@@ -97,16 +97,15 @@ void timer(int value) {
 
 
 int main(int argc, char** argv) {
+    Py_Initialize();
+
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(RESOLUTION[0], RESOLUTION[1]);
 	glutCreateWindow("Hex Grid Thing...");
 
-	Py_Initialize();
-
 	curr_ctrl = Controller::py_get_controller();
-	
-	
+
 	glutDisplayFunc(display);
 	glutIdleFunc(display);
 	glutTimerFunc(SLEEP_TIME, timer, 0);

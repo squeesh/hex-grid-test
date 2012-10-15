@@ -12,12 +12,16 @@ controller_lib.Controller_get_selected_hex.restype = c_long
 from itertools import cycle, islice
 from random import random
 
+from util import dist_between, a_star, try_catch_funcs
+
 from global_consts import GlobalConsts
 from hexagon import Hexagon
+from board_object import BoardObject
+
 from land_generation import RollingHills, MountainRange
-from util import dist_between, a_star
 
 
+@try_catch_funcs
 class Controller(object):
     _curr_ctrl = None
     _c_ctrl_obj = None
@@ -62,7 +66,7 @@ class Controller(object):
 
                 curr_hex = Hexagon(x * self.COS_60, y * self.SIN_60)
 
-                controller_lib.Controller_push_hexagon(curr_hex.c_hex_obj)
+                controller_lib.Controller_push_hexagon(curr_hex._c_hex_obj)
 
         print "Linking Segments..."
         self.link_segments()
@@ -101,6 +105,13 @@ class Controller(object):
                 hex.set_hex_color(height_percent, 0.5 + height_percent / 2.0, height_percent)
             else:
                 hex.set_hex_color(height_percent / 2.0, 0.5 - height_percent / 2.0, 0)
+
+        hex_list = Hexagon.get_all_hexagons()
+
+        BoardObject(hex_list[0])
+        BoardObject(hex_list[15])
+#        except Exception, e:
+#            print e
 
 #        for hex in Hexagon.get_all_hexagons():
 #            if not hex.is_pathable():

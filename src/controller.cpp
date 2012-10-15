@@ -11,6 +11,11 @@ const double Controller::SIN_60 = std::sin(60.0 / 360.0 * 2.0 * M_PI);
 
 
 Controller::Controller(void) {
+    this->controller_py = NULL;
+
+    this->width = 0;
+    this->height = 0;
+
 	this->x_offset = 0.0;
 	this->y_offset = 0.0;
 
@@ -162,8 +167,8 @@ void Controller::resize(long width, long height) {
 void Controller::init_board() {
 	py_call_func(this->controller_py, "init_board");
 
-	this->gameboard->bind_obj_hex(new BoardObject(NULL), this->get_hexagon(0, 0));
-	this->gameboard->bind_obj_hex(new BoardObject(NULL), this->get_hexagon(3, 7));
+	//this->gameboard->bind_obj_hex(new BoardObject(NULL), this->get_hexagon(0, 0));
+	//this->gameboard->bind_obj_hex(new BoardObject(NULL), this->get_hexagon(3, 7));
 }
 
 
@@ -459,17 +464,6 @@ void Controller::mouse_left_click(int x, int y) {
 	    if(curr_board_object_map[curr_hex]) {
 	        this->set_selected_hex(curr_hex);
 	    }
-
-		/*std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(this->gameboard->board_object_map);
-		if(curr_board_object_map[curr_hex]) {
-		    if(curr_board_object_map[this->selected_hex]) {
-		        curr_board_object_map[this->selected_hex]->selected = false;
-		    }
-
-		    this->set_selected_hex(curr_hex);
-            curr_board_object_map[curr_hex]->selected = true;
-            curr_hex->parent_chunk->regenerate_object = true;
-		}*/
 	}
 
 	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["down"] 	= 1;
@@ -564,5 +558,16 @@ void Controller::key_up(unsigned char key, int x, int y) {
     Py_XDECREF(py_str);
     Py_XDECREF(py_x);
     Py_XDECREF(py_y);
+}
+
+Hexagon* Controller::add_object_to_board(BoardObject* curr_obj, Hexagon* curr_hex) {
+    // TODO: actually implement logic below...
+    // accepts a BoardObject and Hexagon.
+    // The hexagon is the target, that the BoardObject would like to be placed on
+    // if this space is occupied, the controller is free to assign it to a differnt Hexagon
+    // The value returned in the Hexagon that it was actually assigned to.
+
+    this->gameboard->bind_obj_hex(curr_obj, curr_hex);
+    return curr_hex;
 }
 

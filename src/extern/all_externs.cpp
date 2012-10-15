@@ -98,6 +98,12 @@ extern "C" {
 
 	/********************************************/
 
+	void Util_force_exit() {
+	    exit(0);
+	}
+
+	/********************************************/
+
 	Hexagon* Hexagon_new_hexagon(){
 		return new Hexagon();
 	}
@@ -169,4 +175,10 @@ extern "C" {
 	bool Hexagon_is_pathable(Hexagon* curr_hex) {
 		return curr_hex->is_pathable();
 	}
+
+	/********************************************/
+
+	BoardObject* BoardObject_new_board_object(Hexagon* curr_hex) {
+        return new BoardObject(curr_hex);
+    }
 }

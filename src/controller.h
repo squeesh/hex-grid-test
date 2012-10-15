@@ -45,14 +45,14 @@ class Controller {
 
 		void zoom_map(double);
 
-		void set_rotation(double rotation);
+		void set_rotation(double);
 		double get_rotation();
 
-		void set_scroll(char direction);
-		void clear_scroll(char direction);
+		void set_scroll(char);
+		void clear_scroll(char);
 
-		void init_gl(long width, long height);
-		void resize(long width, long height);
+		void init_gl(long, long);
+		void resize(long, long);
 
 		void tick();
 
@@ -62,31 +62,33 @@ class Controller {
 		void render();
 		void render_for_select();
 
-		void push_hexagon(Hexagon *hex);
+		void push_hexagon(Hexagon*);
 		void clear_selected_hex();
-		void set_selected_hex(Hexagon* curr_hex);
+		void set_selected_hex(Hexagon*);
 		Hexagon* get_selected_hex();
-		Hexagon* get_hex_by_name(long name);
-		Hexagon* get_hexagon(int i, int j);
-		Hexagon* get_clicked_hex(double x, double y);
+		Hexagon* get_hex_by_name(long);
+		Hexagon* get_hexagon(int, int);
+		Hexagon* get_clicked_hex(double, double);
 
 		std::set< Hexagon* >* get_neighbors_in_radius(Hexagon*, int);
 
-		void mouse_left_click(int x, int y);
-		void mouse_left_release(int x, int y);
-		void mouse_middle_click(int x, int y);
-		void mouse_middle_release(int x, int y);
-		void mouse_right_click(int x, int y);
-		void mouse_right_release(int x, int y);
-		void mouse_scroll_up(int x, int y);
-		void mouse_scroll_down(int x, int y);
+		void mouse_left_click(int, int);
+		void mouse_left_release(int, int);
+		void mouse_middle_click(int, int);
+		void mouse_middle_release(int, int);
+		void mouse_right_click(int, int);
+		void mouse_right_release(int, int);
+		void mouse_scroll_up(int, int);
+		void mouse_scroll_down(int, int);
 
-		void mouse_left_drag(int x, int y);
-		void mouse_middle_drag(int x, int y);
-		void mouse_right_drag(int x, int y);
+		void mouse_left_drag(int, int);
+		void mouse_middle_drag(int, int);
+		void mouse_right_drag(int, int);
 
-		void key_down(unsigned char key, int x, int y);
-		void key_up(unsigned char key, int x, int y);
+		void key_down(unsigned char, int, int);
+		void key_up(unsigned char, int, int);
+
+		Hexagon* add_object_to_board(BoardObject*, Hexagon*) ;
 
 		Gameboard* gameboard;
 };
