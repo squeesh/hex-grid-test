@@ -7,13 +7,7 @@ class Controller {
 		Controller(void);
 		static Controller* curr_ctrl;
 
-		long width;
-		long height;
 
-		double x_offset;
-		double y_offset;
-
-		double zoom;
 		double rotation;
 	
 		double view_range;
@@ -22,12 +16,23 @@ class Controller {
 
 		Hexagon* selected_hex;
 
-		PyObject* controller_py;
-
 		std::set<Hexagon*>* get_neighbors_in_radius(Hexagon*, int, std::set<Hexagon*>*);
+
+
 
 	public:
 		//Hexagon* debug_hex; // for debugging...
+		static PyObject* controller_py;
+
+        long width;
+        long height;
+
+        double x_offset;
+        double y_offset;
+        double zoom;
+
+
+        PlayerInput* player_input;
 
 		std::string print_string;
 
@@ -36,7 +41,7 @@ class Controller {
 		static const double COS_60;
 		static const double SIN_60;
 
-		std::map<int, std::map<const char*, int, cmp_str> > old_mouse_pos;
+		//std::map<int, std::map<const char*, int, cmp_str> > old_mouse_pos;
 
 		static Controller* get_controller();
 		static Controller* py_get_controller();
@@ -72,7 +77,7 @@ class Controller {
 
 		std::set< Hexagon* >* get_neighbors_in_radius(Hexagon*, int);
 
-		void mouse_left_click(int, int);
+		/*void mouse_left_click(int, int);
 		void mouse_left_release(int, int);
 		void mouse_middle_click(int, int);
 		void mouse_middle_release(int, int);
@@ -86,7 +91,10 @@ class Controller {
 		void mouse_right_drag(int, int);
 
 		void key_down(unsigned char, int, int);
-		void key_up(unsigned char, int, int);
+		void key_up(unsigned char, int, int);*/
+
+		void mouse_event(int, int, int, int);
+		void keyboard_event(int, int, int);
 
 		Hexagon* add_object_to_board(BoardObject*, Hexagon*) ;
 

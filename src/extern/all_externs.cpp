@@ -73,17 +73,17 @@ extern "C" {
 
 	void Controller_mouse_left_click(double x, double y) {
 		Controller* curr_ctrl = Controller_get_controller();
-		curr_ctrl->mouse_left_click(x, y);
+		curr_ctrl->player_input->mouse_left_click(x, y);
 	}
 
 	void Controller_mouse_scroll_up(double x, double y) {
 		Controller* curr_ctrl = Controller_get_controller();
-		curr_ctrl->mouse_scroll_up(x, y);
+		curr_ctrl->player_input->mouse_scroll_up(x, y);
 	}
 
 	void Controller_mouse_scroll_down(double x, double y) {
 		Controller* curr_ctrl = Controller_get_controller();
-		curr_ctrl->mouse_scroll_down(x, y);
+		curr_ctrl->player_input->mouse_scroll_down(x, y);
 	}
 
 	void Controller_clear_selected_hex() {

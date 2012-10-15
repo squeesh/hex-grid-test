@@ -24,6 +24,7 @@
 #include "board_object.h"
 #include "gameboard_chunk.h"
 #include "gameboard.h"
+#include "player_input.h"
 #include "controller.h"
 
 

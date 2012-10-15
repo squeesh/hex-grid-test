@@ -18,8 +18,15 @@ class GlobalConsts {
 		static const int MOUSE_SCROLL_UP;
 		static const int MOUSE_SCROLL_DOWN;
 
-		static const int RENDER_LINES;
-		static const int RENDER_TRIANGLES;
+		static const int MOUSE_DOWN;
+		static const int MOUSE_UP;
+        static const int MOUSE_DRAG;
+
+        static const int KEY_UP;
+        static const int KEY_DOWN;
+
+        static const int RENDER_LINES;
+        static const int RENDER_TRIANGLES;
 
 		static const long BOARD_WIDTH;
 		static const long BOARD_HEIGHT;

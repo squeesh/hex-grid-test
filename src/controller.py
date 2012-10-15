@@ -246,17 +246,13 @@ class Controller(object):
         return Hexagon.get_hexagon(c_hex_obj)
 
     def find_path(self, start_hex_addr, end_hex_addr):
-        try:
-            start_hex = Hexagon.get_hexagon(start_hex_addr)
-            end_hex   = Hexagon.get_hexagon(end_hex_addr)
+        start_hex = Hexagon.get_hexagon(start_hex_addr)
+        end_hex   = Hexagon.get_hexagon(end_hex_addr)
 
-            for hex in Hexagon.get_all_hexagons():
-                if hex.is_pathable():
-                    hex.clear_select_color()
+        for hex in Hexagon.get_all_hexagons():
+            if hex.is_pathable():
+                hex.clear_select_color()
 
-            for hex in a_star(start_hex, end_hex):
-                hex.set_select_color(0, 1, 1)
+        for hex in a_star(start_hex, end_hex):
+            hex.set_select_color(0, 1, 1)
 
-        except Exception:
-            import traceback
-            traceback.print_exc()

@@ -145,6 +145,13 @@ const int GlobalConsts::MOUSE_RIGHT 	  = long_global_const_attr("MOUSE_RIGHT");
 const int GlobalConsts::MOUSE_SCROLL_UP   = long_global_const_attr("MOUSE_SCROLL_UP");
 const int GlobalConsts::MOUSE_SCROLL_DOWN = long_global_const_attr("MOUSE_SCROLL_DOWN");
 
+const int GlobalConsts::MOUSE_DOWN  = long_global_const_attr("MOUSE_DOWN");
+const int GlobalConsts::MOUSE_UP    = long_global_const_attr("MOUSE_UP");
+const int GlobalConsts::MOUSE_DRAG  = long_global_const_attr("MOUSE_DRAG");
+
+const int GlobalConsts::KEY_UP      = long_global_const_attr("KEY_UP");
+const int GlobalConsts::KEY_DOWN    = long_global_const_attr("KEY_DOWN");
+
 const int GlobalConsts::RENDER_LINES     = long_global_const_attr("RENDER_LINES");
 const int GlobalConsts::RENDER_TRIANGLES = long_global_const_attr("RENDER_TRIANGLES");
 

@@ -45,49 +45,27 @@ void reshape(int width, int height) {
 }
 
 void key_pressed(unsigned char key, int x, int y) {
-    curr_ctrl->key_down(key, x, y);
+    //curr_ctrl->key_down(key, x, y);
 }
 
 void key_released(unsigned char key, int x, int y) {
-    curr_ctrl->key_up(key, x, y);
+    //curr_ctrl->key_up(key, x, y);
 }
 
 void mouse_click(int button, int state, int x, int y) {
     switch(state) {
         case GLUT_DOWN:
-		if(button == GlobalConsts::MOUSE_LEFT) {
-			curr_ctrl->mouse_left_click(x, y);
-		} else if(button == GlobalConsts::MOUSE_MIDDLE) {
-            curr_ctrl->mouse_middle_click(x, y);
-        } else if(button == GlobalConsts::MOUSE_RIGHT) {
-			curr_ctrl->mouse_right_click(x, y);
-		} else if(button == GlobalConsts::MOUSE_SCROLL_UP) {
-			curr_ctrl->mouse_scroll_up(x, y);
-		} else if(button == GlobalConsts::MOUSE_SCROLL_DOWN) {
-			curr_ctrl->mouse_scroll_down(x, y);
-		}
-		break;
+            curr_ctrl->mouse_event(GlobalConsts::MOUSE_DOWN, button, x, y);
+            break;
 	case GLUT_UP:
-		if(button == GlobalConsts::MOUSE_LEFT) {
-			curr_ctrl->mouse_left_release(x, y);
-		} else if(button == GlobalConsts::MOUSE_MIDDLE) {
-            curr_ctrl->mouse_middle_release(x, y);
-        } else if(button == GlobalConsts::MOUSE_RIGHT) {
-			curr_ctrl->mouse_right_release(x, y);
-		}
+	    curr_ctrl->mouse_event(GlobalConsts::MOUSE_UP, button, x, y);
 		break;
-	
+
     }
 }
 
 void mouse_drag(int x, int y) {
-	if(curr_ctrl->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["down"]) {
-		curr_ctrl->mouse_left_drag(x, y);
-	} else if(curr_ctrl->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["down"]) {
-        curr_ctrl->mouse_middle_drag(x, y);
-    } else if(curr_ctrl->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["down"]) {
-		curr_ctrl->mouse_right_drag(x, y);
-	}
+    curr_ctrl->mouse_event(GlobalConsts::MOUSE_DRAG, -1, x, y);
 }
 
 void timer(int value) {

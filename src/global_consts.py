@@ -50,7 +50,17 @@ class GlobalConsts(object):
     MOUSE_SCROLL_UP     = 3
     MOUSE_SCROLL_DOWN   = 4
 
+    # Event types
+    MOUSE_DOWN = 0
+    MOUSE_UP    = 1
+    MOUSE_DRAG  = 2
+    
+    KEY_UP      = 3
+    KEY_DOWN    = 4
+    
+    # Render modes
     RENDER_LINES     = 0
     RENDER_TRIANGLES = 1
+
 
 

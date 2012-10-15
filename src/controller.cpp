@@ -4,6 +4,7 @@
 
 
 Controller* Controller::curr_ctrl = NULL;
+PyObject* Controller::controller_py = NULL;
 
 
 const double Controller::COS_60 = std::cos(60.0 / 360.0 * 2.0 * M_PI);
@@ -11,7 +12,7 @@ const double Controller::SIN_60 = std::sin(60.0 / 360.0 * 2.0 * M_PI);
 
 
 Controller::Controller(void) {
-    this->controller_py = NULL;
+    //this->controller_py = NULL;
 
     this->width = 0;
     this->height = 0;
@@ -30,11 +31,13 @@ Controller::Controller(void) {
 
 	this->selected_hex = NULL;
 
-	for(int i = 0; i < 5; i++) {
+	this->player_input = new PlayerInput();
+
+	/*for(int i = 0; i < 5; i++) {
 		this->old_mouse_pos[i]["down"]	= 0;
 		this->old_mouse_pos[i]["x"] 	= 0;
 		this->old_mouse_pos[i]["y"] 	= 0;
-	}
+	}*/
 
 	this->gameboard = new Gameboard();
 
@@ -456,6 +459,7 @@ std::set<Hexagon*>* Controller::get_neighbors_in_radius(Hexagon* curr_hex, int r
 
 }
 
+/*
 void Controller::mouse_left_click(int x, int y) {
 	Hexagon* curr_hex = this->get_clicked_hex(x, this->height-y);
 
@@ -558,7 +562,16 @@ void Controller::key_up(unsigned char key, int x, int y) {
     Py_XDECREF(py_str);
     Py_XDECREF(py_x);
     Py_XDECREF(py_y);
+}*/
+
+void Controller::mouse_event(int event_type, int button, int x, int y) {
+    this->player_input->mouse_event(event_type, button, x, y);
 }
+
+void Controller::keyboard_event(int event_type, int x, int y) {
+    //this->player_input->keyboard_event(event_type, button, x, y);
+}
+
 
 Hexagon* Controller::add_object_to_board(BoardObject* curr_obj, Hexagon* curr_hex) {
     // TODO: actually implement logic below...
