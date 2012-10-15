@@ -51,7 +51,7 @@ class GlobalConsts(object):
     MOUSE_SCROLL_DOWN   = 4
 
     # Event types
-    MOUSE_DOWN = 0
+    MOUSE_DOWN  = 0
     MOUSE_UP    = 1
     MOUSE_DRAG  = 2
     
