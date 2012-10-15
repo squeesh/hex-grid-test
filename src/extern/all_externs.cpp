@@ -96,6 +96,11 @@ extern "C" {
 		return curr_ctrl->get_selected_hex();
 	}
 
+	void Controller_set_player_input(PlayerInput* curr_input) {
+	    Controller* curr_ctrl = Controller_get_controller();
+	    curr_ctrl->player_input = curr_input;
+	}
+
 	/********************************************/
 
 	void Util_force_exit() {
@@ -104,7 +109,7 @@ extern "C" {
 
 	/********************************************/
 
-	Hexagon* Hexagon_new_hexagon(){
+	Hexagon* Hexagon_new(){
 		return new Hexagon();
 	}
 
@@ -178,7 +183,13 @@ extern "C" {
 
 	/********************************************/
 
-	BoardObject* BoardObject_new_board_object(Hexagon* curr_hex) {
+	BoardObject* BoardObject_new(Hexagon* curr_hex) {
         return new BoardObject(curr_hex);
     }
+
+	/********************************************/
+
+	PlayerInput* PlayerInput_new(PyObject* py_pointer) {
+	    return new PlayerInput(py_pointer);
+	}
 }

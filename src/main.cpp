@@ -45,11 +45,11 @@ void reshape(int width, int height) {
 }
 
 void key_pressed(unsigned char key, int x, int y) {
-    //curr_ctrl->key_down(key, x, y);
+    curr_ctrl->keyboard_event(GlobalConsts::KEY_DOWN, key, x, y);
 }
 
 void key_released(unsigned char key, int x, int y) {
-    //curr_ctrl->key_up(key, x, y);
+    curr_ctrl->keyboard_event(GlobalConsts::KEY_UP, key, x, y);
 }
 
 void mouse_click(int button, int state, int x, int y) {

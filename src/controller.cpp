@@ -11,7 +11,7 @@ const double Controller::COS_60 = std::cos(60.0 / 360.0 * 2.0 * M_PI);
 const double Controller::SIN_60 = std::sin(60.0 / 360.0 * 2.0 * M_PI);
 
 
-Controller::Controller(void) {
+Controller::Controller() {
     //this->controller_py = NULL;
 
     this->width = 0;
@@ -31,7 +31,8 @@ Controller::Controller(void) {
 
 	this->selected_hex = NULL;
 
-	this->player_input = new PlayerInput();
+	//this->player_input = new PlayerInput();
+	this->player_input = NULL;
 
 	/*for(int i = 0; i < 5; i++) {
 		this->old_mouse_pos[i]["down"]	= 0;
@@ -69,7 +70,7 @@ Controller* Controller::py_get_controller() {
 		PyObject *py_ctrl_obj = py_call_func(py_ctrl_cls, "get_controller");
 		Py_XDECREF(py_ctrl_cls);
 
-		PyObject *py_ctrl_ptr = PyObject_GetAttrString(py_ctrl_obj, "_c_ctrl_obj");
+		PyObject *py_ctrl_ptr = PyObject_GetAttrString(py_ctrl_obj, "_c_pointer");
 		int ctrl_ptr = ((int)PyInt_AsLong(py_ctrl_ptr));
 		Py_XDECREF(py_ctrl_ptr);
 
@@ -459,117 +460,13 @@ std::set<Hexagon*>* Controller::get_neighbors_in_radius(Hexagon* curr_hex, int r
 
 }
 
-/*
-void Controller::mouse_left_click(int x, int y) {
-	Hexagon* curr_hex = this->get_clicked_hex(x, this->height-y);
-
-	if(curr_hex && curr_hex->is_pathable()) {
-	    std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(this->gameboard->board_object_map);
-	    if(curr_board_object_map[curr_hex]) {
-	        this->set_selected_hex(curr_hex);
-	    }
-	}
-
-	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["down"] 	= 1;
-	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["x"]      = x;
-	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["y"] 	    = y;
-}
-
-void Controller::mouse_left_release(int x, int y) {
-	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["down"] 	= 0;
-	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["x"]	    = x;
-	this->old_mouse_pos[GlobalConsts::MOUSE_LEFT]["y"] 	    = y;
-}
-
-void Controller::mouse_middle_click(int x, int y) {
-    this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["down"] = 1;
-    this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["x"]    = x;
-    this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["y"]    = y;
-}
-
-void Controller::mouse_middle_release(int x, int y) {
-    this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["down"] = 0;
-    this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["x"]    = x;
-    this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["y"]    = y;
-}
-
-void Controller::mouse_right_click(int x, int y) {
-    Hexagon* curr_hex = this->get_clicked_hex(x, this->height-y);
-
-    if(curr_hex && curr_hex->is_pathable()) {
-        if(this->get_selected_hex()) {
-            py_call_func(this->controller_py, "find_path", this->get_selected_hex(), curr_hex);
-        }
-    }
-
-	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["down"] 	= 1;
-	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["x"]	    = x;
-	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["y"]     = y;
-}
-
-void Controller::mouse_right_release(int x, int y) {
-	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["down"] 	= 0;
-	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["x"]	    = x;
-	this->old_mouse_pos[GlobalConsts::MOUSE_RIGHT]["y"] 	= y;
-}
-
-void Controller::mouse_left_drag(int x, int y) {
-}
-
-void Controller::mouse_middle_drag(int x, int y) {
-    int x_diff = x - this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["x"];
-    int y_diff = y - this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["y"];
-
-    this->x_offset -= x_diff / 30.0 * this->zoom;
-    this->y_offset += y_diff / 30.0 * this->zoom;
-
-    this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["x"] = x;
-    this->old_mouse_pos[GlobalConsts::MOUSE_MIDDLE]["y"] = y;
-}
-
-void Controller::mouse_right_drag(int x, int y) {
-}
-
-void Controller::mouse_scroll_up(int x, int y) {
-	this->zoom_map(1 / 1.25);
-}
-
-void Controller::mouse_scroll_down(int x, int y) {
-	this->zoom_map(1.25);
-}
-
-void Controller::key_down(unsigned char key, int x, int y) {
-    char key_str[2] = {key, '\0'};
-    PyObject* py_str = PyString_FromString(key_str);
-    PyObject* py_x = PyInt_FromLong(x);
-    PyObject* py_y = PyInt_FromLong(y);
-
-    py_call_func(this->controller_py, "key_down", py_str, py_x, py_y);
-
-    Py_XDECREF(py_str);
-    Py_XDECREF(py_x);
-    Py_XDECREF(py_y);
-}
-
-void Controller::key_up(unsigned char key, int x, int y) {
-    char key_str[2] = {key, '\0'};
-    PyObject* py_str = PyString_FromString(key_str);
-    PyObject* py_x = PyInt_FromLong(x);
-    PyObject* py_y = PyInt_FromLong(y);
-
-    py_call_func(this->controller_py, "key_up", py_str, py_x, py_y);
-
-    Py_XDECREF(py_str);
-    Py_XDECREF(py_x);
-    Py_XDECREF(py_y);
-}*/
 
 void Controller::mouse_event(int event_type, int button, int x, int y) {
     this->player_input->mouse_event(event_type, button, x, y);
 }
 
-void Controller::keyboard_event(int event_type, int x, int y) {
-    //this->player_input->keyboard_event(event_type, button, x, y);
+void Controller::keyboard_event(int event_type, unsigned char key, int x, int y) {
+    this->player_input->keyboard_event(event_type, key, x, y);
 }
 
 

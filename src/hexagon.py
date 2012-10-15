@@ -1,10 +1,8 @@
 from ctypes import *
 hexagon_lib = cdll.LoadLibrary('./externs.so')
-
-hexagon_lib.Hexagon_new_hexagon.restype = c_long
+hexagon_lib.Hexagon_new.restype = c_long
 hexagon_lib.Hexagon_get_vertex.restype = c_long
 hexagon_lib.Hexagon_get_neighbor.restype = c_long
-
 hexagon_lib.Hexagon_get_height.restype = c_double
 hexagon_lib.Hexagon_get_slope.restype = c_double
 hexagon_lib.Hexagon_get_last_x.restype = c_double
@@ -17,7 +15,7 @@ from util import RoundList, try_catch_funcs
 
 @try_catch_funcs
 class Hexagon(object):
-    _c_hex_obj = None
+    _c_pointer = None
     _hex_cache = {}
 
     NEIGHBOR_DIRECTION = RoundList('N', 'NE', 'SE', 'S', 'SW', 'NW') # Order is important!
@@ -36,57 +34,57 @@ class Hexagon(object):
     MAX_PATHABLE_SLOPE = 2.0
 
     def __init__(self, x, y, color=(0, 1, 0)):
-        self._c_hex_obj = hexagon_lib.Hexagon_new_hexagon()
+        self._c_pointer = hexagon_lib.Hexagon_new()
         self.set_border_color(*color)
 
 #        print
 #        print x, '|', y
-        hexagon_lib.Hexagon_set_last_x(self._c_hex_obj, c_double(x))
-        hexagon_lib.Hexagon_set_last_y(self._c_hex_obj, c_double(y))
+        hexagon_lib.Hexagon_set_last_x(self._c_pointer, c_double(x))
+        hexagon_lib.Hexagon_set_last_y(self._c_pointer, c_double(y))
 
-        self._hex_cache[self._c_hex_obj] = self
+        self._hex_cache[self._c_pointer] = self
 
     def set_border_color(self, red, green, blue):
-        hexagon_lib.Hexagon_set_border_color(self._c_hex_obj, c_double(red), c_double(green), c_double(blue))
+        hexagon_lib.Hexagon_set_border_color(self._c_pointer, c_double(red), c_double(green), c_double(blue))
 
     def set_hex_color(self, red, green, blue):
-        hexagon_lib.Hexagon_set_hex_color(self._c_hex_obj, c_double(red), c_double(green), c_double(blue))
+        hexagon_lib.Hexagon_set_hex_color(self._c_pointer, c_double(red), c_double(green), c_double(blue))
 
     def set_select_color(self, red, green, blue):
-        hexagon_lib.Hexagon_set_select_color(self._c_hex_obj, c_double(red), c_double(green), c_double(blue))
+        hexagon_lib.Hexagon_set_select_color(self._c_pointer, c_double(red), c_double(green), c_double(blue))
 
     def clear_select_color(self):
-        hexagon_lib.Hexagon_clear_select_color(self._c_hex_obj)
+        hexagon_lib.Hexagon_clear_select_color(self._c_pointer)
 
     def set_height(self, height):
-        hexagon_lib.Hexagon_set_height(self._c_hex_obj, c_double(height))
+        hexagon_lib.Hexagon_set_height(self._c_pointer, c_double(height))
 
     def add_height(self, height):
-        hexagon_lib.Hexagon_add_height(self._c_hex_obj, c_double(height))
+        hexagon_lib.Hexagon_add_height(self._c_pointer, c_double(height))
 
     def get_height(self):
-        return hexagon_lib.Hexagon_get_height(self._c_hex_obj)
+        return hexagon_lib.Hexagon_get_height(self._c_pointer)
 
     def get_slope(self):
-        return hexagon_lib.Hexagon_get_slope(self._c_hex_obj)
+        return hexagon_lib.Hexagon_get_slope(self._c_pointer)
 
     def get_vertex(self, position):
-        return hexagon_lib.Hexagon_get_vertex(self._c_hex_obj, position)
+        return hexagon_lib.Hexagon_get_vertex(self._c_pointer, position)
 
     def set_neighbors(self, neighbor_dict):
         for position, neighbor_hex in neighbor_dict.iteritems():
-            hexagon_lib.Hexagon_set_neighbor(self._c_hex_obj, position, neighbor_hex._c_hex_obj)
+            hexagon_lib.Hexagon_set_neighbor(self._c_pointer, position, neighbor_hex._c_pointer)
 
     def get_neighbors(self):
         output = {}
 
         for position in self.NEIGHBOR_DIRECTION:
-            output[position] = Hexagon.get_hexagon(hexagon_lib.Hexagon_get_neighbor(self._c_hex_obj, position))
+            output[position] = Hexagon.get_hexagon(hexagon_lib.Hexagon_get_neighbor(self._c_pointer, position))
 
         return output
 
     def get_neighbor(self, position):
-        return Hexagon.get_hexagon(hexagon_lib.Hexagon_get_neighbor(self._c_hex_obj, position))
+        return Hexagon.get_hexagon(hexagon_lib.Hexagon_get_neighbor(self._c_pointer, position))
 
     def link_verticies(self):
         for position, curr_hex in self.get_neighbors().iteritems():
@@ -111,7 +109,7 @@ class Hexagon(object):
                 if position not in curr_hex.VERTEX_POSITIONS:
                     raise IndexError
 
-                c_vert = hexagon_lib.Hexagon_get_vertex(curr_hex._c_hex_obj, position)
+                c_vert = hexagon_lib.Hexagon_get_vertex(curr_hex._c_pointer, position)
                 py_vert = Vertex._verticies_list.get(c_vert, None)
 
                 if not py_vert:
@@ -122,7 +120,7 @@ class Hexagon(object):
                 return py_vert
 
             def __setitem__(self, position, value):
-                hexagon_lib.Hexagon_set_vertex(curr_hex._c_hex_obj, position, value.c_vert_obj)
+                hexagon_lib.Hexagon_set_vertex(curr_hex._c_pointer, position, value.c_vert_obj)
 
             def __iter__(self):
                 for position in curr_hex.VERTEX_POSITIONS:
@@ -139,13 +137,13 @@ class Hexagon(object):
         return Hexagon._hex_cache.values()
 
     def get_last_coord(self):
-        py_last_x = hexagon_lib.Hexagon_get_last_x(self._c_hex_obj)
-        py_last_y = hexagon_lib.Hexagon_get_last_y(self._c_hex_obj)
+        py_last_x = hexagon_lib.Hexagon_get_last_x(self._c_pointer)
+        py_last_y = hexagon_lib.Hexagon_get_last_y(self._c_pointer)
 
         return (py_last_x, py_last_y)
 
     def is_pathable(self):
-        return hexagon_lib.Hexagon_is_pathable(self._c_hex_obj)
+        return hexagon_lib.Hexagon_is_pathable(self._c_pointer)
 
 
 class Vertex(object):

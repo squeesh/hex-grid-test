@@ -1,10 +1,8 @@
 from ctypes import *
 controller_lib = cdll.LoadLibrary('./externs.so')
-
 controller_lib.Controller_COS_60.restype = c_double
 controller_lib.Controller_SIN_60.restype = c_double
 controller_lib.Controller_get_rotation.restype = c_double
-
 controller_lib.Controller_get_controller.restype = c_long
 controller_lib.Controller_get_hexagon.restype = c_long
 controller_lib.Controller_get_selected_hex.restype = c_long
@@ -24,9 +22,7 @@ from land_generation import RollingHills, MountainRange
 @try_catch_funcs
 class Controller(object):
     _curr_ctrl = None
-    _c_ctrl_obj = None
-
-    #MAX_PATHABLE_SLOPE  = 2.0
+    _c_pointer = None
 
     view_range = GlobalConsts.BOARD_WIDTH * 1.25
 
@@ -35,9 +31,11 @@ class Controller(object):
 
     width   = None
     height  = None
+    
+    player_input = None
 
     def __init__(self):
-        self._c_ctrl_obj = controller_lib.Controller_get_controller()
+        self._c_pointer = controller_lib.Controller_get_controller()
 
     @staticmethod
     def get_controller():
@@ -52,11 +50,13 @@ class Controller(object):
         return Controller._curr_ctrl
 
     def init_board(self):
+        from player_input import PlayerInput
+        self.player_input = PlayerInput()
+        controller_lib.Controller_set_player_input(self.player_input._c_pointer)
+        
         self.zoom = GlobalConsts.START_ZOOM
         self.rotation = GlobalConsts.START_ROTATION
         self.view_range = GlobalConsts.BOARD_WIDTH
-
-        #controller_lib.Controller_set_MAX_PATHABLE_SLOPE(c_double(self.MAX_PATHABLE_SLOPE))
 
         print 'Creating Board...'
         for j in range(GlobalConsts.BOARD_HEIGHT):
@@ -66,7 +66,7 @@ class Controller(object):
 
                 curr_hex = Hexagon(x * self.COS_60, y * self.SIN_60)
 
-                controller_lib.Controller_push_hexagon(curr_hex._c_hex_obj)
+                controller_lib.Controller_push_hexagon(curr_hex._c_pointer)
 
         print "Linking Segments..."
         self.link_segments()
@@ -110,8 +110,6 @@ class Controller(object):
 
         BoardObject(hex_list[0])
         BoardObject(hex_list[15])
-#        except Exception, e:
-#            print e
 
 #        for hex in Hexagon.get_all_hexagons():
 #            if not hex.is_pathable():
@@ -170,54 +168,6 @@ class Controller(object):
     def resize(self, width, height):
         controller_lib.Controller_resize(width, height)
 
-    def key_down(self, key, x, y):
-        if ord(key) == 27:
-            controller_lib.Controller_clear_selected_hex()
-
-        elif key == 'w':
-            self.set_scroll(GlobalConsts.UP)
-        elif key == 's':
-            self.set_scroll(GlobalConsts.DOWN)
-        elif key == 'a':
-            self.set_scroll(GlobalConsts.LEFT)
-        elif key == 'd':
-            self.set_scroll(GlobalConsts.RIGHT)
-
-        elif key == '+':
-            self.zoom_map(1 / 1.25)
-        elif key == '-':
-            self.zoom_map(1.25)
-        elif key == '*':
-            self.rotation += 2.0
-        elif key == '/':
-            self.rotation -= 2.0
-
-#        elif key == ' ':
-#            for curr_hex in Hexagon.get_all_hexagons():
-#                curr_hex.clear_select_color()
-#                for neigh_hex in curr_hex.get_neighbors().itervalues():
-##                    print dist_between(curr_hex, neigh_hex)
-#                    if '%s' % dist_between(curr_hex, neigh_hex) != '0.866025403784':
-#                        curr_hex.set_select_color(0, 1, 0)
-#
-##            curr_hex = self.get_hexagon(0, 0)
-##            curr_hex.clear_select_color()
-##            neigh_hex = curr_hex.get_neighbor('SW')
-###            for pos, neigh_hex in curr_hex.get_neighbors().iteritems():
-###            print pos, dist_between(curr_hex, neigh_hex)
-##            if '%s' % dist_between(curr_hex, neigh_hex) != '0.866025403784':
-##                curr_hex.set_select_color(0, 1, 0)
-
-    def key_up(self, key, x, y):
-        if key == 'w':
-            self.clear_scroll(GlobalConsts.UP)
-        elif key == 's':
-            self.clear_scroll(GlobalConsts.DOWN)
-        elif key == 'a':
-            self.clear_scroll(GlobalConsts.LEFT)
-        elif key == 'd':
-            self.clear_scroll(GlobalConsts.RIGHT)
-
     def zoom_map(self, zoom_amount):
         controller_lib.Controller_zoom_map(c_double(zoom_amount))
 
@@ -244,6 +194,9 @@ class Controller(object):
     def get_selected_hex(self):
         c_hex_obj = controller_lib.Controller_get_selected_hex()
         return Hexagon.get_hexagon(c_hex_obj)
+
+    def clear_selected_hex(self):
+        controller_lib.Controller_clear_selected_hex()
 
     def find_path(self, start_hex_addr, end_hex_addr):
         start_hex = Hexagon.get_hexagon(start_hex_addr)
