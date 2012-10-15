@@ -62,6 +62,10 @@ class PlayerInput(object):
         pass
 
     def mouse_middle_drag(self, x_diff, y_diff):
+#        print 'x diff: ', x_diff
+#        print 'y diff: ', y_diff
+#        print
+        
         curr_ctrl = Controller.get_controller()
 
         curr_ctrl.add_x_offset(-x_diff / 30.0 * curr_ctrl.get_zoom())

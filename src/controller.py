@@ -102,14 +102,18 @@ class Controller(object):
             height = hex.get_height()
             height_percent = abs(height / 5.0);
 
-            if height_percent > 1.0:
-                height_percent = 1.0
-
-            if height > 0.0:
-                hex.set_hex_color(height_percent, 0.5 + height_percent / 2.0, height_percent)
+            if height_percent <= 1.0:
+                if height > 0.0:
+                    hex.set_hex_color(height_percent * 0.7, 0.5 + height_percent * 0.2, height_percent * 0.7)
+                else:
+                    hex.set_hex_color(height_percent / 2.0, 0.5 - height_percent / 2.0, 0)
             else:
-                hex.set_hex_color(height_percent / 2.0, 0.5 - height_percent / 2.0, 0)
+                if height > 0.0:
+                    hex.set_hex_color(0.7 + height_percent - 1.0, 0.7 + height_percent - 1.0, 0.7 + height_percent - 1.0)
+                else:
+                    hex.set_hex_color(0.5 - (height_percent - 1.0) * 0.5, 0, 0)
 
+                    
         hex_list = Hexagon.get_all_hexagons()
 
         BoardObject(hex_list[0])
