@@ -1,9 +1,9 @@
 from ctypes import *
 board_object_lib = cdll.LoadLibrary('./externs.so')
-
 board_object_lib.BoardObject_new.restype = c_long
+board_object_lib.BoardObject_is_selected.restype = c_bool
 
-from util import try_catch_funcs
+from util import try_catch_funcs, a_star
 
 
 @try_catch_funcs
@@ -18,17 +18,24 @@ class BoardObject(object):
         
         self._board_obj_cache[self._c_pointer] = self
     
-    def set_destination(self, dest_hex_addr):
-        start_hex = self.parent_hex()
-        dest_hex = Hexagon.get_hexagon(start_hex_addr)
+    def set_destination(self, dest_hex):
+        start_hex = self.get_base_hex()
 
-        self.curr_path = a_star(start_hex, end_hex)
+        self.curr_path = a_star(start_hex, dest_hex)
+        print self.curr_path
 
     @staticmethod
     def get_board_object(c_board_obj):
         return BoardObject._board_obj_cache.get(c_board_obj)
 
     @staticmethod
-    def get_all_board_objects():
+    def get_all():
         return BoardObject._board_obj_cache.values()
     
+    def is_selected(self):
+        return board_object_lib.BoardObject_is_selected(self._c_pointer)
+    
+    def get_base_hex(self):
+        from hexagon import Hexagon
+        hex_ptr = board_object_lib.BoardObject_get_base_hex(self._c_pointer)
+        return Hexagon.get_hexagon(hex_ptr)

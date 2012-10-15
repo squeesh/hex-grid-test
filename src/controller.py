@@ -210,6 +210,8 @@ class Controller(object):
 
     def tick(self):
         controller_lib.Controller_tick()
+        
+        print 'tick...'
 
     def mouse_down(self, x, y, button):
         controller_lib.Controller_mouse_down(c_double(x), c_double(y), 0)

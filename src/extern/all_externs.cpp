@@ -211,6 +211,14 @@ extern "C" {
         return new BoardObject(curr_hex);
     }
 
+	bool BoardObject_is_selected(BoardObject* curr_board_obj) {
+	    return curr_board_obj->selected;
+	}
+
+	Hexagon* BoardObject_get_base_hex(BoardObject* curr_board_obj) {
+	    return curr_board_obj->base_hex;
+	}
+
 	/********************************************/
 
 	PlayerInput* PlayerInput_new(PyObject* py_pointer) {

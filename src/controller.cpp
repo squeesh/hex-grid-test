@@ -61,23 +61,39 @@ Controller* Controller::py_get_controller() {
 		PyRun_SimpleString("import os, sys"); 
 		PyRun_SimpleString("sys.path.append(os.getcwd())");
 		PyRun_SimpleString("sys.dont_write_bytecode = True"); 
-		PyObject *py_name = PyString_FromString("src.controller");
-		PyObject *py_module = PyImport_Import(py_name);
-		Py_XDECREF(py_name);
 
-		PyObject *py_ctrl_cls = PyObject_GetAttrString(py_module, "Controller");
-		Py_XDECREF(py_module);
-		PyObject *py_ctrl_obj = py_call_func(py_ctrl_cls, "get_controller");
-		Py_XDECREF(py_ctrl_cls);
+		try {
+            PyObject *py_name = PyString_FromString("src.controller");
+            if(PyErr_Occurred()) {
+                throw PythonException();
+            }
+            PyObject *py_module = PyImport_Import(py_name);
+            if(PyErr_Occurred()) {
+                throw PythonException();
+            }
+            Py_XDECREF(py_name);
 
-		PyObject *py_ctrl_ptr = PyObject_GetAttrString(py_ctrl_obj, "_c_pointer");
-		int ctrl_ptr = ((int)PyInt_AsLong(py_ctrl_ptr));
-		Py_XDECREF(py_ctrl_ptr);
+            PyObject *py_ctrl_cls = PyObject_GetAttrString(py_module, "Controller");
+            if(PyErr_Occurred()) {
+                throw PythonException();
+            }
+            Py_XDECREF(py_module);
 
-		Controller::curr_ctrl = (Controller*)ctrl_ptr;
+            PyObject *py_ctrl_obj = py_call_func(py_ctrl_cls, "get_controller");
+            Py_XDECREF(py_ctrl_cls);
 
-		// capture our python controller pointer and save it for future use
-		Controller::curr_ctrl->controller_py = py_ctrl_obj;
+            PyObject *py_ctrl_ptr = PyObject_GetAttrString(py_ctrl_obj, "_c_pointer");
+            int ctrl_ptr = ((int)PyInt_AsLong(py_ctrl_ptr));
+            Py_XDECREF(py_ctrl_ptr);
+
+            Controller::curr_ctrl = (Controller*)ctrl_ptr;
+
+            // capture our python controller pointer and save it for future use
+            Controller::curr_ctrl->controller_py = py_ctrl_obj;
+		} catch(PythonException &e) {
+		    PyErr_Print();
+		    exit(0);
+		}
 	}
 
 	return Controller::curr_ctrl;

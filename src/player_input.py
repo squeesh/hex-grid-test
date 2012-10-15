@@ -39,13 +39,20 @@ class PlayerInput(object):
         pass
 
     def mouse_right_click(self, x, y):
+        
+        
         curr_ctrl = Controller.get_controller()
         curr_hex = curr_ctrl.get_clicked_hex(x, y)
     
         if curr_hex and curr_hex.is_pathable():
-            sel_hex = curr_ctrl.get_selected_hex()
-            if sel_hex:
-                curr_ctrl.find_path(sel_hex, curr_hex)
+            from board_object import BoardObject
+            for board_obj in BoardObject.get_all():
+                if board_obj.is_selected():
+                    board_obj.set_destination(curr_hex)
+            
+#            sel_hex = curr_ctrl.get_selected_hex()
+#            if sel_hex:
+#                curr_ctrl.find_path(sel_hex, curr_hex)
 
     def mouse_right_release(self, x, y):
         pass

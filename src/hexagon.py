@@ -7,7 +7,6 @@ hexagon_lib.Hexagon_get_height.restype = c_double
 hexagon_lib.Hexagon_get_slope.restype = c_double
 hexagon_lib.Hexagon_get_last_x.restype = c_double
 hexagon_lib.Hexagon_get_last_y.restype = c_double
-
 hexagon_lib.Hexagon_is_pathable.restype = c_bool
 
 from util import RoundList, try_catch_funcs

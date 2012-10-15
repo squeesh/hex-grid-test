@@ -373,4 +373,9 @@ const int UniqueDataVector<T>::VERTEX_OFFSET = sizeof(T) * 0;
 template <typename T>
 const int UniqueDataVector<T>::COLOR_OFFSET  = sizeof(T) * 3;
 
+//----------------------------------------
+
+
+class PythonException : public std::exception {};
+
 #endif
