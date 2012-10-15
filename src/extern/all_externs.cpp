@@ -31,6 +31,16 @@ extern "C" {
 		return curr_ctrl->get_rotation();
 	}
 
+	void Controller_add_x_offset(double x_offset) {
+	    Controller* curr_ctrl = Controller_get_controller();
+	    curr_ctrl->x_offset += x_offset;
+	}
+
+	void Controller_add_y_offset(double y_offset) {
+        Controller* curr_ctrl = Controller_get_controller();
+        curr_ctrl->y_offset += y_offset;
+    }
+
 	void Controller_set_scroll(char direction) {
         	Controller* curr_ctrl = Controller_get_controller();
 		curr_ctrl->set_scroll(direction);
@@ -71,20 +81,20 @@ extern "C" {
 		return curr_ctrl->SIN_60;
 	}
 
-	void Controller_mouse_left_click(double x, double y) {
-		Controller* curr_ctrl = Controller_get_controller();
-		curr_ctrl->player_input->mouse_left_click(x, y);
-	}
+	double Controller_get_width() {
+        Controller* curr_ctrl = Controller_get_controller();
+        return curr_ctrl->width;
+    }
 
-	void Controller_mouse_scroll_up(double x, double y) {
-		Controller* curr_ctrl = Controller_get_controller();
-		curr_ctrl->player_input->mouse_scroll_up(x, y);
-	}
+    double Controller_get_height() {
+        Controller* curr_ctrl = Controller_get_controller();
+        return curr_ctrl->height;
+    }
 
-	void Controller_mouse_scroll_down(double x, double y) {
-		Controller* curr_ctrl = Controller_get_controller();
-		curr_ctrl->player_input->mouse_scroll_down(x, y);
-	}
+    double Controller_get_zoom() {
+        Controller* curr_ctrl = Controller_get_controller();
+        return curr_ctrl->zoom;
+    }
 
 	void Controller_clear_selected_hex() {
 	    Controller* curr_ctrl = Controller_get_controller();
@@ -95,6 +105,16 @@ extern "C" {
 		Controller* curr_ctrl = Controller_get_controller();
 		return curr_ctrl->get_selected_hex();
 	}
+
+	void Controller_set_selected_hex(Hexagon* curr_hex) {
+        Controller* curr_ctrl = Controller_get_controller();
+        curr_ctrl->set_selected_hex(curr_hex);
+    }
+
+    Hexagon* Controller_get_clicked_hex(int x, int y) {
+        Controller* curr_ctrl = Controller_get_controller();
+        return curr_ctrl->get_clicked_hex(x, y);
+    }
 
 	void Controller_set_player_input(PlayerInput* curr_input) {
 	    Controller* curr_ctrl = Controller_get_controller();
@@ -179,6 +199,10 @@ extern "C" {
 
 	bool Hexagon_is_pathable(Hexagon* curr_hex) {
 		return curr_hex->is_pathable();
+	}
+
+	BoardObject* Hexagon_get_board_object(Hexagon* curr_hex) {
+	    curr_hex->get_board_object();
 	}
 
 	/********************************************/

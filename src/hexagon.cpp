@@ -399,3 +399,10 @@ void Hexagon::generate_object_data(double x, double y, UniqueDataVector< GLfloat
 	}
 }
 
+
+BoardObject* Hexagon::get_board_object() {
+    Controller* curr_ctrl = Controller::get_controller();
+    std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(curr_ctrl->gameboard->board_object_map);
+    return curr_board_object_map[this];
+}
+

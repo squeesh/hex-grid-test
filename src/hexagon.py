@@ -37,8 +37,6 @@ class Hexagon(object):
         self._c_pointer = hexagon_lib.Hexagon_new()
         self.set_border_color(*color)
 
-#        print
-#        print x, '|', y
         hexagon_lib.Hexagon_set_last_x(self._c_pointer, c_double(x))
         hexagon_lib.Hexagon_set_last_y(self._c_pointer, c_double(y))
 
@@ -144,6 +142,9 @@ class Hexagon(object):
 
     def is_pathable(self):
         return hexagon_lib.Hexagon_is_pathable(self._c_pointer)
+    
+    def get_board_object(self):
+        return hexagon_lib.Hexagon_get_board_object(self._c_pointer)
 
 
 class Vertex(object):

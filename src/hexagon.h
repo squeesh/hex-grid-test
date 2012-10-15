@@ -2,11 +2,11 @@
 #define HEXAGON_H
 
 class GameboardChunk;
+class BoardObject;
 
 
 class Hexagon {
 	private:
-
 		std::map<const char*, Hexagon*, cmp_str> neighbor_hexagons;
 
 		std::vector< double >* select_color;
@@ -64,6 +64,8 @@ class Hexagon {
 		void generate_vertex_data(double, double, UniqueDataVector< GLfloat >*);
 		void generate_select_data(double, double, UniqueDataVector< GLfloat >*);
 		void generate_object_data(double, double, UniqueDataVector< GLfloat >*);
+
+		BoardObject* get_board_object();
 };
 
 #endif

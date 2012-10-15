@@ -47,6 +47,14 @@ PyObject* py_call_func(PyObject *py_obj, char* func_name, void* obj_arg_1, void*
     return output;
 }
 
+PyObject* py_call_func(PyObject *py_obj, char* func_name, PyObject* py_obj_1, PyObject* py_obj_2) {
+    PyObject *py_func = PyObject_GetAttrString(py_obj, func_name);
+    PyObject *output = PyObject_CallFunctionObjArgs(py_func, py_obj_1, py_obj_2, NULL);
+    Py_XDECREF(py_func);
+
+    return output;
+}
+
 PyObject* py_call_func(PyObject *py_obj, char* func_name, PyObject* py_obj_1, PyObject* py_obj_2, PyObject* py_obj_3) {
     PyObject *py_func = PyObject_GetAttrString(py_obj, func_name);
     PyObject *output = PyObject_CallFunctionObjArgs(py_func, py_obj_1, py_obj_2, py_obj_3, NULL);

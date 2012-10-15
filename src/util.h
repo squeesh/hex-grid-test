@@ -148,6 +148,7 @@ PyObject* py_call_func(PyObject *py_obj, char* func_name);
 PyObject* py_call_func(PyObject *py_obj, char* func_name, void* obj_arg_1);
 PyObject* py_call_func(PyObject *py_obj, char* func_name, void* obj_arg_1, void* obj_arg_2);
 PyObject* py_call_func(PyObject *py_obj, char* func_name, void* obj_arg_1, void* obj_arg_2, void* obj_arg_3);
+PyObject* py_call_func(PyObject *py_obj, char* func_name, PyObject* py_obj_1, PyObject* py_obj_2);
 PyObject* py_call_func(PyObject *py_obj, char* func_name, PyObject* py_obj_1, PyObject* py_obj_2, PyObject* py_obj_3);
 
 /***************/

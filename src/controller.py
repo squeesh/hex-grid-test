@@ -6,6 +6,10 @@ controller_lib.Controller_get_rotation.restype = c_double
 controller_lib.Controller_get_controller.restype = c_long
 controller_lib.Controller_get_hexagon.restype = c_long
 controller_lib.Controller_get_selected_hex.restype = c_long
+controller_lib.Controller_get_clicked_hex.restype = c_long
+controller_lib.Controller_get_width.restype = c_double
+controller_lib.Controller_get_height.restype = c_double
+controller_lib.Controller_get_zoom.restype = c_double
 
 from itertools import cycle, islice
 from random import random
@@ -29,8 +33,8 @@ class Controller(object):
     COS_60  = controller_lib.Controller_COS_60()
     SIN_60  = controller_lib.Controller_SIN_60()
 
-    width   = None
-    height  = None
+#    width   = None
+#    height  = None
     
     player_input = None
 
@@ -179,6 +183,21 @@ class Controller(object):
     def rotation(self, rotation):
         controller_lib.Controller_set_rotation(c_double(rotation))
 
+    def get_width(self):
+        return controller_lib.Controller_get_width()
+
+    def get_height(self):
+        return controller_lib.Controller_get_height()
+
+    def get_zoom(self):
+        return controller_lib.Controller_get_zoom()
+
+    def add_x_offset(self, x_offset):
+        controller_lib.Controller_add_x_offset(c_double(x_offset))
+
+    def add_y_offset(self, y_offset):
+        controller_lib.Controller_add_y_offset(c_double(y_offset))
+
     def set_scroll(self, direction):
         controller_lib.Controller_set_scroll(c_char(direction))
 
@@ -195,13 +214,19 @@ class Controller(object):
         c_hex_obj = controller_lib.Controller_get_selected_hex()
         return Hexagon.get_hexagon(c_hex_obj)
 
+    def set_selected_hex(self, curr_hex):
+        controller_lib.Controller_set_selected_hex(curr_hex._c_pointer)
+
     def clear_selected_hex(self):
         controller_lib.Controller_clear_selected_hex()
 
-    def find_path(self, start_hex_addr, end_hex_addr):
-        start_hex = Hexagon.get_hexagon(start_hex_addr)
-        end_hex   = Hexagon.get_hexagon(end_hex_addr)
+    def get_clicked_hex(self, x, y):
+        x = int(x)
+        y = int(y)
+        c_hex_obj = controller_lib.Controller_get_clicked_hex(c_int(x), c_int(y))
+        return Hexagon.get_hexagon(c_hex_obj)
 
+    def find_path(self, start_hex, end_hex):
         for hex in Hexagon.get_all_hexagons():
             if hex.is_pathable():
                 hex.clear_select_color()

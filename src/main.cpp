@@ -55,17 +55,17 @@ void key_released(unsigned char key, int x, int y) {
 void mouse_click(int button, int state, int x, int y) {
     switch(state) {
         case GLUT_DOWN:
-            curr_ctrl->mouse_event(GlobalConsts::MOUSE_DOWN, button, x, y);
+            curr_ctrl->mouse_event(GlobalConsts::MOUSE_DOWN, button, x, curr_ctrl->height - y);
             break;
 	case GLUT_UP:
-	    curr_ctrl->mouse_event(GlobalConsts::MOUSE_UP, button, x, y);
+	    curr_ctrl->mouse_event(GlobalConsts::MOUSE_UP, button, x, curr_ctrl->height - y);
 		break;
 
     }
 }
 
 void mouse_drag(int x, int y) {
-    curr_ctrl->mouse_event(GlobalConsts::MOUSE_DRAG, -1, x, y);
+    curr_ctrl->mouse_event(GlobalConsts::MOUSE_DRAG, -1, x, curr_ctrl->height - y);
 }
 
 void timer(int value) {
