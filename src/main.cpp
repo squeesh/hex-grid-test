@@ -10,8 +10,6 @@ const int RESOLUTION[] = {1024, 768};
 const int BOARD_WIDTH  = 20;
 const int BOARD_HEIGHT = 13;
 
-int SLEEP_TIME = 10;
-
 bool SHOW_FPS = true;
 
 time_t seconds = time(NULL);
@@ -70,7 +68,7 @@ void mouse_drag(int x, int y) {
 
 void timer(int value) {
     curr_ctrl->tick();
-    glutTimerFunc(SLEEP_TIME, timer, value);
+    glutTimerFunc(GlobalConsts::SLEEP_TIME, timer, value);
 }
 
 
@@ -86,7 +84,7 @@ int main(int argc, char** argv) {
 
 	glutDisplayFunc(display);
 	glutIdleFunc(display);
-	glutTimerFunc(SLEEP_TIME, timer, 0);
+	glutTimerFunc(GlobalConsts::SLEEP_TIME, timer, 0);
 
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(key_pressed);

@@ -17,12 +17,12 @@ class BoardObject(object):
         self._c_pointer = board_object_lib.BoardObject_new(base_hex._c_pointer)
         
         self._board_obj_cache[self._c_pointer] = self
+        self.curr_path = []
     
     def set_destination(self, dest_hex):
         start_hex = self.get_base_hex()
 
         self.curr_path = a_star(start_hex, dest_hex)
-        print self.curr_path
 
     @staticmethod
     def get_board_object(c_board_obj):
@@ -35,7 +35,13 @@ class BoardObject(object):
     def is_selected(self):
         return board_object_lib.BoardObject_is_selected(self._c_pointer)
     
+    def set_selected(self, selected):
+        board_object_lib.BoardObject_set_selected(self._c_pointer, c_bool(selected))
+    
     def get_base_hex(self):
         from hexagon import Hexagon
         hex_ptr = board_object_lib.BoardObject_get_base_hex(self._c_pointer)
         return Hexagon.get_hexagon(hex_ptr)
+    
+    def move_to_hex(self, curr_hex):
+        board_object_lib.BoardObject_move_to_hex(self._c_pointer, curr_hex._c_pointer)

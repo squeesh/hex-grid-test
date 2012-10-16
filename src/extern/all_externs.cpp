@@ -215,9 +215,18 @@ extern "C" {
 	    return curr_board_obj->selected;
 	}
 
+    void BoardObject_set_selected(BoardObject* curr_board_obj, bool selected) {
+        curr_board_obj->selected = selected;
+    }
+
 	Hexagon* BoardObject_get_base_hex(BoardObject* curr_board_obj) {
 	    return curr_board_obj->base_hex;
 	}
+
+	void BoardObject_move_to_hex(BoardObject* curr_obj, Hexagon* curr_hex) {
+        curr_obj->move_to_hex(curr_hex);
+    }
+
 
 	/********************************************/
 

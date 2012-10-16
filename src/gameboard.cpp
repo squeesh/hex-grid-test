@@ -85,6 +85,9 @@ void Gameboard::bind_obj_hex(BoardObject* curr_obj, Hexagon* curr_hex) {
 	std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(this->board_object_map);
 	curr_board_object_map[curr_hex] = curr_obj;
 	curr_obj->base_hex = curr_hex;
+	if(curr_hex->parent_chunk) {
+	    curr_hex->parent_chunk->regenerate_object = true;
+	}
 }
 
 

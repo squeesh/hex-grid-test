@@ -27,7 +27,11 @@ class PlayerInput(object):
         if curr_hex and curr_hex.is_pathable():
             curr_board_obj = curr_hex.get_board_object()
             if curr_board_obj:
-                curr_ctrl.set_selected_hex(curr_hex);
+                from board_object import BoardObject
+                for board_obj in BoardObject.get_all():
+                    board_obj.set_selected(False)
+                
+                curr_ctrl.set_selected_hex(curr_hex)
 
     def mouse_left_release(self, x, y):
         pass
@@ -39,8 +43,6 @@ class PlayerInput(object):
         pass
 
     def mouse_right_click(self, x, y):
-        
-        
         curr_ctrl = Controller.get_controller()
         curr_hex = curr_ctrl.get_clicked_hex(x, y)
     
@@ -49,7 +51,7 @@ class PlayerInput(object):
             for board_obj in BoardObject.get_all():
                 if board_obj.is_selected():
                     board_obj.set_destination(curr_hex)
-            
+
 #            sel_hex = curr_ctrl.get_selected_hex()
 #            if sel_hex:
 #                curr_ctrl.find_path(sel_hex, curr_hex)

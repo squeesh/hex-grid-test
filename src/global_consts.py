@@ -3,9 +3,11 @@
 #    You will get circular imports...
 
 class GlobalConsts(object):
+    SLEEP_TIME  = 30
+    
     PATH_SHOW_SEARCH    = False
 
-    GENERATE_HILLS = False
+    GENERATE_HILLS = True
     GENERATE_MOUNTAINS = GENERATE_HILLS
 
 #    GENERATE_MOUNTAINS = True
@@ -16,14 +18,14 @@ class GlobalConsts(object):
 #    BOARD_HEIGHT = 80
 #    BOARD_WIDTH  = 120
 
-#    BOARD_HEIGHT = 512
-#    BOARD_WIDTH  = 512
+    BOARD_HEIGHT = 512
+    BOARD_WIDTH  = 512
 
 #    BOARD_HEIGHT = int(BOARD_HEIGHT * 0.5)
 #    BOARD_WIDTH  = int(BOARD_WIDTH  * 0.5)
 
 #    BOARD_CHUNK_SIZE = 16 # MUST be in multiples of 2
-    BOARD_CHUNK_SIZE = 40 # MUST be in multiples of 2
+    BOARD_CHUNK_SIZE = 64 # MUST be in multiples of 2
 
     MIN_ZOOM = 0.5
     MAX_ZOOM = 17.0

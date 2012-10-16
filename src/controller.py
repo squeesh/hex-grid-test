@@ -100,7 +100,7 @@ class Controller(object):
 
         for hex in Hexagon.get_all_hexagons():
             height = hex.get_height()
-            height_percent = abs(height / 5.0);
+            height_percent = abs(height / 5.0)
 
             if height_percent <= 1.0:
                 if height > 0.0:
@@ -209,9 +209,14 @@ class Controller(object):
         controller_lib.Controller_clear_scroll(c_char(direction))
 
     def tick(self):
-        controller_lib.Controller_tick()
-        
-        print 'tick...'
+        from board_object import BoardObject
+        for board_obj in BoardObject.get_all():
+            if board_obj.curr_path:
+                next_hex = board_obj.curr_path[0]
+                board_obj.curr_path = board_obj.curr_path[1:]
+                self.set_selected_hex(next_hex)
+                board_obj.move_to_hex(next_hex)
+                board_obj.set_selected(True)
 
     def mouse_down(self, x, y, button):
         controller_lib.Controller_mouse_down(c_double(x), c_double(y), 0)

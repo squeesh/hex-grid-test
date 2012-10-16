@@ -11,6 +11,7 @@ class BoardObject {
 		BoardObject(Hexagon*);
 
 		void render();
+		void move_to_hex(Hexagon*);
 };
 
 #endif

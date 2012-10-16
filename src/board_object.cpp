@@ -17,3 +17,8 @@ void BoardObject::render() {
 
 }
 
+void BoardObject::move_to_hex(Hexagon* curr_hex) {
+    Controller* curr_ctrl = Controller::get_controller();
+    curr_ctrl->gameboard->bind_obj_hex(this, curr_hex);
+}
+

@@ -131,6 +131,8 @@ std::map< const char*, std::vector< double >*, cmp_str> get_render_tray_coords()
 }
 
 
+const long GlobalConsts::SLEEP_TIME = long_global_const_attr("SLEEP_TIME");
+
 const double GlobalConsts::COS_60 = std::cos(60.0 / 360.0 * 2.0 * M_PI);
 const double GlobalConsts::SIN_60 = std::sin(60.0 / 360.0 * 2.0 * M_PI);
 
@@ -139,7 +141,7 @@ const char GlobalConsts::RIGHT = char_global_const_attr("RIGHT");
 const char GlobalConsts::UP    = char_global_const_attr("UP");
 const char GlobalConsts::DOWN  = char_global_const_attr("DOWN");
 
-const int GlobalConsts::MOUSE_LEFT 	  = long_global_const_attr("MOUSE_LEFT");
+const int GlobalConsts::MOUSE_LEFT 	      = long_global_const_attr("MOUSE_LEFT");
 const int GlobalConsts::MOUSE_MIDDLE 	  = long_global_const_attr("MOUSE_MIDDLE");
 const int GlobalConsts::MOUSE_RIGHT 	  = long_global_const_attr("MOUSE_RIGHT");
 const int GlobalConsts::MOUSE_SCROLL_UP   = long_global_const_attr("MOUSE_SCROLL_UP");

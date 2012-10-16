@@ -4,6 +4,8 @@
 
 class GlobalConsts {
 	public:
+        static const long SLEEP_TIME;
+
 		static const double COS_60;
 		static const double SIN_60;
 

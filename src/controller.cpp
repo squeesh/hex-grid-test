@@ -4,7 +4,7 @@
 
 
 Controller* Controller::curr_ctrl = NULL;
-PyObject* Controller::controller_py = NULL;
+PyObject* Controller::py_pointer = NULL;
 
 
 const double Controller::COS_60 = std::cos(60.0 / 360.0 * 2.0 * M_PI);
@@ -12,7 +12,7 @@ const double Controller::SIN_60 = std::sin(60.0 / 360.0 * 2.0 * M_PI);
 
 
 Controller::Controller() {
-    //this->controller_py = NULL;
+    //this->py_pointer = NULL;
 
     this->width = 0;
     this->height = 0;
@@ -89,7 +89,7 @@ Controller* Controller::py_get_controller() {
             Controller::curr_ctrl = (Controller*)ctrl_ptr;
 
             // capture our python controller pointer and save it for future use
-            Controller::curr_ctrl->controller_py = py_ctrl_obj;
+            Controller::curr_ctrl->py_pointer = py_ctrl_obj;
 		} catch(PythonException &e) {
 		    PyErr_Print();
 		    exit(0);
@@ -185,7 +185,7 @@ void Controller::resize(long width, long height) {
 }
 
 void Controller::init_board() {
-	py_call_func(this->controller_py, "init_board");
+	py_call_func(this->py_pointer, "init_board");
 
 	//this->gameboard->bind_obj_hex(new BoardObject(NULL), this->get_hexagon(0, 0));
 	//this->gameboard->bind_obj_hex(new BoardObject(NULL), this->get_hexagon(3, 7));
@@ -208,6 +208,8 @@ void Controller::tick() {
     if(this->scroll_map[GlobalConsts::DOWN]) {
         this->y_offset -= 0.5 * this->zoom;
     }
+
+    py_call_func(this->py_pointer, "tick");
 }
 
 

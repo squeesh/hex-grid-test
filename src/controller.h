@@ -6,7 +6,7 @@ class Controller {
 	private:
 		Controller(void);
 		static Controller* curr_ctrl;
-		static PyObject* controller_py;
+		static PyObject* py_pointer;
 
 		double rotation;
 	
@@ -17,8 +17,6 @@ class Controller {
 		Hexagon* selected_hex;
 
 		std::set<Hexagon*>* get_neighbors_in_radius(Hexagon*, int, std::set<Hexagon*>*);
-
-
 
 	public:
         long width;
