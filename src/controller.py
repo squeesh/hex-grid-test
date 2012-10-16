@@ -103,55 +103,45 @@ class Controller(object):
         max_height = max(height_list)
         min_height = min(height_list)
 
-        for hex in Hexagon.get_all_hexagons():
-            height = hex.get_height()
+        if max_height and min_height:
+            for hex in Hexagon.get_all_hexagons():
+                height = hex.get_height()
 
-            if height > 0.0:
-                height_percent = (height / max_height)
+                if height > 0.0:
+                    height_percent = (height / max_height)
 
-                if height_percent < 0.5:
-                    curr_percent = height_percent * 2.0
+                    if height_percent < 0.5:
+                        curr_percent = height_percent * 2.0
 
-                    red     = curr_percent * 0.7
-                    green   = 0.5 + curr_percent * 0.2
-                    blue    = curr_percent * 0.7
+                        red     = curr_percent * 0.7
+                        green   = 0.5 + curr_percent * 0.2
+                        blue    = curr_percent * 0.7
+                    else:
+                        curr_percent = (height_percent - 0.5) * 2.0
+
+                        red     = 0.7 + curr_percent * 0.3
+                        green   = 0.7 + curr_percent * 0.3
+                        blue    = 0.7 + curr_percent * 0.3
                 else:
-                    curr_percent = (height_percent - 0.5) * 2.0
+                    height_percent = abs(height / min_height)
 
-                    red     = 0.7 + curr_percent * 0.3
-                    green   = 0.7 + curr_percent * 0.3
-                    blue    = 0.7 + curr_percent * 0.3
-            else:
-                height_percent = abs(height / min_height)
+                    if height_percent < 0.5:
+                        curr_percent = height_percent * 2.0
 
-                if height_percent < 0.5:
-                    curr_percent = height_percent * 2.0
+                        red     = curr_percent * 0.3
+                        green   = 0.5 - curr_percent * 0.5
+                        blue    = 0
+                    else:
+                        curr_percent = (height_percent - 0.5) * 2.0
 
-                    red     = curr_percent * 0.3
-                    green   = 0.5 - curr_percent * 0.5
-                    blue    = 0
-                else:
-                    curr_percent = (height_percent - 0.5) * 2.0
+                        red     = 0.3 + curr_percent * 0.7
+                        green   = 0
+                        blue    = 0
 
-                    red     = 0.3 + curr_percent * 0.7
-                    green   = 0
-                    blue    = 0
-
-            hex.set_hex_color(red, green, blue)
-
-#            height_percent = abs(height / 5.0)
-#
-#            if height_percent <= 1.0:
-#                if height > 0.0:
-#                    hex.set_hex_color(height_percent * 0.7, 0.5 + height_percent * 0.2, height_percent * 0.7)
-#                else:
-#                    hex.set_hex_color(height_percent * 0.3, 0.5 - height_percent * 0.5, 0)
-#            else:
-#                if height > 0.0:
-#                    hex.set_hex_color(0.7 + height_percent - 1.0, 0.7 + height_percent - 1.0, 0.7 + height_percent - 1.0)
-#                else:
-#                    hex.set_hex_color(0.3 + (height_percent - 1.0) * 0.2, 0, 0)
-
+                hex.set_hex_color(red, green, blue)
+        else:
+            for hex in Hexagon.get_all_hexagons():
+                hex.set_hex_color(0, 0.5, 0)
 
         hex_list = Hexagon.get_all_hexagons()
 
