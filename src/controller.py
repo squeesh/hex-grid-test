@@ -35,7 +35,7 @@ class Controller(object):
 
 #    width   = None
 #    height  = None
-    
+
     player_input = None
 
     def __init__(self):
@@ -57,7 +57,7 @@ class Controller(object):
         from player_input import PlayerInput
         self.player_input = PlayerInput()
         controller_lib.Controller_set_player_input(self.player_input._c_pointer)
-        
+
         self.zoom = GlobalConsts.START_ZOOM
         self.rotation = GlobalConsts.START_ROTATION
         self.view_range = GlobalConsts.BOARD_WIDTH
@@ -98,22 +98,61 @@ class Controller(object):
                 )
             print
 
+        height_list = [hex.get_height() for hex in Hexagon.get_all_hexagons()]
+
+        max_height = max(height_list)
+        min_height = min(height_list)
+
         for hex in Hexagon.get_all_hexagons():
             height = hex.get_height()
-            height_percent = abs(height / 5.0)
 
-            if height_percent <= 1.0:
-                if height > 0.0:
-                    hex.set_hex_color(height_percent * 0.7, 0.5 + height_percent * 0.2, height_percent * 0.7)
+            if height > 0.0:
+                height_percent = (height / max_height)
+
+                if height_percent < 0.5:
+                    curr_percent = height_percent * 2.0
+
+                    red     = curr_percent * 0.7
+                    green   = 0.5 + curr_percent * 0.2
+                    blue    = curr_percent * 0.7
                 else:
-                    hex.set_hex_color(height_percent * 0.3, 0.5 - height_percent * 0.5, 0)
+                    curr_percent = (height_percent - 0.5) * 2.0
+
+                    red     = 0.7 + curr_percent * 0.3
+                    green   = 0.7 + curr_percent * 0.3
+                    blue    = 0.7 + curr_percent * 0.3
             else:
-                if height > 0.0:
-                    hex.set_hex_color(0.7 + height_percent - 1.0, 0.7 + height_percent - 1.0, 0.7 + height_percent - 1.0)
-                else:
-                    hex.set_hex_color(0.3 + (height_percent - 1.0) * 0.2, 0, 0)
+                height_percent = abs(height / min_height)
 
-                    
+                if height_percent < 0.5:
+                    curr_percent = height_percent * 2.0
+
+                    red     = curr_percent * 0.3
+                    green   = 0.5 - curr_percent * 0.5
+                    blue    = 0
+                else:
+                    curr_percent = (height_percent - 0.5) * 2.0
+
+                    red     = 0.3 + curr_percent * 0.7
+                    green   = 0
+                    blue    = 0
+
+            hex.set_hex_color(red, green, blue)
+
+#            height_percent = abs(height / 5.0)
+#
+#            if height_percent <= 1.0:
+#                if height > 0.0:
+#                    hex.set_hex_color(height_percent * 0.7, 0.5 + height_percent * 0.2, height_percent * 0.7)
+#                else:
+#                    hex.set_hex_color(height_percent * 0.3, 0.5 - height_percent * 0.5, 0)
+#            else:
+#                if height > 0.0:
+#                    hex.set_hex_color(0.7 + height_percent - 1.0, 0.7 + height_percent - 1.0, 0.7 + height_percent - 1.0)
+#                else:
+#                    hex.set_hex_color(0.3 + (height_percent - 1.0) * 0.2, 0, 0)
+
+
         hex_list = Hexagon.get_all_hexagons()
 
         BoardObject(hex_list[0])
