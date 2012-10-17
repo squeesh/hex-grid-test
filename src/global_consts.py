@@ -15,8 +15,8 @@ class GlobalConsts(object):
 #    BOARD_HEIGHT = 40
 #    BOARD_WIDTH  = 40
 #
-    BOARD_HEIGHT = 4
-    BOARD_WIDTH  = 4
+    BOARD_HEIGHT = 40
+    BOARD_WIDTH  = 40
 
 #    BOARD_HEIGHT = 512
 #    BOARD_WIDTH  = 512
@@ -25,7 +25,7 @@ class GlobalConsts(object):
 #    BOARD_WIDTH  = int(BOARD_WIDTH  * 0.5)
 
 #    BOARD_CHUNK_SIZE = 16 # MUST be in multiples of 2
-    BOARD_CHUNK_SIZE = 4 # MUST be in multiples of 2
+    BOARD_CHUNK_SIZE = 40 # MUST be in multiples of 2
 
     MIN_ZOOM = 0.5
     MAX_ZOOM = 17.0
