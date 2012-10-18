@@ -4,22 +4,19 @@ input_lib.PlayerInput_new.restype = c_long
 
 from global_consts import GlobalConsts
 
-from util import try_catch_funcs
-
 from controller import Controller
 
 
-@try_catch_funcs
 class PlayerInput(object):
     """
         Methods are called on this class when a Player Input event occurs
     """
-    
+
     _c_pointer = None
-    
+
     def __init__(self):
         self._c_pointer = input_lib.PlayerInput_new(c_long(id(self)))
-    
+
     def mouse_left_click(self, x, y):
         curr_ctrl = Controller.get_controller()
         curr_hex = curr_ctrl.get_clicked_hex(x, y)
@@ -30,7 +27,7 @@ class PlayerInput(object):
                 from board_object import BoardObject
                 for board_obj in BoardObject.get_all():
                     board_obj.set_selected(False)
-                
+
                 curr_ctrl.set_selected_hex(curr_hex)
 
     def mouse_left_release(self, x, y):
@@ -45,7 +42,7 @@ class PlayerInput(object):
     def mouse_right_click(self, x, y):
         curr_ctrl = Controller.get_controller()
         curr_hex = curr_ctrl.get_clicked_hex(x, y)
-    
+
         if curr_hex and curr_hex.is_pathable():
             from board_object import BoardObject
             for board_obj in BoardObject.get_all():
@@ -74,7 +71,7 @@ class PlayerInput(object):
 #        print 'x diff: ', x_diff
 #        print 'y diff: ', y_diff
 #        print
-        
+
         curr_ctrl = Controller.get_controller()
 
         curr_ctrl.add_x_offset(-x_diff / 30.0 * curr_ctrl.get_zoom())
@@ -85,7 +82,7 @@ class PlayerInput(object):
 
     def key_down(self, key, x, y):
         curr_ctrl = Controller.get_controller()
-        
+
         if ord(key) == 27:
             curr_ctrl.clear_selected_hex()
 
@@ -109,7 +106,7 @@ class PlayerInput(object):
 
     def key_up(self, key, x, y):
         curr_ctrl = Controller.get_controller()
-        
+
         if key == 'w':
             curr_ctrl.clear_scroll(GlobalConsts.UP)
         elif key == 's':

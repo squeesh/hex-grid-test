@@ -103,44 +103,44 @@ def dist_between(curr_node, neighbor):
     return math.sqrt(x_diff**2 + y_diff**2)
 
 
-# Wraps all functions of a class in a try / catch
-# forces exit on error
-def try_catch_funcs(curr_class):
-    all_attrs = dir(curr_class)
-    base_attrs = dir(object)
-    
-    cls_attrs = list(set(all_attrs) - set(base_attrs))
-    
-    for curr_attr_str in cls_attrs:
-        curr_attr = getattr(curr_class, curr_attr_str)
-        if hasattr(curr_attr, '__call__'):
-            old_func = curr_attr
-            
-            def get_func(curr_func):
-                def _try_catch(*args, **kwargs):
-                    try:
-                        return curr_func(*args, **kwargs)
-                    except Exception, e:
-                        info = sys.exc_info()
-                        traceback.print_exc()
+## Wraps all functions of a class in a try / catch
+## forces exit on error
+#def try_catch_funcs(curr_class):
+#    all_attrs = dir(curr_class)
+#    base_attrs = dir(object)
+#
+#    cls_attrs = list(set(all_attrs) - set(base_attrs))
+#
+#    for curr_attr_str in cls_attrs:
+#        curr_attr = getattr(curr_class, curr_attr_str)
+#        if hasattr(curr_attr, '__call__'):
+#            old_func = curr_attr
+#
+#            def get_func(curr_func):
+#                def _try_catch(*args, **kwargs):
+#                    try:
+#                        return curr_func(*args, **kwargs)
+#                    except Exception, e:
+#                        info = sys.exc_info()
+#                        traceback.print_exc()
+#
+#                        # force exit if python error...
+#                        util_lib.Util_force_exit()
+#
+#                return _try_catch
+#
+#            if isinstance(old_func, types.FunctionType):
+#                old_func = get_func(old_func)
+#
+#                old_func.__name__ = curr_attr_str
+#                old_func = staticmethod(old_func)
+#
+#            else:
+#                old_func = get_func(old_func)
+#
+#                old_func.__name__ = curr_attr_str
+#
+#            setattr(curr_class, curr_attr_str, old_func)
+#
+#    return curr_class
 
-                        # force exit if python error...
-                        util_lib.Util_force_exit()
-                        
-                return _try_catch
-
-            if isinstance(old_func, types.FunctionType):
-                old_func = get_func(old_func)
-                        
-                old_func.__name__ = curr_attr_str
-                old_func = staticmethod(old_func)
-                
-            else:
-                old_func = get_func(old_func)
-
-                old_func.__name__ = curr_attr_str
-
-            setattr(curr_class, curr_attr_str, old_func)
-
-    return curr_class
-    

@@ -1,7 +1,12 @@
 #include "includes.h"
 
 
-Vertex::Vertex(double red, double green, double blue, double height) {
+Vertex::Vertex( double height) {
+	this->set_height(height);
+}
+
+
+/*Vertex::Vertex(double red, double green, double blue, double height) {
 	this->color = new std::vector< double >();
 	this->set_color(red, green, blue);
 
@@ -21,7 +26,7 @@ void Vertex::set_color(std::vector<double> rgb) {
 
 std::vector<double>* Vertex::get_color() {
 	return this->color;
-}
+}*/
 
 void Vertex::set_height(double height) {
 	this->height = height;

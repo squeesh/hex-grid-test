@@ -14,7 +14,7 @@ controller_lib.Controller_get_zoom.restype = c_double
 from itertools import cycle, islice
 from random import random
 
-from util import dist_between, a_star, try_catch_funcs
+from util import dist_between, a_star
 
 from global_consts import GlobalConsts
 from hexagon import Hexagon
@@ -23,7 +23,6 @@ from board_object import BoardObject
 from land_generation import RollingHills, MountainRange
 
 
-@try_catch_funcs
 class Controller(object):
     _curr_ctrl = None
     _c_pointer = None
@@ -202,8 +201,8 @@ class Controller(object):
     def init_gl(self, width, height):
         controller_lib.Controller_init_gl(width, height)
 
-    def resize(self, width, height):
-        controller_lib.Controller_resize(width, height)
+#    def resize(self, width, height):
+#        controller_lib.Controller_resize(width, height)
 
     def zoom_map(self, zoom_amount):
         controller_lib.Controller_zoom_map(c_double(zoom_amount))
@@ -247,8 +246,8 @@ class Controller(object):
                 board_obj.move_to_hex(next_hex)
                 board_obj.set_selected(True)
 
-    def mouse_down(self, x, y, button):
-        controller_lib.Controller_mouse_down(c_double(x), c_double(y), 0)
+#    def mouse_down(self, x, y, button):
+#        controller_lib.Controller_mouse_down(c_double(x), c_double(y), 0)
 
     def get_selected_hex(self):
         c_hex_obj = controller_lib.Controller_get_selected_hex()

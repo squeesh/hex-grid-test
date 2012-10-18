@@ -32,14 +32,14 @@ extern "C" {
 	}
 
 	void Controller_add_x_offset(double x_offset) {
-	    Controller* curr_ctrl = Controller_get_controller();
-	    curr_ctrl->x_offset += x_offset;
+		Controller* curr_ctrl = Controller_get_controller();
+		curr_ctrl->x_offset += x_offset;
 	}
 
 	void Controller_add_y_offset(double y_offset) {
-        Controller* curr_ctrl = Controller_get_controller();
-        curr_ctrl->y_offset += y_offset;
-    }
+		Controller* curr_ctrl = Controller_get_controller();
+		curr_ctrl->y_offset += y_offset;
+	}
 
 	void Controller_set_scroll(char direction) {
         	Controller* curr_ctrl = Controller_get_controller();
@@ -56,20 +56,20 @@ extern "C" {
 		curr_ctrl->init_gl(width, height);
 	}
 
-	void Controller_resize(long width, long height) {
+	/*void Controller_resize(long width, long height) {
 		Controller* curr_ctrl = Controller_get_controller();
 		curr_ctrl->resize(width, height);
-	}
+	}*/
 
 	void Controller_tick() {
 		Controller* curr_ctrl = Controller_get_controller();
 		curr_ctrl->tick();
 	}
 
-	void Controller_render() {
+	/*void Controller_render() {
 		Controller* curr_ctrl = Controller_get_controller();
 		curr_ctrl->render();
-	}
+	}*/
 
 	double Controller_COS_60() {
 		Controller* curr_ctrl = Controller_get_controller();
@@ -157,9 +157,9 @@ extern "C" {
 		return curr_hex->last_y;
 	}
 
-	void Hexagon_set_border_color(Hexagon *curr_hex, double red, double green, double blue) {
+	/*void Hexagon_set_border_color(Hexagon *curr_hex, double red, double green, double blue) {
 		curr_hex->set_border_color(red, green, blue);
-	}
+	}*/
 
 	void Hexagon_set_hex_color(Hexagon *curr_hex, double red, double green, double blue) {
 		curr_hex->set_hex_color(red, green, blue);

@@ -5,14 +5,13 @@ hexagon_lib.Hexagon_get_vertex.restype = c_long
 hexagon_lib.Hexagon_get_neighbor.restype = c_long
 hexagon_lib.Hexagon_get_height.restype = c_double
 hexagon_lib.Hexagon_get_slope.restype = c_double
-hexagon_lib.Hexagon_get_last_x.restype = c_double
-hexagon_lib.Hexagon_get_last_y.restype = c_double
+#hexagon_lib.Hexagon_get_last_x.restype = c_double
+#hexagon_lib.Hexagon_get_last_y.restype = c_double
 hexagon_lib.Hexagon_is_pathable.restype = c_bool
 
-from util import RoundList, try_catch_funcs
+from util import RoundList
 
 
-@try_catch_funcs
 class Hexagon(object):
     _c_pointer = None
     _hex_cache = {}
@@ -32,17 +31,17 @@ class Hexagon(object):
 
     MAX_PATHABLE_SLOPE = 2.0
 
-    def __init__(self, x, y, color=(0, 1, 0)):
+    def __init__(self, x, y):
         self._c_pointer = hexagon_lib.Hexagon_new()
-        self.set_border_color(*color)
+        #self.set_border_color(*color)
 
         hexagon_lib.Hexagon_set_last_x(self._c_pointer, c_double(x))
         hexagon_lib.Hexagon_set_last_y(self._c_pointer, c_double(y))
 
         self._hex_cache[self._c_pointer] = self
 
-    def set_border_color(self, red, green, blue):
-        hexagon_lib.Hexagon_set_border_color(self._c_pointer, c_double(red), c_double(green), c_double(blue))
+#    def set_border_color(self, red, green, blue):
+#        hexagon_lib.Hexagon_set_border_color(self._c_pointer, c_double(red), c_double(green), c_double(blue))
 
     def set_hex_color(self, red, green, blue):
         hexagon_lib.Hexagon_set_hex_color(self._c_pointer, c_double(red), c_double(green), c_double(blue))
@@ -141,7 +140,7 @@ class Hexagon(object):
 
     def is_pathable(self):
         return hexagon_lib.Hexagon_is_pathable(self._c_pointer)
-    
+
     def get_board_object(self):
         return hexagon_lib.Hexagon_get_board_object(self._c_pointer)
 

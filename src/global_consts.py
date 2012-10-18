@@ -7,16 +7,16 @@ class GlobalConsts(object):
 
     PATH_SHOW_SEARCH    = False
 
-    GENERATE_HILLS = False
+    GENERATE_HILLS = True
     GENERATE_MOUNTAINS = GENERATE_HILLS
 
 #    GENERATE_MOUNTAINS = True
 
-#    BOARD_HEIGHT = 40
-#    BOARD_WIDTH  = 40
+    BOARD_HEIGHT = 40
+    BOARD_WIDTH  = 40
 #
-    BOARD_HEIGHT = 80
-    BOARD_WIDTH  = 120
+#    BOARD_HEIGHT = 80
+#    BOARD_WIDTH  = 120
 
 #    BOARD_HEIGHT = 512
 #    BOARD_WIDTH  = 512

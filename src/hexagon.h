@@ -34,8 +34,8 @@ class Hexagon {
 		void set_vertex(const char* position, Vertex* vertex);
 		Vertex* get_vertex(const char* position);
 
-		void set_border_color(double red, double green, double blue);
-		void set_border_color(std::vector< double > rgb);
+		/*void set_border_color(double red, double green, double blue);
+		void set_border_color(std::vector< double > rgb);*/
 
 		void set_hex_color(double red, double green, double blue);
 		void set_hex_color(std::vector< double > rgb);

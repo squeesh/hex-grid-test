@@ -68,7 +68,8 @@ void Hexagon::base_init() {
 	this->select_color = NULL;
 
 	for(int i = 0; i < 6; i++) {
-		this->set_vertex(this->VERTEX_POSITIONS->at(i), new Vertex(0, 0, 0, 0));
+		//this->set_vertex(this->VERTEX_POSITIONS->at(i), new Vertex(0, 0, 0, 0));
+		this->set_vertex(this->VERTEX_POSITIONS->at(i), new Vertex(0));
 	}
 
 	this->name_count++;
@@ -95,7 +96,7 @@ Vertex* Hexagon::get_vertex(const char* position) {
 	return this->verticies[position];
 }
 
-void Hexagon::set_border_color(double red, double green, double blue) {
+/*void Hexagon::set_border_color(double red, double green, double blue) {
 	for(int i = 0; i < 6; i++) {
 		this->verticies[this->VERTEX_POSITIONS->at(i)]->set_color(red, green, blue);
 	}
@@ -105,7 +106,7 @@ void Hexagon::set_border_color(std::vector<double> rgb) {
 	for(int i = 0; i < 6; i++) {
 		this->verticies[this->VERTEX_POSITIONS->at(i)]->set_color(rgb);
 	}
-}
+}*/
 
 void Hexagon::set_select_color(double red, double green, double blue) {
 	bool changed = false;
@@ -266,7 +267,8 @@ void Hexagon::render_for_select(double x, double y) {
 		for(int i = 0; i < 6; i++) {
 			Vertex* curr_vert = this->verticies[this->VERTEX_POSITIONS->at(i)];
 
-			glColor3dv(curr_vert->get_color()->data());
+			//glColor3df(curr_vert->get_color()->data());
+			glColor3f(1, 1, 1);
 			glVertex3f(x + ROT_COORDS->at(i)->at(0), y + ROT_COORDS->at(i)->at(1), curr_vert->get_height());
 		}
 	glEnd();
