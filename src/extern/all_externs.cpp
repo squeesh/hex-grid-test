@@ -96,7 +96,7 @@ extern "C" {
         return curr_ctrl->zoom;
     }
 
-	void Controller_clear_selected_hex() {
+	/*void Controller_clear_selected_hex() {
 	    Controller* curr_ctrl = Controller_get_controller();
         curr_ctrl->clear_selected_hex();
 	}
@@ -109,7 +109,7 @@ extern "C" {
 	void Controller_set_selected_hex(Hexagon* curr_hex) {
         Controller* curr_ctrl = Controller_get_controller();
         curr_ctrl->set_selected_hex(curr_hex);
-    }
+    }*/
 
     Hexagon* Controller_get_clicked_hex(int x, int y) {
         Controller* curr_ctrl = Controller_get_controller();
@@ -212,11 +212,11 @@ extern "C" {
     }
 
 	bool BoardObject_is_selected(BoardObject* curr_board_obj) {
-	    return curr_board_obj->selected;
+	    return curr_board_obj->get_selected();
 	}
 
     void BoardObject_set_selected(BoardObject* curr_board_obj, bool selected) {
-        curr_board_obj->selected = selected;
+        curr_board_obj->set_selected(selected);
     }
 
 	Hexagon* BoardObject_get_base_hex(BoardObject* curr_board_obj) {

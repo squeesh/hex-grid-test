@@ -28,7 +28,9 @@ class PlayerInput(object):
                 for board_obj in BoardObject.get_all():
                     board_obj.set_selected(False)
 
-                curr_ctrl.set_selected_hex(curr_hex)
+                curr_board_obj.set_selected(True)
+
+#                curr_ctrl.set_selected_hex(curr_hex)
 
     def mouse_left_release(self, x, y):
         pass
@@ -83,10 +85,10 @@ class PlayerInput(object):
     def key_down(self, key, x, y):
         curr_ctrl = Controller.get_controller()
 
-        if ord(key) == 27:
-            curr_ctrl.clear_selected_hex()
+#        if ord(key) == 27:
+#            curr_ctrl.clear_selected_hex()
 
-        elif key == 'w':
+        if   key == 'w':
             curr_ctrl.set_scroll(GlobalConsts.UP)
         elif key == 's':
             curr_ctrl.set_scroll(GlobalConsts.DOWN)

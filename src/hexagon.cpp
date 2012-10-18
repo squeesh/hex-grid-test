@@ -139,8 +139,7 @@ void Hexagon::set_select() {
     std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(curr_ctrl->gameboard->board_object_map);
 
     if(curr_board_object_map[this]) {
-        curr_board_object_map[this]->selected = true;
-        this->parent_chunk->regenerate_object = true;
+        curr_board_object_map[this]->set_selected(true);
     }
 }
 
@@ -151,8 +150,7 @@ void Hexagon::clear_select() {
     std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(curr_ctrl->gameboard->board_object_map);
 
     if(curr_board_object_map[this]) {
-        curr_board_object_map[this]->selected = false;
-        this->parent_chunk->regenerate_object = true;
+        curr_board_object_map[this]->set_selected(false);
     }
 }
 
@@ -337,7 +335,7 @@ void Hexagon::generate_object_data(double x, double y, UniqueDataVector< GLfloat
 
 	std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(curr_ctrl->gameboard->board_object_map);
 	if(curr_board_object_map[this]) {
-	    if(curr_board_object_map[this]->selected) {
+	    if(curr_board_object_map[this]->get_selected()) {
             object_data->push_back(
                -0.5 + x, y, this->get_height(),
                 1, 0, 1

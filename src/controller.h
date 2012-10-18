@@ -14,19 +14,19 @@ class Controller {
 
 		std::map<char, bool> scroll_map;
 
-		Hexagon* selected_hex;
+		//Hexagon* selected_hex;
 
 		std::set<Hexagon*>* get_neighbors_in_radius(Hexagon*, int, std::set<Hexagon*>*);
 
 	public:
-        long width;
-        long height;
+		long width;
+		long height;
 
-        double x_offset;
-        double y_offset;
-        double zoom;
+		double x_offset;
+		double y_offset;
+		double zoom;
 
-        PlayerInput* player_input;
+		PlayerInput* player_input;
 
 		std::string print_string;
 
@@ -60,9 +60,9 @@ class Controller {
 		void render_for_select();
 
 		void push_hexagon(Hexagon*);
-		void clear_selected_hex();
+		/*void clear_selected_hex();
 		void set_selected_hex(Hexagon*);
-		Hexagon* get_selected_hex();
+		Hexagon* get_selected_hex();*/
 		Hexagon* get_hex_by_name(long);
 		Hexagon* get_hexagon(int, int);
 		Hexagon* get_clicked_hex(double, double);

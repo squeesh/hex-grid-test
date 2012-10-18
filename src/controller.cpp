@@ -29,7 +29,7 @@ Controller::Controller() {
 	this->scroll_map[GlobalConsts::UP]      = false;
 	this->scroll_map[GlobalConsts::DOWN]    = false;
 
-	this->selected_hex = NULL;
+	//this->selected_hex = NULL;
 
 	//this->player_input = new PlayerInput();
 	this->player_input = NULL;
@@ -360,7 +360,7 @@ void Controller::push_hexagon(Hexagon *hex) {
 }
 
 
-void Controller::set_selected_hex(Hexagon* curr_hex) {
+/*void Controller::set_selected_hex(Hexagon* curr_hex) {
 	if(this->selected_hex) {
 		this->selected_hex->clear_select();
 	}
@@ -378,7 +378,7 @@ void Controller::clear_selected_hex() {
 
 Hexagon* Controller::get_selected_hex() {
 	return this->selected_hex;
-}
+}*/
 
 
 Hexagon* Controller::get_hex_by_name(long name) {

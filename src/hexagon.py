@@ -142,7 +142,9 @@ class Hexagon(object):
         return hexagon_lib.Hexagon_is_pathable(self._c_pointer)
 
     def get_board_object(self):
-        return hexagon_lib.Hexagon_get_board_object(self._c_pointer)
+        from board_object import BoardObject
+        c_pointer = hexagon_lib.Hexagon_get_board_object(self._c_pointer)
+        return BoardObject.get_board_object(c_pointer)
 
 
 class Vertex(object):

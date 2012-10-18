@@ -17,8 +17,21 @@ void BoardObject::render() {
 
 }
 
+
 void BoardObject::move_to_hex(Hexagon* curr_hex) {
     Controller* curr_ctrl = Controller::get_controller();
     curr_ctrl->gameboard->bind_obj_hex(this, curr_hex);
 }
+
+
+void BoardObject::set_selected(bool selected) {
+	// TODO: only regenerate if val changes
+	this->selected = selected;
+	this->base_hex->parent_chunk->regenerate_object = true;
+}
+
+bool BoardObject::get_selected() {
+	return this->selected;
+}
+
 

@@ -5,7 +5,7 @@ controller_lib.Controller_SIN_60.restype = c_double
 controller_lib.Controller_get_rotation.restype = c_double
 controller_lib.Controller_get_controller.restype = c_long
 controller_lib.Controller_get_hexagon.restype = c_long
-controller_lib.Controller_get_selected_hex.restype = c_long
+#controller_lib.Controller_get_selected_hex.restype = c_long
 controller_lib.Controller_get_clicked_hex.restype = c_long
 controller_lib.Controller_get_width.restype = c_double
 controller_lib.Controller_get_height.restype = c_double
@@ -242,22 +242,22 @@ class Controller(object):
             if board_obj.curr_path:
                 next_hex = board_obj.curr_path[0]
                 board_obj.curr_path = board_obj.curr_path[1:]
-                self.set_selected_hex(next_hex)
+#                self.set_selected_hex(next_hex)
                 board_obj.move_to_hex(next_hex)
                 board_obj.set_selected(True)
 
 #    def mouse_down(self, x, y, button):
 #        controller_lib.Controller_mouse_down(c_double(x), c_double(y), 0)
 
-    def get_selected_hex(self):
-        c_hex_obj = controller_lib.Controller_get_selected_hex()
-        return Hexagon.get_hexagon(c_hex_obj)
-
-    def set_selected_hex(self, curr_hex):
-        controller_lib.Controller_set_selected_hex(curr_hex._c_pointer)
-
-    def clear_selected_hex(self):
-        controller_lib.Controller_clear_selected_hex()
+#    def get_selected_hex(self):
+#        c_hex_obj = controller_lib.Controller_get_selected_hex()
+#        return Hexagon.get_hexagon(c_hex_obj)
+#
+#    def set_selected_hex(self, curr_hex):
+#        controller_lib.Controller_set_selected_hex(curr_hex._c_pointer)
+#
+#    def clear_selected_hex(self):
+#        controller_lib.Controller_clear_selected_hex()
 
     def get_clicked_hex(self, x, y):
         x = int(x)
