@@ -21,7 +21,7 @@ class PlayerInput(object):
         curr_ctrl = Controller.get_controller()
         curr_hex = curr_ctrl.get_clicked_hex(x, y)
 
-        if curr_hex and curr_hex.is_pathable():
+        if curr_hex and curr_hex.get_board_object():
             curr_board_obj = curr_hex.get_board_object()
             if curr_board_obj:
                 from board_object import BoardObject
@@ -29,8 +29,6 @@ class PlayerInput(object):
                     board_obj.set_selected(False)
 
                 curr_board_obj.set_selected(True)
-
-#                curr_ctrl.set_selected_hex(curr_hex)
 
     def mouse_left_release(self, x, y):
         pass

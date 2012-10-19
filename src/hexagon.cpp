@@ -248,7 +248,7 @@ double Hexagon::get_slope() {
 }
 
 bool Hexagon::is_pathable() {
-	return this->get_slope() <= GlobalConsts::MAX_PATHABLE_SLOPE;
+	return this->get_slope() <= GlobalConsts::MAX_PATHABLE_SLOPE && this->get_board_object() == NULL;
 }
 
 void Hexagon::set_neighbor(const char* position, Hexagon* neighbor_hex) {
