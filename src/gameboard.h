@@ -1,8 +1,22 @@
 #ifndef GAMEBOARD_H
 #define GAMEBOARD_H
 
+class GameboardRenderable: public Renderable {
+	private:
+		//std::map< Hexagon*, GameboardChunk* >* chunk_map;
 
-class Gameboard {
+	public:
+		GameboardRenderable() : Renderable(false) {
+			std::cout << "GameboardRenderable..." << std::endl;
+			this->regist();
+		}
+		virtual void regist();
+		//void render();
+	
+};
+
+
+class Gameboard: public GameboardRenderable {
 	private:
 		RoundVector< RoundVector< Hexagon* >* >* hexagon_list;
 		std::map< Hexagon*, GameboardChunk* >* chunk_map;

@@ -1,6 +1,17 @@
 #include "includes.h"
 
 
+
+void GameboardRenderable::regist() {
+	std::cout << "GameboardRenderable->regist()" << std::endl;
+	RenderController* curr_rend_ctrl = RenderController::get_render_controller();
+	curr_rend_ctrl->register_renderable(this);
+}
+
+
+//---------------------------------------
+
+
 Gameboard::Gameboard() {
 	this->hexagon_list = new RoundVector< RoundVector< Hexagon* >* >();
 	this->hexagon_list->reserve(GlobalConsts::BOARD_WIDTH);

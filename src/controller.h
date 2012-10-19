@@ -8,6 +8,8 @@ class Controller {
 		static Controller* curr_ctrl;
 		static PyObject* py_pointer;
 
+		static RenderController* curr_rend_ctrl;
+
 		double rotation;
 	
 		double view_range;

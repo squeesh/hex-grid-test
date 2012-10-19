@@ -6,6 +6,8 @@
 Controller* Controller::curr_ctrl = NULL;
 PyObject* Controller::py_pointer = NULL;
 
+RenderController* Controller::curr_rend_ctrl = NULL;
+
 
 const double Controller::COS_60 = std::cos(60.0 / 360.0 * 2.0 * M_PI);
 const double Controller::SIN_60 = std::sin(60.0 / 360.0 * 2.0 * M_PI);
@@ -45,6 +47,8 @@ Controller::Controller() {
 	this->print_flag = false;
 
 	this->print_string = std::string();
+
+	this->curr_rend_ctrl = RenderController::get_render_controller();
 }
 
 Controller* Controller::get_controller() {
@@ -305,6 +309,7 @@ void Controller::render() {
 
 
 	this->gameboard->render(neg_x_view, pos_x_view, neg_y_view, pos_y_view);
+	//this->curr_rnd_ctrl->render(this->gameboard);
 }
 
 
@@ -358,27 +363,6 @@ void Controller::render_for_select() {
 void Controller::push_hexagon(Hexagon *hex) {
 	this->gameboard->push_back(hex);
 }
-
-
-/*void Controller::set_selected_hex(Hexagon* curr_hex) {
-	if(this->selected_hex) {
-		this->selected_hex->clear_select();
-	}
-	this->selected_hex = curr_hex;
-
-	if(this->selected_hex) {
-	    this->selected_hex->set_select();
-	}
-}
-
-
-void Controller::clear_selected_hex() {
-    this->set_selected_hex(NULL);
-}
-
-Hexagon* Controller::get_selected_hex() {
-	return this->selected_hex;
-}*/
 
 
 Hexagon* Controller::get_hex_by_name(long name) {

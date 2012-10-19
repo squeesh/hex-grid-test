@@ -7,8 +7,6 @@
 #include <set>
 #include <string>
 #include <sstream>
-//#include <GL/gl.h>
-//#include <GL/glu.h>
 #include <GL/glew.h>
 #include <Python.h>
 #include <signal.h>
@@ -18,7 +16,7 @@
 
 #include "util.h"
 #include "global_consts.h"
-//#include "color.h"
+#include "render_controller.h"
 #include "vertex.h"
 #include "hexagon.h"
 #include "board_object.h"
