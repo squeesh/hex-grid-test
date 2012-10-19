@@ -144,8 +144,16 @@ class Controller(object):
 
         hex_list = Hexagon.get_all_hexagons()
 
-        BoardObject(hex_list[0])
-        BoardObject(hex_list[15])
+        for i in range(2):
+            while True:
+                x = int(random() * GlobalConsts.BOARD_WIDTH)
+                y = int(random() * GlobalConsts.BOARD_HEIGHT)
+                
+                curr_hex = self.get_hexagon(x, y)
+                if curr_hex.is_pathable():
+                    BoardObject(curr_hex)
+                    break
+
 
 #        for hex in Hexagon.get_all_hexagons():
 #            if not hex.is_pathable():
