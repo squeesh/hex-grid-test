@@ -2,12 +2,34 @@
 
 
 
-void GameboardRenderable::regist() {
-	std::cout << "GameboardRenderable->regist()" << std::endl;
-	RenderController* curr_rend_ctrl = RenderController::get_render_controller();
-	curr_rend_ctrl->register_renderable(this);
+RegistrarOfGameboardChunk::RegistrarOfGameboardChunk() {
+	this->chunk_map = new std::map< Hexagon*, GameboardChunk* >();
 }
 
+
+void RegistrarOfGameboardChunk::regist(Renderable* renderable) {
+	//std::cout << "RegistrarOfGameboardChunk->regist()" << std::endl;
+	RenderController* curr_rend_ctrl = RenderController::get_render_controller();
+	curr_rend_ctrl->register_renderable(renderable);
+}
+
+
+GameboardChunk* RegistrarOfGameboardChunk::get_chunk(Hexagon* base_hex) {
+	GameboardChunk* output = NULL;
+	std::map< Hexagon*, GameboardChunk* > &chunk = *(this->chunk_map);
+
+	if(this->chunk_map->count(base_hex) == 0) {
+		output = new GameboardChunk(base_hex);
+		this->regist(output);
+		chunk[base_hex] = output;
+	} else {
+		output = chunk[base_hex];
+	}
+
+	output->verify_render_data();
+
+	return output;
+}
 
 //---------------------------------------
 
@@ -23,7 +45,6 @@ Gameboard::Gameboard() {
 		this->hexagon_list->push_back(curr_vect);
 	}
 
-	this->chunk_map = new std::map< Hexagon*, GameboardChunk* >();
 	this->board_object_map = new std::map< Hexagon*,BoardObject* >();
 }
 
@@ -37,23 +58,6 @@ void Gameboard::push_back(Hexagon* hex) {
 	int i = (int)(total_size % GlobalConsts::BOARD_WIDTH);
 
 	this->hexagon_list->at(i)->push_back(hex);
-}
-
-
-GameboardChunk* Gameboard::get_chunk(Hexagon* base_hex) {
-	GameboardChunk* output = NULL;
-	std::map< Hexagon*, GameboardChunk* > &chunk = *(this->chunk_map);
-
-	if(this->chunk_map->count(base_hex) == 0) {
-		output = new GameboardChunk(base_hex);
-		chunk[base_hex] = output;
-	} else {
-		output = chunk[base_hex];
-	}
-
-	output->verify_render_data();
-
-	return output;
 }
 
 
@@ -90,6 +94,9 @@ RoundVector< RoundVector< Hexagon* >* >* Gameboard::get_hexagon_list() {
 
 void Gameboard::bind_obj_hex(BoardObject* curr_obj, Hexagon* curr_hex) {
 	if(curr_obj->base_hex) {
+		if(curr_obj->base_hex->parent_chunk) {
+			curr_obj->base_hex->parent_chunk->regenerate_object = true;
+		}
 		this->board_object_map->erase(curr_obj->base_hex);
 	}
 

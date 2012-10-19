@@ -3,7 +3,7 @@
 
 
 
-class GameboardChunk {
+class GameboardChunk: public Renderable {
 	private:
 		Hexagon* base_hex;
 
