@@ -7,12 +7,6 @@ class GameboardChunk {
 	private:
 		Hexagon* base_hex;
 
-		/*GLuint vbo_terrain_vert;
-		GLuint vbo_terrain_indicie;
-
-		GLuint vbo_select_vert;
-		GLuint vbo_select_indicie;*/
-
 		UniqueDataVector< GLfloat >* board_terrain_data;
 		UniqueDataVector< GLfloat >* board_select_data;
 		UniqueDataVector< GLfloat >* board_object_data;

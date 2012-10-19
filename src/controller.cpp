@@ -249,65 +249,6 @@ void Controller::render_string(int x, int y, std::string curr_string, std::vecto
 
 void Controller::render() {
 	// TODO: Do something about duplicated code...
-
-	/*glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	std::vector< GLfloat >* color = new std::vector< GLfloat >();
-	color->push_back(1);
-	color->push_back(1);
-	color->push_back(0);
-	this->render_string(2, 20, RenderController::print_string, color);
-	delete color;
-
-	glLoadIdentity();
-
-	double eye_x = this->curr_rend_ctrl->x_offset * 1.5 * GlobalConsts::COS_60;
-	double eye_y = this->curr_rend_ctrl->y_offset * 1.0 * GlobalConsts::SIN_60;
-
-	gluLookAt(
-	    eye_x, eye_y, 15 * this->curr_rend_ctrl->zoom,
-	    eye_x, eye_y, 0,
-		0, 1, 0
-	);
-
-	// set the rotation point... since our "origin" kinda changes... we need to go to it, rotate, then go back
-	glTranslatef(0.0, this->curr_rend_ctrl->y_offset * GlobalConsts::SIN_60, 0.0);
-	glRotatef(this->curr_rend_ctrl->rotation, 1.0, 0.0, 0.0);
-	glTranslatef(0.0, -this->curr_rend_ctrl->y_offset * GlobalConsts::SIN_60, 0.0);
-
-	int neg_x_view = this->curr_rend_ctrl->x_offset - this->curr_rend_ctrl->view_range / 2.0 - GlobalConsts::BOARD_CHUNK_SIZE;
-	int pos_x_view = this->curr_rend_ctrl->x_offset + this->curr_rend_ctrl->view_range / 2.0;
-	int neg_y_view = this->curr_rend_ctrl->y_offset - this->curr_rend_ctrl->view_range / 2.0 - GlobalConsts::BOARD_CHUNK_SIZE;
-	int pos_y_view = this->curr_rend_ctrl->y_offset + this->curr_rend_ctrl->view_range / 2.0;
-
-	if(neg_y_view < 0) {
-		neg_y_view += (-neg_y_view) % GlobalConsts::BOARD_CHUNK_SIZE;
-	} else {
-		neg_y_view -=  neg_y_view % GlobalConsts::BOARD_CHUNK_SIZE;
-	}
-
-	if(pos_y_view < 0) {
-		pos_y_view += (-pos_y_view) % GlobalConsts::BOARD_CHUNK_SIZE;
-	} else {
-		pos_y_view -=  pos_y_view % GlobalConsts::BOARD_CHUNK_SIZE;
-	}
-
-	int temp = neg_x_view;
-
-	if(neg_x_view < 0) {
-		neg_x_view += (-neg_x_view) % GlobalConsts::BOARD_CHUNK_SIZE;
-	} else {
-		neg_x_view -=  neg_x_view % GlobalConsts::BOARD_CHUNK_SIZE;
-	}
-
-	if(pos_x_view < 0) {
-		pos_x_view += (-pos_x_view) % GlobalConsts::BOARD_CHUNK_SIZE;
-	} else {
-		pos_x_view -=  pos_x_view % GlobalConsts::BOARD_CHUNK_SIZE;
-	}
-
-
-	this->gameboard->render(neg_x_view, pos_x_view, neg_y_view, pos_y_view);*/
 	this->curr_rend_ctrl->render();
 }
 

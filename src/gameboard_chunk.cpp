@@ -6,18 +6,6 @@ GameboardChunk::GameboardChunk(Hexagon* base_hex) {
 	this->board_terrain_data = NULL;
 	this->board_select_data = NULL;
 	this->board_object_data = NULL;
-	
-	/*this->vbo_terrain_vert = 0;
-	this->vbo_terrain_indicie = 0;
-
-	this->vbo_select_vert = 0;
-	this->vbo_select_indicie = 0;*/
-
-	/*glGenBuffers(1, &(this->vbo_terrain_vert));
-	glGenBuffers(1, &(this->vbo_terrain_indicie));
-
-	glGenBuffers(1, &(this->vbo_select_vert));
-	glGenBuffers(1, &(this->vbo_select_indicie));*/
 
 	this->regenerate_terrain = true;
 	this->regenerate_select = true;
@@ -35,12 +23,6 @@ GameboardChunk::~GameboardChunk() {
 	if(this->board_select_data) {
 		delete this->board_select_data;
 	}
-
-	/*glDeleteBuffers(1, &(this->vbo_terrain_vert));
-	glDeleteBuffers(1, &(this->vbo_terrain_indicie));
-
-	glDeleteBuffers(1, &(this->vbo_select_vert));
-	glDeleteBuffers(1, &(this->vbo_select_indicie));*/
 }
 
 
