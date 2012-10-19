@@ -1,40 +1,7 @@
 #include "includes.h"
 
 
-
-RegistrarOfGameboardChunk::RegistrarOfGameboardChunk() {
-	this->chunk_map = new std::map< Hexagon*, GameboardChunk* >();
-}
-
-
-void RegistrarOfGameboardChunk::regist(Renderable* renderable) {
-	//std::cout << "RegistrarOfGameboardChunk->regist()" << std::endl;
-	RenderController* curr_rend_ctrl = RenderController::get_render_controller();
-	curr_rend_ctrl->register_renderable(renderable);
-}
-
-
-GameboardChunk* RegistrarOfGameboardChunk::get_chunk(Hexagon* base_hex) {
-	GameboardChunk* output = NULL;
-	std::map< Hexagon*, GameboardChunk* > &chunk = *(this->chunk_map);
-
-	if(this->chunk_map->count(base_hex) == 0) {
-		output = new GameboardChunk(base_hex);
-		this->regist(output);
-		chunk[base_hex] = output;
-	} else {
-		output = chunk[base_hex];
-	}
-
-	output->verify_render_data();
-
-	return output;
-}
-
-//---------------------------------------
-
-
-Gameboard::Gameboard() {
+GameboardBase::GameboardBase() {
 	this->hexagon_list = new RoundVector< RoundVector< Hexagon* >* >();
 	this->hexagon_list->reserve(GlobalConsts::BOARD_WIDTH);
 
@@ -49,7 +16,7 @@ Gameboard::Gameboard() {
 }
 
 
-void Gameboard::push_back(Hexagon* hex) {
+void GameboardBase::push_back(Hexagon* hex) {
 	int total_size = 0;
 	for(int i = 0; i < this->hexagon_list->size(); i++) {
 		total_size += this->hexagon_list->at(i)->size();
@@ -58,6 +25,52 @@ void Gameboard::push_back(Hexagon* hex) {
 	int i = (int)(total_size % GlobalConsts::BOARD_WIDTH);
 
 	this->hexagon_list->at(i)->push_back(hex);
+}
+
+
+RoundVector< RoundVector< Hexagon* >* >* GameboardBase::get_hexagon_list() {
+	// TODO: This should return a copy... so things do get added without being added to the other constructs
+	return this->hexagon_list;
+}
+
+
+void GameboardBase::bind_obj_hex(BoardObject* curr_obj, Hexagon* curr_hex) {
+	if(curr_obj->base_hex) {
+		if(curr_obj->base_hex->parent_chunk) {
+			curr_obj->base_hex->parent_chunk->regenerate_object = true;
+		}
+		this->board_object_map->erase(curr_obj->base_hex);
+	}
+
+	std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(this->board_object_map);
+	curr_board_object_map[curr_hex] = curr_obj;
+	curr_obj->base_hex = curr_hex;
+	if(curr_hex->parent_chunk) {
+	    curr_hex->parent_chunk->regenerate_object = true;
+	}
+}
+
+// -----------------------------------
+
+Gameboard::Gameboard() {
+	this->chunk_map = new std::map< Hexagon*, GameboardChunk* >();
+}
+
+
+GameboardChunk* Gameboard::get_chunk(Hexagon* base_hex) {
+	GameboardChunk* output = NULL;
+	std::map< Hexagon*, GameboardChunk* > &chunk = *(this->chunk_map);
+
+	if(this->chunk_map->count(base_hex) == 0) {
+		output = new GameboardChunk(base_hex);
+		chunk[base_hex] = output;
+	} else {
+		output = chunk[base_hex];
+	}
+
+	output->verify_render_data();
+
+	return output;
 }
 
 
@@ -85,27 +98,5 @@ void Gameboard::render(int x_start, int x_stop, int y_start, int y_stop) {
     }
 }
 
-
-RoundVector< RoundVector< Hexagon* >* >* Gameboard::get_hexagon_list() {
-	// TODO: This should return a copy... so things do get added without being added to the other constructs
-	return this->hexagon_list;
-}
-
-
-void Gameboard::bind_obj_hex(BoardObject* curr_obj, Hexagon* curr_hex) {
-	if(curr_obj->base_hex) {
-		if(curr_obj->base_hex->parent_chunk) {
-			curr_obj->base_hex->parent_chunk->regenerate_object = true;
-		}
-		this->board_object_map->erase(curr_obj->base_hex);
-	}
-
-	std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(this->board_object_map);
-	curr_board_object_map[curr_hex] = curr_obj;
-	curr_obj->base_hex = curr_hex;
-	if(curr_hex->parent_chunk) {
-	    curr_hex->parent_chunk->regenerate_object = true;
-	}
-}
-
+//---------------------------------------
 

@@ -1,38 +1,29 @@
 #ifndef GAMEBOARD_H
 #define GAMEBOARD_H
 
-class RegistrarOfGameboardChunk: public RegistrarOfRenderable {
-	private:
-		std::map< Hexagon*, GameboardChunk* >* chunk_map;
-
-	public:
-		RegistrarOfGameboardChunk();
-		virtual void regist(Renderable*);
-
-		GameboardChunk* get_chunk(Hexagon*);
-		//void render();
-	
-};
-
-
-class Gameboard: public RegistrarOfGameboardChunk {
-	private:
+class GameboardBase {
+	protected:
 		RoundVector< RoundVector< Hexagon* >* >* hexagon_list;
-		//std::map< Hexagon*, GameboardChunk* >* chunk_map;
 
 	public:
 		std::map< Hexagon*, BoardObject* >* board_object_map;
 
-		Gameboard();
+		GameboardBase();
 
 		void push_back(Hexagon*);
-		int count(Hexagon*);
-
 		RoundVector< RoundVector< Hexagon* >* >* get_hexagon_list();
-
-		void render(int, int, int, int);
-
 		void bind_obj_hex(BoardObject*, Hexagon*);
+};
+
+class Gameboard: public GameboardBase, public Renderable {
+	private:
+		std::map< Hexagon*, GameboardChunk* >* chunk_map;
+
+	public:
+		Gameboard();
+
+		GameboardChunk* get_chunk(Hexagon*);
+		virtual void render(int, int, int, int);
 };
 
 
