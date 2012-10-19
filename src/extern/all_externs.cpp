@@ -33,12 +33,12 @@ extern "C" {
 
 	void Controller_add_x_offset(double x_offset) {
 		Controller* curr_ctrl = Controller_get_controller();
-		curr_ctrl->x_offset += x_offset;
+		curr_ctrl->curr_rend_ctrl->x_offset += x_offset;
 	}
 
 	void Controller_add_y_offset(double y_offset) {
 		Controller* curr_ctrl = Controller_get_controller();
-		curr_ctrl->y_offset += y_offset;
+		curr_ctrl->curr_rend_ctrl->y_offset += y_offset;
 	}
 
 	void Controller_set_scroll(char direction) {
@@ -71,7 +71,7 @@ extern "C" {
 		curr_ctrl->render();
 	}*/
 
-	double Controller_COS_60() {
+	/*double Controller_COS_60() {
 		Controller* curr_ctrl = Controller_get_controller();
 		return curr_ctrl->COS_60;
 	}
@@ -79,7 +79,7 @@ extern "C" {
 	double Controller_SIN_60() {
 		Controller* curr_ctrl = Controller_get_controller();
 		return curr_ctrl->SIN_60;
-	}
+	}*/
 
 	double Controller_get_width() {
         Controller* curr_ctrl = Controller_get_controller();
@@ -93,7 +93,7 @@ extern "C" {
 
     double Controller_get_zoom() {
         Controller* curr_ctrl = Controller_get_controller();
-        return curr_ctrl->zoom;
+        return curr_ctrl->curr_rend_ctrl->zoom;
     }
 
 	/*void Controller_clear_selected_hex() {

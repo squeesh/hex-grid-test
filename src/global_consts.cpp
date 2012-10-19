@@ -133,8 +133,8 @@ std::map< const char*, std::vector< double >*, cmp_str> get_render_tray_coords()
 
 const long GlobalConsts::SLEEP_TIME = long_global_const_attr("SLEEP_TIME");
 
-const double GlobalConsts::COS_60 = std::cos(60.0 / 360.0 * 2.0 * M_PI);
-const double GlobalConsts::SIN_60 = std::sin(60.0 / 360.0 * 2.0 * M_PI);
+const double GlobalConsts::COS_60 = double_global_const_attr("COS_60");
+const double GlobalConsts::SIN_60 = double_global_const_attr("SIN_60");
 
 const char GlobalConsts::LEFT  = char_global_const_attr("LEFT");
 const char GlobalConsts::RIGHT = char_global_const_attr("RIGHT");

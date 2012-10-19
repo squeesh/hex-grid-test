@@ -64,5 +64,9 @@ class GlobalConsts(object):
     RENDER_LINES     = 0
     RENDER_TRIANGLES = 1
 
+    # Math stuffs
+    COS_60  = 0.5
+    SIN_60  = 0.866025
+
 
 

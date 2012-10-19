@@ -8,11 +8,9 @@ class Controller {
 		static Controller* curr_ctrl;
 		static PyObject* py_pointer;
 
-		static RenderController* curr_rend_ctrl;
-
-		double rotation;
+		//double rotation;
 	
-		double view_range;
+		//double view_range;
 
 		std::map<char, bool> scroll_map;
 
@@ -21,21 +19,23 @@ class Controller {
 		std::set<Hexagon*>* get_neighbors_in_radius(Hexagon*, int, std::set<Hexagon*>*);
 
 	public:
+		static RenderController* curr_rend_ctrl;
+
 		long width;
 		long height;
 
-		double x_offset;
-		double y_offset;
-		double zoom;
+		//double x_offset;
+		//double y_offset;
+		//double zoom;
 
 		PlayerInput* player_input;
 
-		std::string print_string;
+		//std::string print_string;
 
 		bool print_flag;
 
-		static const double COS_60;
-		static const double SIN_60;
+		//static const double COS_60;
+		//static const double SIN_60;
 
 		static Controller* get_controller();
 		static Controller* py_get_controller();

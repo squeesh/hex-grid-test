@@ -20,11 +20,11 @@ void display() {
 		if(curr_seconds > seconds) {
 			//std::cout << "FPS: " << fps << std::endl;
 
-			curr_ctrl->print_string.clear();
-			curr_ctrl->print_string += std::string("FPS: ");
+			RenderController::print_string.clear();
+			RenderController::print_string += std::string("FPS: ");
 			std::stringstream temp;
 			temp << fps;
-			curr_ctrl->print_string += temp.str();
+			RenderController::print_string += temp.str();
 
 			seconds = curr_seconds;
 			fps = 0;

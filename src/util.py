@@ -79,8 +79,8 @@ def heuristic_cost_estimate(curr_node, goal):
 def dist_between(curr_node, neighbor):
     from controller import Controller
 
-    board_width  = GlobalConsts.BOARD_WIDTH * 1.5 * Controller.COS_60
-    board_height = GlobalConsts.BOARD_HEIGHT * 1.0 * Controller.SIN_60
+    board_width  = GlobalConsts.BOARD_WIDTH * 1.5 * GlobalConsts.COS_60
+    board_height = GlobalConsts.BOARD_HEIGHT * 1.0 * GlobalConsts.SIN_60
 
     curr_last_x, curr_last_y   = curr_node.get_last_coord()
     neigh_last_x, neigh_last_y = neighbor.get_last_coord()

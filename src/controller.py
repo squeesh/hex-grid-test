@@ -1,7 +1,7 @@
 from ctypes import *
 controller_lib = cdll.LoadLibrary('./externs.so')
-controller_lib.Controller_COS_60.restype = c_double
-controller_lib.Controller_SIN_60.restype = c_double
+#controller_lib.Controller_COS_60.restype = c_double
+#controller_lib.Controller_SIN_60.restype = c_double
 controller_lib.Controller_get_rotation.restype = c_double
 controller_lib.Controller_get_controller.restype = c_long
 controller_lib.Controller_get_hexagon.restype = c_long
@@ -29,8 +29,8 @@ class Controller(object):
 
     view_range = GlobalConsts.BOARD_WIDTH * 1.25
 
-    COS_60  = controller_lib.Controller_COS_60()
-    SIN_60  = controller_lib.Controller_SIN_60()
+    #COS_60  = controller_lib.Controller_COS_60()
+    #SIN_60  = controller_lib.Controller_SIN_60()
 
 #    width   = None
 #    height  = None
@@ -67,7 +67,7 @@ class Controller(object):
                 x = i * 1.5
                 y = j if not i%2 else j + 0.5
 
-                curr_hex = Hexagon(x * self.COS_60, y * self.SIN_60)
+                curr_hex = Hexagon(x * GlobalConsts.COS_60, y * GlobalConsts.SIN_60)
 
                 controller_lib.Controller_push_hexagon(curr_hex._c_pointer)
 
@@ -148,7 +148,7 @@ class Controller(object):
             while True:
                 x = int(random() * GlobalConsts.BOARD_WIDTH)
                 y = int(random() * GlobalConsts.BOARD_HEIGHT)
-                
+
                 curr_hex = self.get_hexagon(x, y)
                 if curr_hex.is_pathable():
                     BoardObject(curr_hex)

@@ -68,11 +68,11 @@ void Gameboard::render(int x_start, int x_stop, int y_start, int y_stop) {
             Hexagon* curr_hex = this->hexagon_list->at(i)->at(j);
             GameboardChunk* curr_chunk = this->get_chunk(curr_hex);
 
-            double x = i * 1.5 * Controller::COS_60;
-            double y = j * 1.0 * Controller::SIN_60;
+            double x = i * 1.5 * GlobalConsts::COS_60;
+            double y = j * 1.0 * GlobalConsts::SIN_60;
 
             if(i % 2 != 0) {
-                y += 0.5 * Controller::SIN_60;
+                y += 0.5 * GlobalConsts::SIN_60;
             }
 
             glPushMatrix();

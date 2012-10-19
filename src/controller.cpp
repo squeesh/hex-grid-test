@@ -9,22 +9,22 @@ PyObject* Controller::py_pointer = NULL;
 RenderController* Controller::curr_rend_ctrl = NULL;
 
 
-const double Controller::COS_60 = std::cos(60.0 / 360.0 * 2.0 * M_PI);
-const double Controller::SIN_60 = std::sin(60.0 / 360.0 * 2.0 * M_PI);
+//const double Controller::COS_60 = std::cos(60.0 / 360.0 * 2.0 * M_PI);
+//const double Controller::SIN_60 = std::sin(60.0 / 360.0 * 2.0 * M_PI);
+
+
 
 
 Controller::Controller() {
-    //this->py_pointer = NULL;
-
     this->width = 0;
     this->height = 0;
 
-	this->x_offset = 0.0;
-	this->y_offset = 0.0;
+	/*this->curr_rend_ctrl->x_offset = 0.0;
+	this->curr_rend_ctrl->y_offset = 0.0;
 
-	this->zoom       = GlobalConsts::START_ZOOM;
-	this->rotation   = GlobalConsts::START_ROTATION;
-	this->view_range = GlobalConsts::START_VIEW_RANGE;
+	this->curr_rend_ctrl->zoom = GlobalConsts::START_ZOOM;*/
+	//this->rotation   = GlobalConsts::START_ROTATION;
+	//this->view_range = GlobalConsts::START_VIEW_RANGE;
 
 	this->scroll_map[GlobalConsts::LEFT]    = false;
 	this->scroll_map[GlobalConsts::RIGHT]   = false;
@@ -46,8 +46,7 @@ Controller::Controller() {
 
 	this->print_flag = false;
 
-	this->print_string = std::string();
-
+	//this->print_string = std::string();
 	this->curr_rend_ctrl = RenderController::get_render_controller();
 }
 
@@ -106,25 +105,25 @@ Controller* Controller::py_get_controller() {
 
 void Controller::zoom_map(double zoom_amount) {
 	if(zoom_amount > 1) {
-		if(zoom < GlobalConsts::MAX_ZOOM) {
-			this->zoom *= zoom_amount;
-			this->view_range *= zoom_amount;
+		if(this->curr_rend_ctrl->zoom < GlobalConsts::MAX_ZOOM) {
+			this->curr_rend_ctrl->zoom *= zoom_amount;
+			this->curr_rend_ctrl->view_range *= zoom_amount;
 		}
 	} else {
-		if(GlobalConsts::MIN_ZOOM < zoom) {
-			this->zoom *= zoom_amount;
-			this->view_range *= zoom_amount;
+		if(GlobalConsts::MIN_ZOOM < this->curr_rend_ctrl->zoom) {
+			this->curr_rend_ctrl->zoom *= zoom_amount;
+			this->curr_rend_ctrl->view_range *= zoom_amount;
 		}
 	}
 	
 }
 
 void Controller::set_rotation(double rotation) {
-	this->rotation = rotation;
+	this->curr_rend_ctrl->rotation = rotation;
 }
 
 double Controller::get_rotation() {
-	return this->rotation;
+	return this->curr_rend_ctrl->rotation;
 }
 
 void Controller::set_scroll(char direction) {
@@ -198,19 +197,19 @@ void Controller::init_board() {
 
 void Controller::tick() {
     if(this->scroll_map[GlobalConsts::LEFT]) {
-        this->x_offset -= 0.5 * this->zoom;
+        this->curr_rend_ctrl->x_offset -= 0.5 * this->curr_rend_ctrl->zoom;
     }
 
     if(this->scroll_map[GlobalConsts::RIGHT]) {
-        this->x_offset += 0.5 * this->zoom;
+        this->curr_rend_ctrl->x_offset += 0.5 * this->curr_rend_ctrl->zoom;
     }
 
     if(this->scroll_map[GlobalConsts::UP]) {
-        this->y_offset += 0.5 * this->zoom;
+        this->curr_rend_ctrl->y_offset += 0.5 * this->curr_rend_ctrl->zoom;
     }
 
     if(this->scroll_map[GlobalConsts::DOWN]) {
-        this->y_offset -= 0.5 * this->zoom;
+        this->curr_rend_ctrl->y_offset -= 0.5 * this->curr_rend_ctrl->zoom;
     }
 
     py_call_func(this->py_pointer, "tick");
@@ -251,35 +250,35 @@ void Controller::render_string(int x, int y, std::string curr_string, std::vecto
 void Controller::render() {
 	// TODO: Do something about duplicated code...
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	/*glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	std::vector< GLfloat >* color = new std::vector< GLfloat >();
 	color->push_back(1);
 	color->push_back(1);
 	color->push_back(0);
-	this->render_string(2, 20, this->print_string, color);
+	this->render_string(2, 20, RenderController::print_string, color);
 	delete color;
 
 	glLoadIdentity();
 
-	double eye_x = this->x_offset * 1.5 * this->COS_60;
-	double eye_y = this->y_offset * 1.0 * this->SIN_60;
+	double eye_x = this->curr_rend_ctrl->x_offset * 1.5 * GlobalConsts::COS_60;
+	double eye_y = this->curr_rend_ctrl->y_offset * 1.0 * GlobalConsts::SIN_60;
 
 	gluLookAt(
-	    eye_x, eye_y, 15 * this->zoom,
+	    eye_x, eye_y, 15 * this->curr_rend_ctrl->zoom,
 	    eye_x, eye_y, 0,
 		0, 1, 0
 	);
 
 	// set the rotation point... since our "origin" kinda changes... we need to go to it, rotate, then go back
-	glTranslatef(0.0, this->y_offset * this->SIN_60, 0.0);
-	glRotatef(this->rotation, 1.0, 0.0, 0.0);
-	glTranslatef(0.0, -this->y_offset * this->SIN_60, 0.0);
+	glTranslatef(0.0, this->curr_rend_ctrl->y_offset * GlobalConsts::SIN_60, 0.0);
+	glRotatef(this->curr_rend_ctrl->rotation, 1.0, 0.0, 0.0);
+	glTranslatef(0.0, -this->curr_rend_ctrl->y_offset * GlobalConsts::SIN_60, 0.0);
 
-	int neg_x_view = this->x_offset - this->view_range / 2.0 - GlobalConsts::BOARD_CHUNK_SIZE;
-	int pos_x_view = this->x_offset + this->view_range / 2.0;
-	int neg_y_view = this->y_offset - this->view_range / 2.0 - GlobalConsts::BOARD_CHUNK_SIZE;
-	int pos_y_view = this->y_offset + this->view_range / 2.0;
+	int neg_x_view = this->curr_rend_ctrl->x_offset - this->curr_rend_ctrl->view_range / 2.0 - GlobalConsts::BOARD_CHUNK_SIZE;
+	int pos_x_view = this->curr_rend_ctrl->x_offset + this->curr_rend_ctrl->view_range / 2.0;
+	int neg_y_view = this->curr_rend_ctrl->y_offset - this->curr_rend_ctrl->view_range / 2.0 - GlobalConsts::BOARD_CHUNK_SIZE;
+	int pos_y_view = this->curr_rend_ctrl->y_offset + this->curr_rend_ctrl->view_range / 2.0;
 
 	if(neg_y_view < 0) {
 		neg_y_view += (-neg_y_view) % GlobalConsts::BOARD_CHUNK_SIZE;
@@ -308,8 +307,8 @@ void Controller::render() {
 	}
 
 
-	this->gameboard->render(neg_x_view, pos_x_view, neg_y_view, pos_y_view);
-	//this->curr_rnd_ctrl->render(this->gameboard);
+	this->gameboard->render(neg_x_view, pos_x_view, neg_y_view, pos_y_view);*/
+	this->curr_rend_ctrl->render();
 }
 
 
@@ -318,24 +317,24 @@ void Controller::render_for_select() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
-	double eye_x = this->x_offset * 1.5 * this->COS_60;
-	double eye_y = this->y_offset * 1.0 * this->SIN_60;
+	double eye_x = this->curr_rend_ctrl->x_offset * 1.5 * GlobalConsts::COS_60;
+	double eye_y = this->curr_rend_ctrl->y_offset * 1.0 * GlobalConsts::SIN_60;
 
 	gluLookAt(
-	    eye_x, eye_y, 15 * this->zoom,
+	    eye_x, eye_y, 15 * this->curr_rend_ctrl->zoom,
 	    eye_x, eye_y, 0,
 		0, 1, 0
 	);
 
 	// set the rotation point... since our "origin" kinda changes... we need to go to it, rotate, then go back
-	glTranslatef(0.0, this->y_offset * this->SIN_60, 0.0);
-	glRotatef(this->rotation, 1.0, 0.0, 0.0);
-	glTranslatef(0.0, -this->y_offset * this->SIN_60, 0.0);
+	glTranslatef(0.0, this->curr_rend_ctrl->y_offset * GlobalConsts::SIN_60, 0.0);
+	glRotatef(this->curr_rend_ctrl->rotation, 1.0, 0.0, 0.0);
+	glTranslatef(0.0, -this->curr_rend_ctrl->y_offset * GlobalConsts::SIN_60, 0.0);
 
-	int neg_x_view = this->x_offset - this->view_range / 2.0;
-	int pos_x_view = this->x_offset + this->view_range / 2.0;
-	int neg_y_view = this->y_offset - this->view_range / 2.0;
-	int pos_y_view = this->y_offset + this->view_range / 2.0;
+	int neg_x_view = this->curr_rend_ctrl->x_offset - this->curr_rend_ctrl->view_range / 2.0;
+	int pos_x_view = this->curr_rend_ctrl->x_offset + this->curr_rend_ctrl->view_range / 2.0;
+	int neg_y_view = this->curr_rend_ctrl->y_offset - this->curr_rend_ctrl->view_range / 2.0;
+	int pos_y_view = this->curr_rend_ctrl->y_offset + this->curr_rend_ctrl->view_range / 2.0;
 
 	glDisable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -345,11 +344,11 @@ void Controller::render_for_select() {
                 Hexagon* curr_hex = this->gameboard->get_hexagon_list()->at(i)->at(j);
                 glLoadName(curr_hex->name);
 
-                double x = i * 1.5 * this->COS_60;
-                double y = j * 1.0 * this->SIN_60;
+                double x = i * 1.5 * GlobalConsts::COS_60;
+                double y = j * 1.0 * GlobalConsts::SIN_60;
 
                 if(i % 2 != 0) {
-                    y += 0.5 * this->SIN_60;
+                    y += 0.5 * GlobalConsts::SIN_60;
                 }
 
                 curr_hex->render_for_select(x, y);
