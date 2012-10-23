@@ -254,6 +254,9 @@ void Controller::render() {
 
 
 void Controller::render_for_select() {
+	glDisable(GL_CULL_FACE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 	// TODO: Do something about duplicated code...
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
@@ -277,9 +280,6 @@ void Controller::render_for_select() {
 	int neg_y_view = this->curr_rend_ctrl->y_offset - this->curr_rend_ctrl->view_range / 2.0;
 	int pos_y_view = this->curr_rend_ctrl->y_offset + this->curr_rend_ctrl->view_range / 2.0;
 
-	glDisable(GL_CULL_FACE);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
         for(int i = neg_x_view; i <= pos_x_view; i++) {
             for(int j = neg_y_view; j <= pos_y_view; j++) {
                 Hexagon* curr_hex = this->gameboard->get_hexagon_list()->at(i)->at(j);
@@ -297,6 +297,9 @@ void Controller::render_for_select() {
             }
         }
 	glEnable(GL_CULL_FACE);
+
+	glPolygonMode(GL_FRONT, GL_FILL);
+	glPolygonMode(GL_BACK,  GL_LINE);
 }
 
 
