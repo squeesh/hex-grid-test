@@ -157,6 +157,9 @@ const int GlobalConsts::KEY_DOWN    = long_global_const_attr("KEY_DOWN");
 const int GlobalConsts::RENDER_LINES     = long_global_const_attr("RENDER_LINES");
 const int GlobalConsts::RENDER_TRIANGLES = long_global_const_attr("RENDER_TRIANGLES");
 
+const long GlobalConsts::SCREEN_WIDTH  = long_global_const_attr("SCREEN_WIDTH");
+const long GlobalConsts::SCREEN_HEIGHT = long_global_const_attr("SCREEN_HEIGHT");
+
 const long GlobalConsts::BOARD_WIDTH  = long_global_const_attr("BOARD_WIDTH");
 const long GlobalConsts::BOARD_HEIGHT = long_global_const_attr("BOARD_HEIGHT");
 

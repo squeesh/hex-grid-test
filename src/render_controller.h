@@ -19,12 +19,17 @@ class RenderController {
 	public:
 		static std::string print_string;
 
+		long width;
+		long height;
+
 		double x_offset;
 		double y_offset;
 		double zoom;
 		double view_range;
 		double rotation;
 
+		void init_gl(long, long);
+		void resize(long, long);
 
 		static RenderController* get_render_controller();
 		void register_renderable(Renderable*);

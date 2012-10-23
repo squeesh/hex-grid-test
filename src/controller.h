@@ -21,8 +21,8 @@ class Controller {
 	public:
 		static RenderController* curr_rend_ctrl;
 
-		long width;
-		long height;
+		//long width;
+		//long height;
 
 		//double x_offset;
 		//double y_offset;

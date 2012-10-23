@@ -5,10 +5,7 @@
 
 
 static Controller* curr_ctrl = NULL;
-const int RESOLUTION[] = {1024, 768};
-
-const int BOARD_WIDTH  = 20;
-const int BOARD_HEIGHT = 13;
+//const int RESOLUTION[] = {1024, 768};
 
 bool SHOW_FPS = true;
 
@@ -53,17 +50,17 @@ void key_released(unsigned char key, int x, int y) {
 void mouse_click(int button, int state, int x, int y) {
     switch(state) {
         case GLUT_DOWN:
-            curr_ctrl->mouse_event(GlobalConsts::MOUSE_DOWN, button, x, curr_ctrl->height - y);
+            curr_ctrl->mouse_event(GlobalConsts::MOUSE_DOWN, button, x, y);
             break;
 	case GLUT_UP:
-	    curr_ctrl->mouse_event(GlobalConsts::MOUSE_UP, button, x, curr_ctrl->height - y);
+	    curr_ctrl->mouse_event(GlobalConsts::MOUSE_UP, button, x, y);
 		break;
 
     }
 }
 
 void mouse_drag(int x, int y) {
-    curr_ctrl->mouse_event(GlobalConsts::MOUSE_DRAG, -1, x, curr_ctrl->height - y);
+    curr_ctrl->mouse_event(GlobalConsts::MOUSE_DRAG, -1, x, y);
 }
 
 void timer(int value) {
@@ -77,7 +74,7 @@ int main(int argc, char** argv) {
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
-	glutInitWindowSize(RESOLUTION[0], RESOLUTION[1]);
+	glutInitWindowSize(GlobalConsts::SCREEN_WIDTH, GlobalConsts::SCREEN_HEIGHT);
 	glutCreateWindow("Hex Grid Thing...");
 
 	curr_ctrl = Controller::py_get_controller();
@@ -92,7 +89,7 @@ int main(int argc, char** argv) {
 	glutMouseFunc(mouse_click);
 	glutMotionFunc(mouse_drag);
 
-	curr_ctrl->init_gl(RESOLUTION[0], RESOLUTION[1]);
+	curr_ctrl->init_gl(GlobalConsts::SCREEN_WIDTH, GlobalConsts::SCREEN_HEIGHT);
 	curr_ctrl->init_board();
 	//curr_ctrl->init_board(BOARD_WIDTH, BOARD_HEIGHT);
 

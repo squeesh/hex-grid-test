@@ -83,12 +83,12 @@ extern "C" {
 
 	double Controller_get_width() {
         Controller* curr_ctrl = Controller_get_controller();
-        return curr_ctrl->width;
+        return curr_ctrl->curr_rend_ctrl->width;
     }
 
     double Controller_get_height() {
         Controller* curr_ctrl = Controller_get_controller();
-        return curr_ctrl->height;
+        return curr_ctrl->curr_rend_ctrl->height;
     }
 
     double Controller_get_zoom() {

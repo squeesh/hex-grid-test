@@ -16,8 +16,8 @@ RenderController* Controller::curr_rend_ctrl = NULL;
 
 
 Controller::Controller() {
-    this->width = 0;
-    this->height = 0;
+    //this->width = 0;
+    //this->height = 0;
 
 	/*this->curr_rend_ctrl->x_offset = 0.0;
 	this->curr_rend_ctrl->y_offset = 0.0;
@@ -135,7 +135,7 @@ void Controller::clear_scroll(char direction) {
 }
 
 void Controller::init_gl(long width, long height) {
-	this->width = width;
+	/*this->width = width;
 	this->height = height;
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -165,15 +165,17 @@ void Controller::init_gl(long width, long height) {
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 	{
-		/* Problem: glewInit failed, something is seriously wrong. */
+		// Problem: glewInit failed, something is seriously wrong.
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 	}
-	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));*/
+
+	this->curr_rend_ctrl->init_gl(width, height);
 
 }
 
 void Controller::resize(long width, long height) {
-        this->width = width;
+        /*this->width = width;
 	this->height = height;
 
         if(this->height == 0) {
@@ -184,7 +186,9 @@ void Controller::resize(long width, long height) {
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         gluPerspective(45.0, this->width/((double) this->height), 0.1, 1000.0);
-        glMatrixMode(GL_MODELVIEW);
+        glMatrixMode(GL_MODELVIEW);*/
+
+	this->curr_rend_ctrl->resize(width, height);
 }
 
 void Controller::init_board() {
@@ -233,12 +237,12 @@ void Controller::render_string(int x, int y, std::string curr_string, std::vecto
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
 			glLoadIdentity();
-			glOrtho(0, this->width, 0, this->height, -1.0f, 1.0f);
+			glOrtho(0, this->curr_rend_ctrl->width, 0, this->curr_rend_ctrl->height, -1.0f, 1.0f);
 			glMatrixMode(GL_MODELVIEW);
 			glPushMatrix();
 				glLoadIdentity();
 				glColor3fv(color->data());
-				glRasterPos2i(x, this->height - y);
+				glRasterPos2i(x, this->curr_rend_ctrl->height - y);
 				glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)curr_string.data());
 				glMatrixMode(GL_PROJECTION);
 			glPopMatrix();
@@ -352,7 +356,7 @@ Hexagon* Controller::get_clicked_hex(double x, double y) {
 	glLoadIdentity();
 
 	gluPickMatrix(x, y, 1.0, 1.0, view);
-	gluPerspective(45.0, float(this->width)/float(this->height), 0.1, 1000.0);
+	gluPerspective(45.0, float(this->curr_rend_ctrl->width)/float(this->curr_rend_ctrl->height), 0.1, 1000.0);
 
 	glMatrixMode(GL_MODELVIEW);
 
@@ -407,11 +411,11 @@ std::set<Hexagon*>* Controller::get_neighbors_in_radius(Hexagon* curr_hex, int r
 
 
 void Controller::mouse_event(int event_type, int button, int x, int y) {
-    this->player_input->mouse_event(event_type, button, x, y);
+    this->player_input->mouse_event(event_type, button, x, this->curr_rend_ctrl->height - y);
 }
 
 void Controller::keyboard_event(int event_type, unsigned char key, int x, int y) {
-    this->player_input->keyboard_event(event_type, key, x, y);
+    this->player_input->keyboard_event(event_type, key, x, this->curr_rend_ctrl->height - y);
 }
 
 

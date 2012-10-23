@@ -16,6 +16,9 @@ std::string RenderController::print_string = std::string();
 RenderController::RenderController() {
 	this->renderables = new std::vector< Renderable* >();
 
+	this->width = 0;
+	this->height = 0;
+
 	this->x_offset = 0.0;
 	this->y_offset = 0.0;
 	this->zoom = GlobalConsts::START_ZOOM;
@@ -24,6 +27,60 @@ RenderController::RenderController() {
 	
 }
 
+
+
+void RenderController::init_gl(long width, long height) {
+	this->width = width;
+	this->height = height;
+
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glClearDepth(1.0);
+	glDepthFunc(GL_LESS);
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glShadeModel(GL_SMOOTH);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable( GL_BLEND );
+
+	glPolygonMode(GL_FRONT, GL_FILL);
+	glPolygonMode(GL_BACK,  GL_LINE);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(45.0, this->width/((double) this->height),-1.0, 1000.0);
+	glMatrixMode(GL_MODELVIEW);
+
+	//glEnable(GL_LINE_SMOOTH);
+	glLineWidth(5);
+
+
+	//glewExperimental = GL_TRUE;
+	GLenum err = glewInit();
+	if (GLEW_OK != err)
+	{
+		/* Problem: glewInit failed, something is seriously wrong. */
+		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+	}
+	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+
+}
+
+void RenderController::resize(long width, long height) {
+        this->width = width;
+	this->height = height;
+
+        if(this->height == 0) {
+            this->height = 1;
+	}
+
+        glViewport(0, 0, this->width, this->height);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluPerspective(45.0, this->width/((double) this->height), 0.1, 1000.0);
+        glMatrixMode(GL_MODELVIEW);
+}
 
 RenderController* RenderController::get_render_controller() {
 	if(!RenderController::curr_rend_ctrl) {

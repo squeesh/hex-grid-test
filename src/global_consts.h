@@ -30,6 +30,9 @@ class GlobalConsts {
         static const int RENDER_LINES;
         static const int RENDER_TRIANGLES;
 
+		static const long SCREEN_WIDTH;
+		static const long SCREEN_HEIGHT;
+
 		static const long BOARD_WIDTH;
 		static const long BOARD_HEIGHT;
 
