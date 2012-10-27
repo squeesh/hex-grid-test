@@ -252,7 +252,7 @@ class Controller(object):
                 board_obj.curr_path = board_obj.curr_path[1:]
 #                self.set_selected_hex(next_hex)
                 board_obj.move_to_hex(next_hex)
-                board_obj.set_selected(True)
+                #board_obj.set_selected(True)
 
 #    def mouse_down(self, x, y, button):
 #        controller_lib.Controller_mouse_down(c_double(x), c_double(y), 0)

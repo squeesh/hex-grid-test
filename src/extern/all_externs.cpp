@@ -17,44 +17,44 @@ extern "C" {
 	}
 
 	void Controller_zoom_map(double zoom) {
-		Controller* curr_ctrl = Controller_get_controller();
+		RenderController* curr_ctrl = RenderController::get_render_controller();
 		curr_ctrl->zoom_map(zoom);
 	}
 
 	void Controller_set_rotation(double rotation) {
-		Controller* curr_ctrl = Controller_get_controller();
+		RenderController* curr_ctrl = RenderController::get_render_controller();
 		curr_ctrl->set_rotation(rotation);
 	}
 	
 	double Controller_get_rotation() {
-		Controller* curr_ctrl = Controller_get_controller();
+		RenderController* curr_ctrl = RenderController::get_render_controller();
 		return curr_ctrl->get_rotation();
 	}
 
 	void Controller_add_x_offset(double x_offset) {
-		Controller* curr_ctrl = Controller_get_controller();
-		curr_ctrl->curr_rend_ctrl->x_offset += x_offset;
+		RenderController* curr_rend_ctrl = RenderController::get_render_controller();
+		curr_rend_ctrl->x_offset += x_offset;
 	}
 
 	void Controller_add_y_offset(double y_offset) {
-		Controller* curr_ctrl = Controller_get_controller();
-		curr_ctrl->curr_rend_ctrl->y_offset += y_offset;
+		RenderController* curr_rend_ctrl = RenderController::get_render_controller();
+		curr_rend_ctrl->y_offset += y_offset;
 	}
 
 	void Controller_set_scroll(char direction) {
-        	Controller* curr_ctrl = Controller_get_controller();
+		RenderController* curr_ctrl = RenderController::get_render_controller();
 		curr_ctrl->set_scroll(direction);
 	}
 
 	void Controller_clear_scroll(char direction) {
-        	Controller* curr_ctrl = Controller_get_controller();
+		RenderController* curr_ctrl = RenderController::get_render_controller();
 		curr_ctrl->clear_scroll(direction);
 	}
 
-	void Controller_init_gl(long width, long height) {
+	/*void Controller_init_gl(long width, long height) {
 		Controller* curr_ctrl = Controller_get_controller();
 		curr_ctrl->init_gl(width, height);
-	}
+	}*/
 
 	/*void Controller_resize(long width, long height) {
 		Controller* curr_ctrl = Controller_get_controller();
@@ -82,18 +82,18 @@ extern "C" {
 	}*/
 
 	double Controller_get_width() {
-        Controller* curr_ctrl = Controller_get_controller();
-        return curr_ctrl->curr_rend_ctrl->width;
+		RenderController* curr_ctrl = RenderController::get_render_controller();
+        return curr_ctrl->width;
     }
 
     double Controller_get_height() {
-        Controller* curr_ctrl = Controller_get_controller();
-        return curr_ctrl->curr_rend_ctrl->height;
+    	RenderController* curr_ctrl = RenderController::get_render_controller();
+        return curr_ctrl->height;
     }
 
     double Controller_get_zoom() {
-        Controller* curr_ctrl = Controller_get_controller();
-        return curr_ctrl->curr_rend_ctrl->zoom;
+    	RenderController* curr_ctrl = RenderController::get_render_controller();
+        return curr_ctrl->get_zoom();
     }
 
 	/*void Controller_clear_selected_hex() {
@@ -112,8 +112,8 @@ extern "C" {
     }*/
 
     Hexagon* Controller_get_clicked_hex(int x, int y) {
-        Controller* curr_ctrl = Controller_get_controller();
-        return curr_ctrl->get_clicked_hex(x, y);
+        RenderController* curr_rend_ctrl = RenderController::get_render_controller();
+        return curr_rend_ctrl->get_clicked_hex(x, y);
     }
 
 	void Controller_set_player_input(PlayerInput* curr_input) {

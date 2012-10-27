@@ -20,8 +20,13 @@ class BoardObject(object):
 
     def set_destination(self, dest_hex):
         start_hex = self.get_base_hex()
-
+        
         self.curr_path = a_star(start_hex, dest_hex)
+#        i = 0
+#        while i < 10000:
+#            i+=1
+#            print i
+        
 
     @staticmethod
     def get_board_object(c_board_obj):

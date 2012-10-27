@@ -5,6 +5,7 @@
 
 
 static Controller* curr_ctrl = NULL;
+static RenderController* curr_rend_ctrl = NULL;
 //const int RESOLUTION[] = {1024, 768};
 
 bool SHOW_FPS = true;
@@ -30,13 +31,13 @@ void display() {
 		fps++;
 	}
 
-	curr_ctrl->render();
+	curr_rend_ctrl->render();
 	glutSwapBuffers();
 	
 }
 
 void reshape(int width, int height) {
-	curr_ctrl->resize(width, height);
+	curr_rend_ctrl->resize(width, height);
 }
 
 void key_pressed(unsigned char key, int x, int y) {
@@ -78,6 +79,7 @@ int main(int argc, char** argv) {
 	glutCreateWindow("Hex Grid Thing...");
 
 	curr_ctrl = Controller::py_get_controller();
+	curr_rend_ctrl = RenderController::get_render_controller();
 
 	glutDisplayFunc(display);
 	glutIdleFunc(display);
@@ -89,7 +91,7 @@ int main(int argc, char** argv) {
 	glutMouseFunc(mouse_click);
 	glutMotionFunc(mouse_drag);
 
-	curr_ctrl->init_gl(GlobalConsts::SCREEN_WIDTH, GlobalConsts::SCREEN_HEIGHT);
+	curr_rend_ctrl->init_gl(GlobalConsts::SCREEN_WIDTH, GlobalConsts::SCREEN_HEIGHT);
 	curr_ctrl->init_board();
 	//curr_ctrl->init_board(BOARD_WIDTH, BOARD_HEIGHT);
 

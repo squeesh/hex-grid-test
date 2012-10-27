@@ -251,9 +251,11 @@ bool Hexagon::is_pathable() {
 	return this->get_slope() <= GlobalConsts::MAX_PATHABLE_SLOPE && this->get_board_object() == NULL;
 }
 
+
 void Hexagon::set_neighbor(const char* position, Hexagon* neighbor_hex) {
 	this->neighbor_hexagons[position] = neighbor_hex;
 }
+
 
 Hexagon* Hexagon::get_neighbor(const char* position) {
 	return this->neighbor_hexagons[position];
@@ -299,7 +301,6 @@ void Hexagon::generate_vertex_data(double x, double y, UniqueDataVector< GLfloat
 			curr_color->at(0), curr_color->at(1), curr_color->at(2)
 		);
 	}
-
 }
 
 
@@ -325,7 +326,7 @@ void Hexagon::generate_select_data(double x, double y, UniqueDataVector< GLfloat
 			Hexagon::ROT_COORDS->at(i  )->at(0) + x, Hexagon::ROT_COORDS->at(i  )->at(1) + y, this->verticies[this->VERTEX_POSITIONS->at(i  )]->get_height() + 0.01,
 			curr_color->at(0), curr_color->at(1), curr_color->at(2)
 		    );
-                }
+		}
 	}
 }
 

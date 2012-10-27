@@ -1,53 +1,16 @@
 #include "includes.h"
 
-#include <GL/freeglut.h>
-
 
 Controller* Controller::curr_ctrl = NULL;
 PyObject* Controller::py_pointer = NULL;
 
-RenderController* Controller::curr_rend_ctrl = NULL;
-
-
-//const double Controller::COS_60 = std::cos(60.0 / 360.0 * 2.0 * M_PI);
-//const double Controller::SIN_60 = std::sin(60.0 / 360.0 * 2.0 * M_PI);
-
-
-
 
 Controller::Controller() {
-    //this->width = 0;
-    //this->height = 0;
-
-	/*this->curr_rend_ctrl->x_offset = 0.0;
-	this->curr_rend_ctrl->y_offset = 0.0;
-
-	this->curr_rend_ctrl->zoom = GlobalConsts::START_ZOOM;*/
-	//this->rotation   = GlobalConsts::START_ROTATION;
-	//this->view_range = GlobalConsts::START_VIEW_RANGE;
-
-	this->scroll_map[GlobalConsts::LEFT]    = false;
-	this->scroll_map[GlobalConsts::RIGHT]   = false;
-	this->scroll_map[GlobalConsts::UP]      = false;
-	this->scroll_map[GlobalConsts::DOWN]    = false;
-
-	//this->selected_hex = NULL;
-
-	//this->player_input = new PlayerInput();
 	this->player_input = NULL;
-
-	/*for(int i = 0; i < 5; i++) {
-		this->old_mouse_pos[i]["down"]	= 0;
-		this->old_mouse_pos[i]["x"] 	= 0;
-		this->old_mouse_pos[i]["y"] 	= 0;
-	}*/
 
 	this->gameboard = new Gameboard();
 
 	this->print_flag = false;
-
-	//this->print_string = std::string();
-	this->curr_rend_ctrl = RenderController::get_render_controller();
 }
 
 Controller* Controller::get_controller() {
@@ -103,207 +66,16 @@ Controller* Controller::py_get_controller() {
 }
 
 
-void Controller::zoom_map(double zoom_amount) {
-	if(zoom_amount > 1) {
-		if(this->curr_rend_ctrl->zoom < GlobalConsts::MAX_ZOOM) {
-			this->curr_rend_ctrl->zoom *= zoom_amount;
-			this->curr_rend_ctrl->view_range *= zoom_amount;
-		}
-	} else {
-		if(GlobalConsts::MIN_ZOOM < this->curr_rend_ctrl->zoom) {
-			this->curr_rend_ctrl->zoom *= zoom_amount;
-			this->curr_rend_ctrl->view_range *= zoom_amount;
-		}
-	}
-	
-}
-
-void Controller::set_rotation(double rotation) {
-	this->curr_rend_ctrl->rotation = rotation;
-}
-
-double Controller::get_rotation() {
-	return this->curr_rend_ctrl->rotation;
-}
-
-void Controller::set_scroll(char direction) {
-	this->scroll_map[direction] = true;
-}
-
-void Controller::clear_scroll(char direction) {
-    this->scroll_map[direction] = false;
-}
-
-void Controller::init_gl(long width, long height) {
-	/*this->width = width;
-	this->height = height;
-
-	glClearColor(0.0, 0.0, 0.0, 0.0);
-	glClearDepth(1.0);
-	glDepthFunc(GL_LESS);
-	glEnable(GL_DEPTH_TEST);
-	glDepthMask(GL_TRUE);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glShadeModel(GL_SMOOTH);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable( GL_BLEND );
-
-	glPolygonMode(GL_FRONT, GL_FILL);
-	glPolygonMode(GL_BACK,  GL_LINE);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(45.0, this->width/((double) this->height),-1.0, 1000.0);
-	glMatrixMode(GL_MODELVIEW);
-
-	//glEnable(GL_LINE_SMOOTH);
-	glLineWidth(5);
-
-
-	//glewExperimental = GL_TRUE; 
-	GLenum err = glewInit();
-	if (GLEW_OK != err)
-	{
-		// Problem: glewInit failed, something is seriously wrong.
-		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-	}
-	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));*/
-
-	this->curr_rend_ctrl->init_gl(width, height);
-
-}
-
-void Controller::resize(long width, long height) {
-        /*this->width = width;
-	this->height = height;
-
-        if(this->height == 0) {
-            this->height = 1;
-	}
-
-        glViewport(0, 0, this->width, this->height);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        gluPerspective(45.0, this->width/((double) this->height), 0.1, 1000.0);
-        glMatrixMode(GL_MODELVIEW);*/
-
-	this->curr_rend_ctrl->resize(width, height);
-}
-
 void Controller::init_board() {
 	py_call_func(this->py_pointer, "init_board");
-
-	//this->gameboard->bind_obj_hex(new BoardObject(NULL), this->get_hexagon(0, 0));
-	//this->gameboard->bind_obj_hex(new BoardObject(NULL), this->get_hexagon(3, 7));
 }
 
 
 void Controller::tick() {
-    if(this->scroll_map[GlobalConsts::LEFT]) {
-        this->curr_rend_ctrl->x_offset -= 0.5 * this->curr_rend_ctrl->zoom;
-    }
-
-    if(this->scroll_map[GlobalConsts::RIGHT]) {
-        this->curr_rend_ctrl->x_offset += 0.5 * this->curr_rend_ctrl->zoom;
-    }
-
-    if(this->scroll_map[GlobalConsts::UP]) {
-        this->curr_rend_ctrl->y_offset += 0.5 * this->curr_rend_ctrl->zoom;
-    }
-
-    if(this->scroll_map[GlobalConsts::DOWN]) {
-        this->curr_rend_ctrl->y_offset -= 0.5 * this->curr_rend_ctrl->zoom;
-    }
+	RenderController* curr_rend_ctrl = RenderController::get_render_controller();
+	curr_rend_ctrl->tick();
 
     py_call_func(this->py_pointer, "tick");
-}
-
-
-void Controller::render_string(int x, int y, std::string curr_string) {
-	std::vector< GLfloat >* default_color = new std::vector< GLfloat >();
-	default_color->push_back(0);
-	default_color->push_back(0);
-	default_color->push_back(0);
-
-	this->render_string(x, y, curr_string, default_color);
-
-	delete default_color;
-}
-
-
-void Controller::render_string(int x, int y, std::string curr_string, std::vector< GLfloat >* color) {
-	glPushMatrix();
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-			glLoadIdentity();
-			glOrtho(0, this->curr_rend_ctrl->width, 0, this->curr_rend_ctrl->height, -1.0f, 1.0f);
-			glMatrixMode(GL_MODELVIEW);
-			glPushMatrix();
-				glLoadIdentity();
-				glColor3fv(color->data());
-				glRasterPos2i(x, this->curr_rend_ctrl->height - y);
-				glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)curr_string.data());
-				glMatrixMode(GL_PROJECTION);
-			glPopMatrix();
-			glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
-	glPopMatrix();
-}
-
-void Controller::render() {
-	// TODO: Do something about duplicated code...
-	this->curr_rend_ctrl->render();
-}
-
-
-void Controller::render_for_select() {
-	glDisable(GL_CULL_FACE);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-	// TODO: Do something about duplicated code...
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
-
-	double eye_x = this->curr_rend_ctrl->x_offset * 1.5 * GlobalConsts::COS_60;
-	double eye_y = this->curr_rend_ctrl->y_offset * 1.0 * GlobalConsts::SIN_60;
-
-	gluLookAt(
-	    eye_x, eye_y, 15 * this->curr_rend_ctrl->zoom,
-	    eye_x, eye_y, 0,
-		0, 1, 0
-	);
-
-	// set the rotation point... since our "origin" kinda changes... we need to go to it, rotate, then go back
-	glTranslatef(0.0, this->curr_rend_ctrl->y_offset * GlobalConsts::SIN_60, 0.0);
-	glRotatef(this->curr_rend_ctrl->rotation, 1.0, 0.0, 0.0);
-	glTranslatef(0.0, -this->curr_rend_ctrl->y_offset * GlobalConsts::SIN_60, 0.0);
-
-	int neg_x_view = this->curr_rend_ctrl->x_offset - this->curr_rend_ctrl->view_range / 2.0;
-	int pos_x_view = this->curr_rend_ctrl->x_offset + this->curr_rend_ctrl->view_range / 2.0;
-	int neg_y_view = this->curr_rend_ctrl->y_offset - this->curr_rend_ctrl->view_range / 2.0;
-	int pos_y_view = this->curr_rend_ctrl->y_offset + this->curr_rend_ctrl->view_range / 2.0;
-
-        for(int i = neg_x_view; i <= pos_x_view; i++) {
-            for(int j = neg_y_view; j <= pos_y_view; j++) {
-                Hexagon* curr_hex = this->gameboard->get_hexagon_list()->at(i)->at(j);
-                glLoadName(curr_hex->name);
-
-                double x = i * 1.5 * GlobalConsts::COS_60;
-                double y = j * 1.0 * GlobalConsts::SIN_60;
-
-                if(i % 2 != 0) {
-                    y += 0.5 * GlobalConsts::SIN_60;
-                }
-
-                curr_hex->render_for_select(x, y);
-		
-            }
-        }
-	glEnable(GL_CULL_FACE);
-
-	glPolygonMode(GL_FRONT, GL_FILL);
-	glPolygonMode(GL_BACK,  GL_LINE);
 }
 
 
@@ -332,57 +104,6 @@ Hexagon* Controller::get_hexagon(int i, int j) {
 }
 
 
-Hexagon* Controller::get_clicked_hex(double x, double y) {
-	GLuint buff[64] = {0};
-	GLint hits = 0;
-	GLint view[4];
-
-	glSelectBuffer(64, buff);
-
-	glGetIntegerv(GL_VIEWPORT,view);
-
-	glRenderMode(GL_SELECT);
-
-	//Clearing the name's stack
-	//This stack contains all the info about the objects
-	glInitNames();
-
-	//Now fill the stack with one element (or glLoadName will generate an error)
-	glPushName(0);
-
-	glMatrixMode(GL_PROJECTION);
-
-	glPushMatrix();
-	glLoadIdentity();
-
-	gluPickMatrix(x, y, 1.0, 1.0, view);
-	gluPerspective(45.0, float(this->curr_rend_ctrl->width)/float(this->curr_rend_ctrl->height), 0.1, 1000.0);
-
-	glMatrixMode(GL_MODELVIEW);
-
-	this->render_for_select();
-
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-
-	//get number of objects drawed in that area
-	//and return to render mode
-	hits = glRenderMode(GL_RENDER);
-	glMatrixMode(GL_MODELVIEW);
-
-	Hexagon* clicked_hex = NULL;
-
-	// TODO: buggy... needs to be fixed.
-	for(int i = 0; i < hits; i++) {
-		clicked_hex = this->get_hex_by_name(buff[i * 4 + 3]);
-		if(clicked_hex) {
-			break;
-		}
-	}
-
-	return clicked_hex;
-}
-
 std::set<Hexagon*>* Controller::get_neighbors_in_radius(Hexagon* curr_hex, int radius) {
 	std::set<Hexagon*>* output = new std::set<Hexagon*>();
 	this->get_neighbors_in_radius(curr_hex, radius, output);
@@ -406,16 +127,17 @@ std::set<Hexagon*>* Controller::get_neighbors_in_radius(Hexagon* curr_hex, int r
 	}
 
 	return curr_neighbors;
-
 }
 
 
 void Controller::mouse_event(int event_type, int button, int x, int y) {
-    this->player_input->mouse_event(event_type, button, x, this->curr_rend_ctrl->height - y);
+	RenderController* curr_rend_ctrl = RenderController::get_render_controller();
+    this->player_input->mouse_event(event_type, button, x, curr_rend_ctrl->height - y);
 }
 
 void Controller::keyboard_event(int event_type, unsigned char key, int x, int y) {
-    this->player_input->keyboard_event(event_type, key, x, this->curr_rend_ctrl->height - y);
+	RenderController* curr_rend_ctrl = RenderController::get_render_controller();
+    this->player_input->keyboard_event(event_type, key, x, curr_rend_ctrl->height - y);
 }
 
 
