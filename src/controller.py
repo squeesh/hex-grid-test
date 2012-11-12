@@ -159,26 +159,47 @@ class Controller(object):
 #            if not hex.is_pathable():
 #                hex.set_hex_color(0.5, 0, 0.5)
 
+    EVEN_OFFSET = {
+        'N':    ( 0,  1),
+        'NE':   ( 1,  0),
+        'SE':   ( 1, -1),
+        'S':    ( 0, -1),
+        'SW':   (-1, -1),
+        'NW':   (-1,  0),
+    }
+
+    ODD_OFFSET = {
+        'N':    ( 0,  1),
+        'NE':   ( 1,  1),
+        'SE':   ( 1,  0),
+        'S':    ( 0, -1),
+        'SW':   (-1,  0),
+        'NW':   (-1,  1),
+    }
+
     def get_neighbor_offset(self, index):
-        EVEN_OFFSET = {
-            'N':    ( 0,  1),
-            'NE':   ( 1,  0),
-            'SE':   ( 1, -1),
-            'S':    ( 0, -1),
-            'SW':   (-1, -1),
-            'NW':   (-1,  0),
-        }
+        return islice(cycle([self.EVEN_OFFSET, self.ODD_OFFSET]), index, index+1).next()
 
-        ODD_OFFSET = {
-            'N':    ( 0,  1),
-            'NE':   ( 1,  1),
-            'SE':   ( 1,  0),
-            'S':    ( 0, -1),
-            'SW':   (-1,  0),
-            'NW':   (-1,  1),
-        }
-
-        return islice(cycle([EVEN_OFFSET, ODD_OFFSET]), index, index+1).next()
+#    def get_neighbor_offset(self, index):
+#        EVEN_OFFSET = {
+#            'N':    ( 0,  1),
+#            'NE':   ( 1,  0),
+#            'SE':   ( 1, -1),
+#            'S':    ( 0, -1),
+#            'SW':   (-1, -1),
+#            'NW':   (-1,  0),
+#        }
+#
+#        ODD_OFFSET = {
+#            'N':    ( 0,  1),
+#            'NE':   ( 1,  1),
+#            'SE':   ( 1,  0),
+#            'S':    ( 0, -1),
+#            'SW':   (-1,  0),
+#            'NW':   (-1,  1),
+#        }
+#
+#        return islice(cycle([EVEN_OFFSET, ODD_OFFSET]), index, index+1).next()
 
     def link_segments(self):
         for i in range(GlobalConsts.BOARD_WIDTH):

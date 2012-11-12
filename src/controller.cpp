@@ -71,6 +71,32 @@ void Controller::init_board() {
 }
 
 
+/*void Controller::link_segments() {
+    //for i in range(GlobalConsts.BOARD_WIDTH):
+    for(int i = 0; i < GlobalConsts::BOARD_WIDTH){
+        offset = self.get_neighbor_offset(i)
+
+        for j in range(GlobalConsts.BOARD_HEIGHT):
+            neighbor_dict = {}
+            curr_hex = self.get_hexagon(i, j)
+
+            for pos, (i_offset, j_offset) in offset.iteritems():
+                new_seg_i = i + i_offset
+                new_seg_j = j + j_offset
+
+                neighbor_hex = self.get_hexagon(new_seg_i, new_seg_j)
+
+                assert neighbor_hex not in neighbor_dict.values()
+                neighbor_dict[pos] = neighbor_hex
+
+            curr_hex.set_neighbors(neighbor_dict)
+    }
+
+    for curr_hex in Hexagon.get_all_hexagons():
+        curr_hex.link_verticies()
+}*/
+
+
 void Controller::tick() {
 	RenderController* curr_rend_ctrl = RenderController::get_render_controller();
 	curr_rend_ctrl->tick();
