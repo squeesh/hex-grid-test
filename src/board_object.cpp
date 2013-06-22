@@ -4,10 +4,15 @@ BoardObject::BoardObject(Hexagon* base_hex) {
     Controller* curr_ctrl = Controller::get_controller();
     this->base_hex = curr_ctrl->add_object_to_board(this, base_hex);
 
-	this->color = new std::vector< double >();
+	this->color = new std::vector< GLfloat >();
 	this->color->push_back(0);
 	this->color->push_back(0);
 	this->color->push_back(1);
+
+    this->selected_color = new std::vector< GLfloat >();
+    this->selected_color->push_back(1);
+    this->selected_color->push_back(0);
+    this->selected_color->push_back(1);
 
 	this->selected = false;
 }

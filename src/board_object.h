@@ -7,7 +7,8 @@ class BoardObject {
 
 	public:
 		Hexagon* base_hex;
-		std::vector< double >* color;
+		std::vector< GLfloat >* color;
+		std::vector< GLfloat >* selected_color;
 
 		BoardObject(Hexagon*);
 

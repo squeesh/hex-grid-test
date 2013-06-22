@@ -58,15 +58,15 @@ void GameboardChunk::generate_render_data(Hexagon* curr_hex, double x, double y)
 	// TODO: I don't like this logic being here.. this should be moved out...
 	if(this->regenerate_terrain) {
 		curr_hex->generate_vertex_data(x, y, this->board_terrain_data);
-	} 
+	}
 
 	if(this->regenerate_select) {
 		curr_hex->generate_select_data(x, y, this->board_select_data);
-	} 
+	}
 
 	if(this->regenerate_object) {
 		curr_hex->generate_object_data(x, y, this->board_object_data);
-	} 
+	}
 
 	curr_hex->parent_chunk = this;
 }
@@ -81,7 +81,7 @@ void GameboardChunk::generate_chunk_data() {
 	double x = base_x;
 	double y = base_y;
 
-	const char* dir_ary[] = {"SE", "NE"}; 
+	const char* dir_ary[] = {"SE", "NE"};
 
 	Hexagon* curr_hex = this->base_hex;
 

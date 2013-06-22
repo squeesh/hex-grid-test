@@ -5,11 +5,11 @@ int Hexagon::name_count = 0;
 
 RoundVector< RoundVector<double>* >* get_rot_coords() {
 	double rot_data[][2] = {
-		{-0.5,   0.0}, 
-		{-0.25,  0.433012701892}, 
-		{ 0.25,  0.433012701892}, 
-		{ 0.5,   0.0}, 
-		{ 0.25, -0.433012701892}, 
+		{-0.5,   0.0},
+		{-0.25,  0.433012701892},
+		{ 0.25,  0.433012701892},
+		{ 0.5,   0.0},
+		{ 0.25, -0.433012701892},
 		{-0.25, -0.433012701892}
 	};
 
@@ -117,7 +117,7 @@ void Hexagon::set_select_color(double red, double green, double blue) {
 	} else {
 		// assume this will be 3 in length if we have a pointer...
 		changed = color_changed(
-			red, green, blue, 
+			red, green, blue,
 			this->select_color->at(0), this->select_color->at(1), this->select_color->at(2)
 		);
 	}
@@ -157,7 +157,7 @@ void Hexagon::clear_select() {
 void Hexagon::set_select_color(std::vector<double> rgb) {
 	if(!this->select_color) {
 		this->select_color = new std::vector< double >();
-	} 
+	}
 
 	this->set_select_color(rgb[0], rgb[1], rgb[2]);
 }
@@ -184,7 +184,7 @@ std::vector<double>* Hexagon::get_select_color() {
 void Hexagon::set_hex_color(double red, double green, double blue) {
 	if(!this->hex_color) {
 		this->hex_color = new std::vector< double >();
-	} 
+	}
 
 	this->hex_color->clear();
 	this->hex_color->push_back(red);
@@ -199,7 +199,7 @@ void Hexagon::set_hex_color(double red, double green, double blue) {
 void Hexagon::set_hex_color(std::vector<double> rgb) {
 	if(!this->hex_color) {
 		this->hex_color = new std::vector< double >();
-	} 
+	}
 
 	this->set_hex_color(rgb[0], rgb[1], rgb[2]);
 }
@@ -311,20 +311,20 @@ void Hexagon::generate_select_data(double x, double y, UniqueDataVector< GLfloat
         for(int i = 2; i < 6; i++) {
 		curr_vert = this->verticies[this->VERTEX_POSITIONS->at(i)];
 
-                if(curr_color) {
+        if(curr_color) {
 		    select_data->push_back(
-			Hexagon::ROT_COORDS->at(0  )->at(0) + x, Hexagon::ROT_COORDS->at(0  )->at(1) + y, this->verticies[this->VERTEX_POSITIONS->at(0  )]->get_height() + 0.01,
-			curr_color->at(0), curr_color->at(1), curr_color->at(2)
+    			Hexagon::ROT_COORDS->at(0  )->at(0) + x, Hexagon::ROT_COORDS->at(0  )->at(1) + y, this->verticies[this->VERTEX_POSITIONS->at(0  )]->get_height() + 0.01,
+    			curr_color->at(0), curr_color->at(1), curr_color->at(2)
 		    );
 
 		    select_data->push_back(
-			Hexagon::ROT_COORDS->at(i-1)->at(0) + x, Hexagon::ROT_COORDS->at(i-1)->at(1) + y, this->verticies[this->VERTEX_POSITIONS->at(i-1)]->get_height() + 0.01,
-			curr_color->at(0), curr_color->at(1), curr_color->at(2)
+    			Hexagon::ROT_COORDS->at(i-1)->at(0) + x, Hexagon::ROT_COORDS->at(i-1)->at(1) + y, this->verticies[this->VERTEX_POSITIONS->at(i-1)]->get_height() + 0.01,
+    			curr_color->at(0), curr_color->at(1), curr_color->at(2)
 		    );
 
 		    select_data->push_back(
-			Hexagon::ROT_COORDS->at(i  )->at(0) + x, Hexagon::ROT_COORDS->at(i  )->at(1) + y, this->verticies[this->VERTEX_POSITIONS->at(i  )]->get_height() + 0.01,
-			curr_color->at(0), curr_color->at(1), curr_color->at(2)
+    			Hexagon::ROT_COORDS->at(i  )->at(0) + x, Hexagon::ROT_COORDS->at(i  )->at(1) + y, this->verticies[this->VERTEX_POSITIONS->at(i  )]->get_height() + 0.01,
+    			curr_color->at(0), curr_color->at(1), curr_color->at(2)
 		    );
 		}
 	}
@@ -335,68 +335,38 @@ void Hexagon::generate_object_data(double x, double y, UniqueDataVector< GLfloat
 	Controller* curr_ctrl = Controller::get_controller();
 
 	std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(curr_ctrl->gameboard->board_object_map);
-	if(curr_board_object_map[this]) {
-	    if(curr_board_object_map[this]->get_selected()) {
-            object_data->push_back(
-               -0.5 + x, y, this->get_height(),
-                1, 0, 1
-            );
+    //std::vector< double > curr_rbg;
+    //std::vector<int> v { 34,23 };
 
-            object_data->push_back(
-               -0.5 + x, y, this->get_height() + 2.0,
-                1, 0, 1
-            );
+    BoardObject* curr_board_object = curr_board_object_map[this];
 
-            object_data->push_back(
-                0.5 + x, y, this->get_height() + 2.0,
-                1, 0, 1
-            );
+	if(curr_board_object) {
+        std::vector< GLfloat > curr_xyz;
+        std::vector< GLfloat >* curr_color = NULL;
 
-            object_data->push_back(
-                0.5 + x, y, this->get_height() + 2.0,
-                1, 0, 1
-            );
-
-            object_data->push_back(
-                0.5 + x, y, this->get_height() ,
-                1, 0, 1
-            );
-
-            object_data->push_back(
-               -0.5 + x, y, this->get_height(),
-                1, 0, 1
-            );
+	    if(curr_board_object->get_selected()) {
+            curr_color = curr_board_object->selected_color;
 	    } else {
-            object_data->push_back(
-               -0.5 + x, y, this->get_height(),
-                0, 0, 1
-            );
-
-            object_data->push_back(
-               -0.5 + x, y, this->get_height() + 2.0,
-                0, 0, 1
-            );
-
-            object_data->push_back(
-                0.5 + x, y, this->get_height() + 2.0,
-                0, 0, 1
-            );
-
-            object_data->push_back(
-                0.5 + x, y, this->get_height() + 2.0,
-                0, 0, 1
-            );
-
-            object_data->push_back(
-                0.5 + x, y, this->get_height() ,
-                0, 0, 1
-            );
-
-            object_data->push_back(
-               -0.5 + x, y, this->get_height(),
-                0, 0, 1
-            );
+            curr_color = curr_board_object->color;
 	    }
+
+        curr_xyz = {-0.5 + x, y, this->get_height()};
+        object_data->push_back(&curr_xyz, curr_color);
+
+        curr_xyz = {-0.5 + x, y, this->get_height() + 2.0};
+        object_data->push_back(&curr_xyz, curr_color);
+
+        curr_xyz = { 0.5 + x, y, this->get_height() + 2.0};
+        object_data->push_back(&curr_xyz, curr_color);
+
+        curr_xyz = { 0.5 + x, y, this->get_height() + 2.0};
+        object_data->push_back(&curr_xyz, curr_color);
+
+        curr_xyz = { 0.5 + x, y, this->get_height()};
+        object_data->push_back(&curr_xyz, curr_color);
+
+        curr_xyz = {-0.5 + x, y, this->get_height()};
+        object_data->push_back(&curr_xyz, curr_color);
 	}
 }
 

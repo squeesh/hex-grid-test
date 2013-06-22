@@ -154,11 +154,11 @@ PyObject* py_call_func(PyObject *py_obj, char* func_name, PyObject* py_obj_1, Py
 /***************/
 
 template <typename T>
-class UniqueDataVector { 
+class UniqueDataVector {
 	private:
 		std::map< std::vector<T>*, GLuint, cmp_coord<T> > *index_data;
 		std::vector< std::vector<T> *> *index_data_keys;
-		
+
 		std::vector<T> *vectors;
 		std::vector< GLuint > *indicies;
 
@@ -177,6 +177,7 @@ class UniqueDataVector {
 
 		T* at(int);
 		GLuint push_back(T, T, T, T, T, T);
+		GLuint push_back(std::vector<T>*, std::vector<T>*);
 
 		int vector_size();
 		int indicies_size();
@@ -228,7 +229,7 @@ T* UniqueDataVector<T>::at(int index) {
 		// fun with pointers...
 		return (T*)((long)(this->data()) + (sizeof(T) * index * 3));
 	} else {
-		// throw whatever error at() throws... 
+		// throw whatever error at() throws...
 		// TODO: QUIT BEING LAZY
 		T output = this->vectors->at(-1);
 
@@ -267,13 +268,18 @@ GLuint UniqueDataVector<T>::push_back(T x, T y, T z, T r, T g, T b) {
 		this->indicies->push_back(index);
 		curr_index_data[curr_coords] = index;
 		this->index_data_keys->push_back(curr_coords);
-	} else {	
+	} else {
 		index = this->get_index(curr_coords);
 		this->indicies->push_back(index);
 		delete curr_coords;
 	}
 
 	return index;
+}
+
+template <typename T>
+GLuint UniqueDataVector<T>::push_back(std::vector<T>* vec_xyz, std::vector<T>* vec_rgb) {
+	return this->push_back(vec_xyz->at(0), vec_xyz->at(1), vec_xyz->at(2), vec_rgb->at(0), vec_rgb->at(1), vec_rgb->at(2));
 }
 
 /*void UniqueDataVector::set(int index, double x, double y, double z) {
@@ -324,13 +330,13 @@ void UniqueDataVector<T>::reserve(int reserve) {
 
 template <typename T>
 void UniqueDataVector<T>::reverse_indicies() {
-    std::reverse(this->indicies->begin(), this->indicies->end()); 
+    std::reverse(this->indicies->begin(), this->indicies->end());
 }
 
 
 template <typename T>
 void UniqueDataVector<T>::reverse_verticies() {
-	std::reverse(this->vectors->begin(), this->vectors->end()); 
+	std::reverse(this->vectors->begin(), this->vectors->end());
 }
 
 template <typename T>
