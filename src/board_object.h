@@ -1,7 +1,10 @@
 #ifndef BOARD_OBJECT_H
 #define BOARD_OBJECT_H
 
-class BoardObject {
+class Controller;
+
+
+class BoardObject: public Renderable  {
 	private:
 		bool selected;
 		GLvoid* tex_data;
@@ -13,7 +16,6 @@ class BoardObject {
 
 		BoardObject(Hexagon*);
 
-		void render();
 		void move_to_hex(Hexagon*);
 
 		void set_selected(bool);
@@ -21,7 +23,11 @@ class BoardObject {
 
 		void set_tex_data(GLvoid*);
 		GLvoid* get_tex_data();
+
+		virtual void render(Controller*, int, int, int, int);
+		void render();
 };
+
 
 #endif
 

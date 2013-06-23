@@ -5,11 +5,11 @@ GameboardChunk::GameboardChunk(Hexagon* base_hex) {
 
 	this->board_terrain_data = NULL;
 	this->board_select_data = NULL;
-	this->board_object_data = NULL;
+	//this->board_object_data = NULL;
 
 	this->regenerate_terrain = true;
 	this->regenerate_select = true;
-	this->regenerate_object = true;
+	//this->regenerate_object = true;
 }
 
 
@@ -45,14 +45,14 @@ void GameboardChunk::clear_select() {
 	this->regenerate_select = true;
 }
 
-void GameboardChunk::clear_object() {
+/*void GameboardChunk::clear_object() {
 	if(this->board_object_data) {
 		delete this->board_object_data;
 	}
 
 	this->board_object_data = new UniqueDataVector< GLfloat >();
 	this->regenerate_object = true;
-}
+}*/
 
 void GameboardChunk::generate_render_data(Hexagon* curr_hex, double x, double y) {
 	// TODO: I don't like this logic being here.. this should be moved out...
@@ -64,9 +64,9 @@ void GameboardChunk::generate_render_data(Hexagon* curr_hex, double x, double y)
 		curr_hex->generate_select_data(x, y, this->board_select_data);
 	}
 
-	if(this->regenerate_object) {
+	/*if(this->regenerate_object) {
 		curr_hex->generate_object_data(x, y, this->board_object_data);
-	}
+	}*/
 
 	curr_hex->parent_chunk = this;
 }
@@ -114,14 +114,14 @@ void GameboardChunk::generate_chunk_data() {
 		this->board_select_data->reverse_indicies();
 	}
 
-	if(this->regenerate_object) {
+	/*if(this->regenerate_object) {
 		this->board_object_data->reverse_indicies();
-	}
+	}*/
 }
 
 
 void GameboardChunk::verify_render_data() {
-	if(this->regenerate_terrain || this->regenerate_select || this->regenerate_object) {
+	if(this->regenerate_terrain || this->regenerate_select) {// || this->regenerate_object) {
 		if(this->regenerate_terrain) {
 			this->clear_terrain();
 		}
@@ -130,23 +130,23 @@ void GameboardChunk::verify_render_data() {
 			this->clear_select();
 		}
 
-		if(this->regenerate_object) {
+		/*if(this->regenerate_object) {
 			this->clear_object();
-		}
+		}*/
 
 		this->generate_chunk_data();
 		this->write_VBO_data();
 
 		this->regenerate_terrain = false;
 		this->regenerate_select = false;
-		this->regenerate_object = false;
+		//this->regenerate_object = false;
 	}
 }
 
 void GameboardChunk::write_VBO_data() {
 	this->board_terrain_data->write_VBO_data(GL_STATIC_DRAW);
 	this->board_select_data->write_VBO_data(GL_STATIC_DRAW);
-	this->board_object_data->write_VBO_data(GL_STATIC_DRAW);
+	//this->board_object_data->write_VBO_data(GL_STATIC_DRAW);
 }
 
 void GameboardChunk::render() {
@@ -183,7 +183,7 @@ void GameboardChunk::render() {
 
 	//----------------------------------------
 
-	glDisable(GL_CULL_FACE);
+	/*glDisable(GL_CULL_FACE);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 
@@ -193,7 +193,7 @@ void GameboardChunk::render() {
 
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
-	glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);*/
 
 	//----------------------------------------
 

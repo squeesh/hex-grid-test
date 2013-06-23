@@ -2,12 +2,13 @@
 #define RENDER_CONTROLLER_H
 
 class Hexagon;
+class Controller;
 
 
 class Renderable {
 	public:
 		Renderable();
-		virtual void render(int x_start, int x_stop, int y_start, int y_stop) {}
+		virtual void render(Controller* curr_ctrl, int x_start, int x_stop, int y_start, int y_stop) {}
 };
 
 

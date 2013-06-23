@@ -162,7 +162,7 @@ void RenderController::render() {
 
 	//std::cout << "size: " << this->renderables->size() << std::endl;
 	for(int i = 0; i < this->renderables->size(); i++) {
-		this->renderables->at(i)->render(neg_x_view, pos_x_view, neg_y_view, pos_y_view);
+		this->renderables->at(i)->render(curr_ctrl, neg_x_view, pos_x_view, neg_y_view, pos_y_view);
 	}
 }
 

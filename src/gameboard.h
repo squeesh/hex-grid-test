@@ -1,6 +1,9 @@
 #ifndef GAMEBOARD_H
 #define GAMEBOARD_H
 
+class Controller;
+
+
 class GameboardBase {
 	protected:
 		RoundVector< RoundVector< Hexagon* >* >* hexagon_list;
@@ -15,6 +18,7 @@ class GameboardBase {
 		void bind_obj_hex(BoardObject*, Hexagon*);
 };
 
+
 class Gameboard: public GameboardBase, public Renderable {
 	private:
 		std::map< Hexagon*, GameboardChunk* >* chunk_map;
@@ -23,7 +27,7 @@ class Gameboard: public GameboardBase, public Renderable {
 		Gameboard();
 
 		GameboardChunk* get_chunk(Hexagon*);
-		virtual void render(int, int, int, int);
+		virtual void render(Controller*, int, int, int, int);
 };
 
 

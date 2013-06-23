@@ -36,18 +36,18 @@ RoundVector< RoundVector< Hexagon* >* >* GameboardBase::get_hexagon_list() {
 
 void GameboardBase::bind_obj_hex(BoardObject* curr_obj, Hexagon* curr_hex) {
 	if(curr_obj->base_hex) {
-		if(curr_obj->base_hex->parent_chunk) {
+		/*if(curr_obj->base_hex->parent_chunk) {
 			curr_obj->base_hex->parent_chunk->regenerate_object = true;
-		}
+		}*/
 		this->board_object_map->erase(curr_obj->base_hex);
 	}
 
 	std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(this->board_object_map);
 	curr_board_object_map[curr_hex] = curr_obj;
 	curr_obj->base_hex = curr_hex;
-	if(curr_hex->parent_chunk) {
+	/*if(curr_hex->parent_chunk) {
 	    curr_hex->parent_chunk->regenerate_object = true;
-	}
+	}*/
 }
 
 // -----------------------------------
@@ -74,7 +74,7 @@ GameboardChunk* Gameboard::get_chunk(Hexagon* base_hex) {
 }
 
 
-void Gameboard::render(int x_start, int x_stop, int y_start, int y_stop) {
+void Gameboard::render(Controller* curr_ctrl, int x_start, int x_stop, int y_start, int y_stop) {
     // draw game board
     for(int j = y_start; j <= y_stop; j+=GlobalConsts::BOARD_CHUNK_SIZE) {
         for(int i = x_start; i <= x_stop; i+=GlobalConsts::BOARD_CHUNK_SIZE) {

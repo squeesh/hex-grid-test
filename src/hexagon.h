@@ -27,7 +27,7 @@ class Hexagon {
 		std::map<const char*, Vertex*, cmp_str> verticies;
 
 		double last_x;
-		double last_y;	
+		double last_y;
 
 		Hexagon();
 
@@ -63,7 +63,7 @@ class Hexagon {
 
 		void generate_vertex_data(double, double, UniqueDataVector< GLfloat >*);
 		void generate_select_data(double, double, UniqueDataVector< GLfloat >*);
-		void generate_object_data(double, double, UniqueDataVector< GLfloat >*);
+		//void generate_object_data(double, double, UniqueDataVector< GLfloat >*);
 
 		BoardObject* get_board_object();
 };

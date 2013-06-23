@@ -331,7 +331,7 @@ void Hexagon::generate_select_data(double x, double y, UniqueDataVector< GLfloat
 }
 
 
-void Hexagon::generate_object_data(double x, double y, UniqueDataVector< GLfloat >* object_data) {
+/*void Hexagon::generate_object_data(double x, double y, UniqueDataVector< GLfloat >* object_data) {
 	Controller* curr_ctrl = Controller::get_controller();
 
 	std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(curr_ctrl->gameboard->board_object_map);
@@ -370,7 +370,7 @@ void Hexagon::generate_object_data(double x, double y, UniqueDataVector< GLfloat
         curr_xyz = {-0.5 + x, y, this->get_height()};
         object_data->push_back(&curr_xyz, curr_color);
 	}
-}
+}*/
 
 
 BoardObject* Hexagon::get_board_object() {

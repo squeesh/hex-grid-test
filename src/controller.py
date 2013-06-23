@@ -151,9 +151,10 @@ class Controller(object):
 
                 curr_hex = self.get_hexagon(x, y)
                 if curr_hex.is_pathable():
-                    BoardObject(curr_hex)
+                    board_obj = BoardObject(curr_hex)
                     break
 
+        board_obj.set_selected(True)
 
 #        for hex in Hexagon.get_all_hexagons():
 #            if not hex.is_pathable():
