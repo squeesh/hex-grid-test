@@ -25,7 +25,7 @@ extern "C" {
 		RenderController* curr_ctrl = RenderController::get_render_controller();
 		curr_ctrl->set_rotation(rotation);
 	}
-	
+
 	double Controller_get_rotation() {
 		RenderController* curr_ctrl = RenderController::get_render_controller();
 		return curr_ctrl->get_rotation();
@@ -223,10 +223,13 @@ extern "C" {
 	    return curr_board_obj->base_hex;
 	}
 
-	void BoardObject_move_to_hex(BoardObject* curr_obj, Hexagon* curr_hex) {
-        curr_obj->move_to_hex(curr_hex);
+	void BoardObject_move_to_hex(BoardObject* curr_board_obj, Hexagon* curr_hex) {
+        curr_board_obj->move_to_hex(curr_hex);
     }
 
+    void BoardObject_set_tex_data(BoardObject* curr_board_obj, GLvoid* tex_data) {
+    	curr_board_obj->set_tex_data(tex_data);
+    }
 
 	/********************************************/
 

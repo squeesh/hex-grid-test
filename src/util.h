@@ -156,6 +156,12 @@ PyObject* py_call_func(PyObject *py_obj, char* func_name, PyObject* py_obj_1, Py
 template <typename T>
 class UniqueDataVector {
 	private:
+		static const int VERTEX_STRIDE;
+		static const int COLOR_STRIDE;
+
+		static const int VERTEX_OFFSET;
+		static const int COLOR_OFFSET;
+
 		std::map< std::vector<T>*, GLuint, cmp_coord<T> > *index_data;
 		std::vector< std::vector<T> *> *index_data_keys;
 
@@ -165,11 +171,7 @@ class UniqueDataVector {
 		GLuint vbo_vert;
 		GLuint vbo_indicie;
 
-		static const int VERTEX_STRIDE;
-		static const int COLOR_STRIDE;
-
-		static const int VERTEX_OFFSET;
-		static const int COLOR_OFFSET;
+		GLvoid* tex_data;
 
 	public:
 		UniqueDataVector();
@@ -178,6 +180,8 @@ class UniqueDataVector {
 		T* at(int);
 		GLuint push_back(T, T, T, T, T, T);
 		GLuint push_back(std::vector<T>*, std::vector<T>*);
+
+		void set_tex_data(GLvoid*);
 
 		int vector_size();
 		int indicies_size();
@@ -293,6 +297,11 @@ GLuint UniqueDataVector<T>::push_back(std::vector<T>* vec_xyz, std::vector<T>* v
 	this->data[index+1] = y;
 	this->data[index+2] = z;
 }*/
+
+template <typename T>
+void UniqueDataVector<T>::set_tex_data(GLvoid* new_tex_data) {
+	this->tex_data = new_tex_data;
+}
 
 template <typename T>
 int UniqueDataVector<T>::vector_size() {

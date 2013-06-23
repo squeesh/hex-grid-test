@@ -350,6 +350,8 @@ void Hexagon::generate_object_data(double x, double y, UniqueDataVector< GLfloat
             curr_color = curr_board_object->color;
 	    }
 
+        object_data->set_tex_data(curr_board_object->get_tex_data());
+
         curr_xyz = {-0.5 + x, y, this->get_height()};
         object_data->push_back(&curr_xyz, curr_color);
 

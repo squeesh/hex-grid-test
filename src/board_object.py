@@ -1,3 +1,4 @@
+from PIL import Image
 from ctypes import *
 board_object_lib = cdll.LoadLibrary('./externs.so')
 board_object_lib.BoardObject_new.restype = c_long
@@ -11,22 +12,31 @@ class BoardObject(object):
     _board_obj_cache = {}
 
     curr_path = None
+    texture = '/home/squoosh/Downloads/test.png'
+    text_data = None
 
     def __init__(self, base_hex):
+        im = Image.open(self.texture)
+        self.text_data = '%s' % im.convert("RGBA").tostring("raw", "RGBA")
+        # print len(self.text_data)
+        # print len(self.text_data)
+
         self._c_pointer = board_object_lib.BoardObject_new(base_hex._c_pointer)
 
         self._board_obj_cache[self._c_pointer] = self
         self.curr_path = []
 
+        board_object_lib.BoardObject_set_tex_data(self._c_pointer, self.text_data)
+
     def set_destination(self, dest_hex):
         start_hex = self.get_base_hex()
-        
+
         self.curr_path = a_star(start_hex, dest_hex)
 #        i = 0
 #        while i < 10000:
 #            i+=1
 #            print i
-        
+
 
     @staticmethod
     def get_board_object(c_board_obj):

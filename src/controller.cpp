@@ -24,9 +24,9 @@ Controller* Controller::get_controller() {
 
 Controller* Controller::py_get_controller() {
 	if(!Controller::curr_ctrl) {
-		PyRun_SimpleString("import os, sys"); 
+		PyRun_SimpleString("import os, sys");
 		PyRun_SimpleString("sys.path.append(os.getcwd())");
-		PyRun_SimpleString("sys.dont_write_bytecode = True"); 
+		PyRun_SimpleString("sys.dont_write_bytecode = True");
 
 		try {
             PyObject *py_name = PyString_FromString("src.controller");
@@ -173,7 +173,6 @@ Hexagon* Controller::add_object_to_board(BoardObject* curr_obj, Hexagon* curr_he
     // The hexagon is the target, that the BoardObject would like to be placed on
     // if this space is occupied, the controller is free to assign it to a differnt Hexagon
     // The value returned in the Hexagon that it was actually assigned to.
-
     this->gameboard->bind_obj_hex(curr_obj, curr_hex);
     return curr_hex;
 }

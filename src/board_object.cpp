@@ -2,6 +2,7 @@
 
 BoardObject::BoardObject(Hexagon* base_hex) {
     Controller* curr_ctrl = Controller::get_controller();
+    this->base_hex = NULL;
     this->base_hex = curr_ctrl->add_object_to_board(this, base_hex);
 
 	this->color = new std::vector< GLfloat >();
@@ -15,6 +16,7 @@ BoardObject::BoardObject(Hexagon* base_hex) {
     this->selected_color->push_back(1);
 
 	this->selected = false;
+    this->tex_data = NULL;
 }
 
 
@@ -39,4 +41,11 @@ bool BoardObject::get_selected() {
 	return this->selected;
 }
 
+void BoardObject::set_tex_data(GLvoid* new_tex_data) {
+    this->tex_data = new_tex_data;
+}
+
+GLvoid* BoardObject::get_tex_data() {
+    return this->tex_data;
+}
 

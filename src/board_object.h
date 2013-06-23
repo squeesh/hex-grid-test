@@ -4,6 +4,7 @@
 class BoardObject {
 	private:
 		bool selected;
+		GLvoid* tex_data;
 
 	public:
 		Hexagon* base_hex;
@@ -17,6 +18,9 @@ class BoardObject {
 
 		void set_selected(bool);
 		bool get_selected();
+
+		void set_tex_data(GLvoid*);
+		GLvoid* get_tex_data();
 };
 
 #endif
