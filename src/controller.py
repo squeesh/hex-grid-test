@@ -20,7 +20,7 @@ from global_consts import GlobalConsts
 from hexagon import Hexagon
 from board_object import BoardObject
 
-from land_generation import RollingHills, MountainRange
+from land_generation import RollingHills, MountainRange, Road
 
 
 class Controller(object):
@@ -97,6 +97,12 @@ class Controller(object):
                 )
             print
 
+        x_start = int(random() * GlobalConsts.BOARD_WIDTH)
+        y_start = int(random() * GlobalConsts.BOARD_WIDTH)
+        Road.generate(
+            self.get_hexagon(x_start, y_start)
+        )
+
         height_list = [hex.get_height() for hex in Hexagon.get_all_hexagons()]
 
         max_height = max(height_list)
@@ -141,8 +147,6 @@ class Controller(object):
         else:
             for hex in Hexagon.get_all_hexagons():
                 hex.set_hex_color(0, 0.5, 0)
-
-        hex_list = Hexagon.get_all_hexagons()
 
         img_list = [
             '/home/squoosh/Downloads/test_a.png',

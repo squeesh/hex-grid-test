@@ -141,6 +141,14 @@ extern "C" {
 		return curr_hex->get_vertex(position);
 	}
 
+	void Hexagon_set_improvement(Hexagon *curr_hex, const char* key, bool value) {
+		curr_hex->set_improvement(key, value);
+	}
+
+	bool Hexagon_get_improvement(Hexagon *curr_hex, const char* key) {
+		return curr_hex->get_improvement(key);
+	}
+
 	void Hexagon_set_last_x(Hexagon *curr_hex, double last_x) {
 		curr_hex->last_x = last_x;
 	}

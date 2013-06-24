@@ -37,21 +37,15 @@ bool BoardObject::get_selected() {
 }
 
 void BoardObject::set_tex_data(GLvoid* new_tex_data) {
-    std::cout << "tex data" << std::endl;
-
     this->tex_data = new_tex_data;
 
     glGenTextures(1, &(this->tex_name));
     glBindTexture(GL_TEXTURE_2D, this->tex_name);
-
-
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, this->tex_data);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-
 }
 
 GLvoid* BoardObject::get_tex_data() {
@@ -91,8 +85,6 @@ void BoardObject::render(Controller* curr_ctrl, int x_start, int x_stop, int y_s
 }
 
 void BoardObject::render() {
-    glDisable(GL_CULL_FACE);
-
     glEnable(GL_TEXTURE_2D);
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     glBindTexture(GL_TEXTURE_2D, this->tex_name);

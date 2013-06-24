@@ -50,6 +50,8 @@ class GlobalConsts {
 
 		// TODO: this should be const...
 		static std::map< const char*, std::vector< double >*, cmp_str> RENDER_TRAY_COORDS;
+
+		static std::vector< double > COLOR_GREY;
 };
 
 

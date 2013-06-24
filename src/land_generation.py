@@ -61,3 +61,10 @@ class MountainRange(object):
 
             MountainRange.generate(curr_seg, curr_seg.NEIGHBOR_DIRECTION[curr_dir], total_dist-1, distance, orig_dir=orig_dir)
 
+class Road(object):
+    @staticmethod
+    def generate(curr_seg):#, distance, height_range=(0, 2)):
+        for i in range(5):
+            curr_seg.set_improvement('road', True)
+            curr_seg = curr_seg.get_neighbor('N')
+

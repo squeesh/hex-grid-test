@@ -12,6 +12,8 @@ class Hexagon {
 		std::vector< double >* select_color;
 		std::vector< double >* hex_color;
 
+		std::map< const char*, bool, cmp_str > improvements;
+
 		void base_init();
 	public:
 		static const RoundVector<const char*>* VERTEX_POSITIONS;
@@ -36,6 +38,9 @@ class Hexagon {
 
 		/*void set_border_color(double red, double green, double blue);
 		void set_border_color(std::vector< double > rgb);*/
+
+		void set_improvement(const char*, bool);
+		bool get_improvement(const char*);
 
 		void set_hex_color(double red, double green, double blue);
 		void set_hex_color(std::vector< double > rgb);

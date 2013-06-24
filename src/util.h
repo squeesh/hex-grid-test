@@ -179,6 +179,7 @@ class UniqueDataVector {
 
 		T* at(int);
 		GLuint push_back(T, T, T, T, T, T);
+		GLuint push_back(T, T, T, std::vector<T>*);
 		GLuint push_back(std::vector<T>*, std::vector<T>*);
 
 		void set_tex_data(GLvoid*);
@@ -280,6 +281,12 @@ GLuint UniqueDataVector<T>::push_back(T x, T y, T z, T r, T g, T b) {
 
 	return index;
 }
+
+template <typename T>
+GLuint UniqueDataVector<T>::push_back(T x, T y, T z, std::vector<T>* vec_rgb) {
+	return this->push_back(x, y, z, vec_rgb->at(0), vec_rgb->at(1), vec_rgb->at(2));
+}
+
 
 template <typename T>
 GLuint UniqueDataVector<T>::push_back(std::vector<T>* vec_xyz, std::vector<T>* vec_rgb) {

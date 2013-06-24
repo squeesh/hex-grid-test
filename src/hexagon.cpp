@@ -82,6 +82,8 @@ void Hexagon::base_init() {
 
 	this->hex_color = NULL;
 	this->set_hex_color(0, 1, 0);
+
+	this->improvements["road"] = false;
 }
 
 Hexagon::Hexagon() {
@@ -107,6 +109,14 @@ void Hexagon::set_border_color(std::vector<double> rgb) {
 		this->verticies[this->VERTEX_POSITIONS->at(i)]->set_color(rgb);
 	}
 }*/
+
+void Hexagon::set_improvement(const char* key, bool value) {
+	this->improvements[key] = value;
+}
+
+bool Hexagon::get_improvement(const char* key){
+	return this->improvements[key];
+}
 
 void Hexagon::set_select_color(double red, double green, double blue) {
 	bool changed = false;
@@ -277,7 +287,13 @@ void Hexagon::render_for_select(double x, double y) {
 
 void Hexagon::generate_vertex_data(double x, double y, UniqueDataVector< GLfloat >* vertex_data) {
 	Vertex* curr_vert = NULL;
-	std::vector< double >* curr_color = this->get_hex_color();
+	std::vector< double >* curr_color = NULL;
+
+	if(this->improvements["road"]) {
+		curr_color = &GlobalConsts::COLOR_GREY;
+	} else {
+		curr_color = this->get_hex_color();
+	}
 
 	for(int i = 1; i < 5; i++) {
 		curr_vert = this->verticies[this->VERTEX_POSITIONS->at(0)];

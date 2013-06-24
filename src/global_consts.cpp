@@ -1,9 +1,9 @@
 #include "includes.h"
 
 PyObject* get_py_attr(const char* attr_str) {
-	PyRun_SimpleString("import os, sys"); 
+	PyRun_SimpleString("import os, sys");
 	PyRun_SimpleString("sys.path.append(os.getcwd())");
-	PyRun_SimpleString("sys.dont_write_bytecode = True");  
+	PyRun_SimpleString("sys.dont_write_bytecode = True");
 	PyObject *py_name = PyString_FromString("src.global_consts");
 	PyObject *py_module = PyImport_Import(py_name);
 
@@ -101,7 +101,7 @@ double double_global_const_attr(const char* attr_str) {
 }
 
 std::map< const char*, std::vector< double >*, cmp_str> get_render_tray_coords() {
-	std::map< const char*, std::vector< double >*, cmp_str> output; 
+	std::map< const char*, std::vector< double >*, cmp_str> output;
 
 	output["N"] = new std::vector< double >();
 	output["N"]->push_back( 0);
@@ -176,6 +176,7 @@ const double GlobalConsts::START_VIEW_RANGE = double_global_const_attr("START_VI
 const double GlobalConsts::MAX_PATHABLE_SLOPE = double_global_const_attr("MAX_PATHABLE_SLOPE");
 
 std::map< const char*, std::vector< double >*, cmp_str>  GlobalConsts::RENDER_TRAY_COORDS = get_render_tray_coords();
+std::vector< double > GlobalConsts::COLOR_GREY = {0.5, 0.5, 0.5};
 
 
 

@@ -2,6 +2,7 @@ from ctypes import *
 hexagon_lib = cdll.LoadLibrary('./externs.so')
 hexagon_lib.Hexagon_new.restype = c_long
 hexagon_lib.Hexagon_get_vertex.restype = c_long
+hexagon_lib.Hexagon_get_improvement.restype = c_bool
 hexagon_lib.Hexagon_get_neighbor.restype = c_long
 hexagon_lib.Hexagon_get_height.restype = c_double
 hexagon_lib.Hexagon_get_slope.restype = c_double
@@ -66,6 +67,12 @@ class Hexagon(object):
 
     def get_vertex(self, position):
         return hexagon_lib.Hexagon_get_vertex(self._c_pointer, position)
+
+    def set_improvement(self, key, value):
+        hexagon_lib.Hexagon_set_improvement(self._c_pointer, key, value)
+
+    def get_improvement(self, key):
+        return hexagon_lib.Hexagon_get_improvement(self._c_pointer, key)
 
     def set_neighbors(self, neighbor_dict):
         for position, neighbor_hex in neighbor_dict.iteritems():
