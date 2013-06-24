@@ -144,6 +144,11 @@ class Controller(object):
 
         hex_list = Hexagon.get_all_hexagons()
 
+        img_list = [
+            '/home/squoosh/Downloads/test_a.png',
+            '/home/squoosh/Downloads/test_b.png',
+        ]
+
         for i in range(2):
             while True:
                 x = int(random() * GlobalConsts.BOARD_WIDTH)
@@ -151,7 +156,7 @@ class Controller(object):
 
                 curr_hex = self.get_hexagon(x, y)
                 if curr_hex.is_pathable():
-                    board_obj = BoardObject(curr_hex)
+                    board_obj = BoardObject(curr_hex, img_list[i])
                     break
 
         board_obj.set_selected(True)
