@@ -8,6 +8,7 @@ class BoardObject: public Renderable  {
 	private:
 		bool selected;
 		GLvoid* tex_data;
+		GLuint tex_name;
 
 	public:
 		Hexagon* base_hex;
