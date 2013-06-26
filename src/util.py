@@ -1,6 +1,7 @@
 from ctypes import cdll
 util_lib = cdll.LoadLibrary('./externs.so')
 
+from collections import defaultdict
 import math
 import types
 import traceback
@@ -107,6 +108,54 @@ def dist_between(curr_node, neighbor):
 
     return math.sqrt(x_diff**2 + y_diff**2)
 
+def a_star_2(start_node, goal_node):
+    open_list = [start_node]
+    closed_list = []
+    cost_dict = defaultdict(dict)
+    parent_dict = {}
+
+    cost_dict[start_node]['g'] = 0.0
+    cost_dict[start_node]['h'] = get_h_cost(start_node, goal_node)
+    cost_dict[start_node]['f'] = cost_dict[start_node]['h']
+
+    curr_node = start_node
+
+    while open_list:
+        if curr_node == goal_node:
+            return reconstruct_path(parent_dict, goal_node)
+
+        if GlobalConsts.PATH_SHOW_SEARCH and curr_node.is_pathable():
+            curr_node.set_select_color(1, 0, 0)
+
+        open_list.remove(curr_node)
+        closed_list.append(curr_node)
+
+        for direction, neighbor in curr_node.get_neighbors().items():
+            if neighbor not in closed_list:
+                parent_dict[neighbor] = curr_node
+                if neighbor.is_pathable():
+                    open_list.append(neighbor)
+                    cost_dict[neighbor]['g'] = get_g_cost(curr_node, neighbor) + cost_dict[curr_node]['g']
+                    cost_dict[neighbor]['h'] = get_h_cost(neighbor, goal_node)
+                    cost_dict[neighbor]['f'] = cost_dict[neighbor]['g'] + cost_dict[neighbor]['h']
+                else:
+                    closed_list.append(neighbor)
+
+        min_f_node = open_list[0]
+        for node in open_list[1:]:
+            if cost_dict[node]['f'] < cost_dict[min_f_node]['f']:
+                min_f_node = node
+
+        curr_node = min_f_node
+
+    return []
+
+def get_g_cost(start_node, end_node):
+    slope = end_node.get_slope() + 1
+    return (slope ** 10)
+
+def get_h_cost(start_node, end_node):
+    return dist_between(start_node, end_node)
 
 ## Wraps all functions of a class in a try / catch
 ## forces exit on error

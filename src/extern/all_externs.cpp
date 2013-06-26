@@ -244,4 +244,25 @@ extern "C" {
 	PlayerInput* PlayerInput_new(PyObject* py_pointer) {
 	    return new PlayerInput(py_pointer);
 	}
+
+	/*************************************/
+
+	PyObject* Python_test() {
+		int array_len = 5;
+
+		PyObject *lst = PyList_New(array_len);
+		if (!lst) {
+		    return NULL;
+		}
+
+		for(int i = 0; i < array_len; i++) {
+		    PyObject *num = PyFloat_FromDouble((GLdouble)i);
+		    if (!num) {
+		        Py_DECREF(lst);
+		        return NULL;
+		    }
+		    PyList_SET_ITEM(lst, i, num);   // reference to num stolen
+		}
+		return lst;
+	}
 }

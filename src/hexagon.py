@@ -6,9 +6,10 @@ hexagon_lib.Hexagon_get_improvement.restype = c_bool
 hexagon_lib.Hexagon_get_neighbor.restype = c_long
 hexagon_lib.Hexagon_get_height.restype = c_double
 hexagon_lib.Hexagon_get_slope.restype = c_double
-#hexagon_lib.Hexagon_get_last_x.restype = c_double
-#hexagon_lib.Hexagon_get_last_y.restype = c_double
+hexagon_lib.Hexagon_get_last_x.restype = c_double
+hexagon_lib.Hexagon_get_last_y.restype = c_double
 hexagon_lib.Hexagon_is_pathable.restype = c_bool
+hexagon_lib.Python_test.restype = py_object
 
 from util import RoundList
 
@@ -33,6 +34,8 @@ class Hexagon(object):
     MAX_PATHABLE_SLOPE = 2.0
 
     def __init__(self, x, y):
+        print hexagon_lib.Python_test()
+
         self._c_pointer = hexagon_lib.Hexagon_new()
         #self.set_border_color(*color)
 

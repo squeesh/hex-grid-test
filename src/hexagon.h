@@ -15,6 +15,10 @@ class Hexagon {
 		std::map< const char*, bool, cmp_str > improvements;
 
 		void base_init();
+
+		static GLdouble get_g_score(Hexagon*, Hexagon*);
+		static GLdouble get_h_score(Hexagon*, Hexagon*);
+
 	public:
 		static const RoundVector<const char*>* VERTEX_POSITIONS;
 		static const RoundVector<const char*>* NEIGHBOR_DIRECTION;
@@ -60,6 +64,8 @@ class Hexagon {
 
 		GLdouble get_slope();
 		bool is_pathable();
+
+		static std::vector< Hexagon* >* find_path(Hexagon*, Hexagon*);
 
 		void set_neighbor(const char* position, Hexagon* neighbor_hex);
 		Hexagon* get_neighbor(const char* position);

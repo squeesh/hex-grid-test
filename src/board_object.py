@@ -4,7 +4,7 @@ board_object_lib = cdll.LoadLibrary('./externs.so')
 board_object_lib.BoardObject_new.restype = c_long
 board_object_lib.BoardObject_is_selected.restype = c_bool
 
-from util import a_star
+from util import a_star_2 as a_star
 
 
 class BoardObject(object):

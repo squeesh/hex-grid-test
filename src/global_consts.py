@@ -5,7 +5,7 @@
 class GlobalConsts(object):
     SLEEP_TIME  = 30
 
-    PATH_SHOW_SEARCH = False
+    PATH_SHOW_SEARCH = True
 
     GENERATE_HILLS = True
     GENERATE_MOUNTAINS = False

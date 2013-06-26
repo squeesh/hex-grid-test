@@ -254,11 +254,66 @@ GLdouble Hexagon::get_slope() {
 		}
 	}
 
-	return abs(max_height - min_height);
+	return max_height - min_height;
 }
 
 bool Hexagon::is_pathable() {
 	return this->get_slope() <= GlobalConsts::MAX_PATHABLE_SLOPE && this->get_board_object() == NULL;
+}
+/*
+    open_list = [start_node]
+    closed_list = []
+    cost_dict = defaultdict(dict)
+    parent_dict = {}
+
+    cost_dict[start_node]['g'] = 0.0
+    cost_dict[start_node]['h'] = get_h_cost(start_node, goal_node)
+    cost_dict[start_node]['f'] = cost_dict[start_node]['h']
+
+    curr_node = start_node
+
+    while open_list:
+        if curr_node == goal_node:
+            return reconstruct_path(parent_dict, goal_node)
+
+        if GlobalConsts.PATH_SHOW_SEARCH and curr_node.is_pathable():
+            curr_node.set_select_color(1, 0, 0)
+
+        open_list.remove(curr_node)
+        closed_list.append(curr_node)
+
+        for direction, neighbor in curr_node.get_neighbors().items():
+            if neighbor not in closed_list:
+                parent_dict[neighbor] = curr_node
+                if neighbor.is_pathable():
+                    open_list.append(neighbor)
+                    cost_dict[neighbor]['g'] = get_g_cost(curr_node, neighbor) + cost_dict[curr_node]['g']
+                    cost_dict[neighbor]['h'] = get_h_cost(neighbor, goal_node)
+                    cost_dict[neighbor]['f'] = cost_dict[neighbor]['g'] + cost_dict[neighbor]['h']
+                else:
+                    closed_list.append(neighbor)
+
+        min_f_node = open_list[0]
+        for node in open_list[1:]:
+            if cost_dict[node]['f'] < cost_dict[min_f_node]['f']:
+                min_f_node = node
+
+        curr_node = min_f_node
+
+    return []
+*/
+std::vector< Hexagon* >* Hexagon::find_path(Hexagon* start_hex, Hexagon* end_hex){
+	/* A* path finding */
+	std::vector< Hexagon* > open_list = {start_hex};
+	std::vector< Hexagon* > closed_list;
+
+	std::map< Hexagon*, GLdouble > parent_map;
+	std::map< Hexagon*, GLdouble > g_score;
+	g_score[start_hex] = 0.0;
+
+	std::map< Hexagon*, GLdouble > h_score;
+	std::map< Hexagon*, GLdouble > f_score;
+
 }
 
 

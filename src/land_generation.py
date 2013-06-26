@@ -1,6 +1,6 @@
 from random import random
 
-from util import a_star
+from util import a_star_2 as a_star
 
 
 def add_mountain(center_seg, height, radius):

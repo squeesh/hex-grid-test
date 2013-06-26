@@ -14,7 +14,7 @@ controller_lib.Controller_get_zoom.restype = c_double
 from itertools import cycle, islice
 from random import random
 
-from util import dist_between, a_star
+from util import dist_between, a_star_2 as a_star
 
 from global_consts import GlobalConsts
 from hexagon import Hexagon
@@ -97,22 +97,35 @@ class Controller(object):
                 )
             print
 
-        road_hexagons = []
-        for i in range(3):
-            while True:
-                curr_hex = self.get_hexagon(int(random() * GlobalConsts.BOARD_WIDTH), int(random() * GlobalConsts.BOARD_HEIGHT))
-                if curr_hex.is_pathable():
-                    road_hexagons.append(curr_hex)
-                    break
+        # road_hexagons = []
+        # for i in range(3):
+        #     while True:
+        #         curr_hex = self.get_hexagon(int(random() * GlobalConsts.BOARD_WIDTH), int(random() * GlobalConsts.BOARD_HEIGHT))
+        #         if curr_hex.is_pathable():
+        #             road_hexagons.append(curr_hex)
+        #             break
+
+        # RoadGen.generate(
+        #     road_hexagons[0], road_hexagons[1]
+        # )
+        # RoadGen.generate(
+        #     road_hexagons[1], road_hexagons[2]
+        # )
+        # RoadGen.generate(
+        #     road_hexagons[2], road_hexagons[0]
+        # )
+
+        while True:
+            curr_hex = self.get_hexagon(int(random() * GlobalConsts.BOARD_WIDTH), int(random() * GlobalConsts.BOARD_HEIGHT))
+            if curr_hex.is_pathable():
+                break
+
+        # print 'dist: ', dist_between(curr_hex, curr_hex.get_neighbor('N').get_neighbor('N')), 'should be 2'
+        # print 'dist: ', dist_between(curr_hex, curr_hex.get_neighbor('S').get_neighbor('S')), 'should be 2'
+        # print 'dist: ', dist_between(curr_hex, curr_hex.get_neighbor('S').get_neighbor('S').get_neighbor('SE').get_neighbor('SE')), 'should be 3ish'
 
         RoadGen.generate(
-            road_hexagons[0], road_hexagons[1]
-        )
-        RoadGen.generate(
-            road_hexagons[1], road_hexagons[2]
-        )
-        RoadGen.generate(
-            road_hexagons[2], road_hexagons[0]
+            curr_hex, curr_hex.get_neighbor('N').get_neighbor('N')
         )
 
         height_list = [hex.get_height() for hex in Hexagon.get_all_hexagons()]
