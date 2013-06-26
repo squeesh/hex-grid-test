@@ -18,68 +18,68 @@ class RoundList(list):
         return super(RoundList, self).__getitem__(index % len(self))
 
 
-def a_star(start, goal):
-    closedset  = []    # The set of nodes already evaluated.
-    openset    = [start]    # The set of tentative nodes to be evaluated, initially containing the start node
-    came_from  = {}    # The map of navigated nodes.
+# def a_star(start, goal):
+#     closedset  = []    # The set of nodes already evaluated.
+#     openset    = [start]    # The set of tentative nodes to be evaluated, initially containing the start node
+#     came_from  = {}    # The map of navigated nodes.
 
-    g_score = {}
-    f_score = {}
+#     g_score = {}
+#     f_score = {}
 
-    g_score[start] = 0    # Cost from start along best known path.
-    # Estimated total cost from start to goal through y.
-    f_score[start] = g_score[start] + heuristic_cost_estimate(start, goal)
+#     g_score[start] = 0    # Cost from start along best known path.
+#     # Estimated total cost from start to goal through y.
+#     f_score[start] = g_score[start] + heuristic_cost_estimate(start, goal)
 
-    while openset:
-        curr_f_score = f_score[openset[0]]
-        current = openset[0]
+#     while openset:
+#         curr_f_score = f_score[openset[0]]
+#         current = openset[0]
 
-        for item in openset:
-            if f_score[item] < curr_f_score:
-                curr_f_score = f_score[item]
-                current = item #the node in openset having the lowest f_score[] value
+#         for item in openset:
+#             if f_score[item] < curr_f_score:
+#                 curr_f_score = f_score[item]
+#                 current = item #the node in openset having the lowest f_score[] value
 
-        if GlobalConsts.PATH_SHOW_SEARCH and current.is_pathable():
-            current.set_select_color(1, 0, 0)
+#         if GlobalConsts.PATH_SHOW_SEARCH and current.is_pathable():
+#             current.set_select_color(1, 0, 0)
 
-        if current == goal:
-            return reconstruct_path(came_from, goal)
+#         if current == goal:
+#             return reconstruct_path(came_from, goal)
 
-        openset.remove(current) # remove current from openset
-        closedset.append(current) # add current to closedset
+#         openset.remove(current) # remove current from openset
+#         closedset.append(current) # add current to closedset
 
-        for neighbor in current.get_neighbors().values():
-            if not neighbor.is_pathable():
-                closedset.append(neighbor)
+#         for neighbor in current.get_neighbors().values():
+#             if not neighbor.is_pathable():
+#                 closedset.append(neighbor)
 
-            if neighbor in closedset:
-                continue
-            tentative_g_score = g_score[current] + dist_between(current, neighbor)
+#             if neighbor in closedset:
+#                 continue
+#             tentative_g_score = g_score[current] + dist_between(current, neighbor)
 
-            if neighbor not in openset or tentative_g_score < g_score[neighbor]:
-                openset.append(neighbor) # add neighbor to openset
-                came_from[neighbor] = current
-                g_score[neighbor] = tentative_g_score
-                f_score[neighbor] = g_score[neighbor] + heuristic_cost_estimate(neighbor, goal)
+#             if neighbor not in openset or tentative_g_score < g_score[neighbor]:
+#                 openset.append(neighbor) # add neighbor to openset
+#                 came_from[neighbor] = current
+#                 g_score[neighbor] = tentative_g_score
+#                 f_score[neighbor] = g_score[neighbor] + heuristic_cost_estimate(neighbor, goal)
 
-    return []
-
-
-def reconstruct_path(came_from, current_node):
-    if current_node in came_from:
-        p = reconstruct_path(came_from, came_from[current_node])
-        return p + [current_node]
-    else:
-        return [current_node]
+#     return []
 
 
-def heuristic_cost_estimate(curr_node, goal):
-    # if curr_node.get_improvement('road'):
-    #     hex_cost = 0
-    # else:
-    #     hex_cost = ((curr_node.get_slope()+1) ** 10)
+# def reconstruct_path(came_from, current_node):
+#     if current_node in came_from:
+#         p = reconstruct_path(came_from, came_from[current_node])
+#         return p + [current_node]
+#     else:
+#         return [current_node]
 
-    return dist_between(curr_node, goal) + ((curr_node.get_slope()+1) ** 10)
+
+# def heuristic_cost_estimate(curr_node, goal):
+#     # if curr_node.get_improvement('road'):
+#     #     hex_cost = 0
+#     # else:
+#     #     hex_cost = ((curr_node.get_slope()+1) ** 10)
+
+#     return dist_between(curr_node, goal) + ((curr_node.get_slope()+1) ** 10)
 
 
 def dist_between(curr_node, neighbor):
@@ -108,53 +108,53 @@ def dist_between(curr_node, neighbor):
 
     return math.sqrt(x_diff**2 + y_diff**2)
 
-def a_star_2(start_node, goal_node):
-    open_list = [start_node]
-    closed_list = []
-    cost_dict = defaultdict(dict)
-    parent_dict = {}
+# def a_star_2(start_node, goal_node):
+#     open_list = [start_node]
+#     closed_list = []
+#     cost_dict = defaultdict(dict)
+#     parent_dict = {}
 
-    cost_dict[start_node]['g'] = 0.0
-    cost_dict[start_node]['h'] = get_h_cost(start_node, goal_node)
-    cost_dict[start_node]['f'] = cost_dict[start_node]['h']
+#     cost_dict[start_node]['g'] = 0.0
+#     cost_dict[start_node]['h'] = get_h_cost(start_node, goal_node)
+#     cost_dict[start_node]['f'] = cost_dict[start_node]['h']
 
-    curr_node = start_node
+#     curr_node = start_node
 
-    while open_list:
-        if curr_node == goal_node:
-            return reconstruct_path(parent_dict, goal_node)
+#     while open_list:
+#         if curr_node == goal_node:
+#             return reconstruct_path(parent_dict, goal_node)
 
-        if GlobalConsts.PATH_SHOW_SEARCH and curr_node.is_pathable():
-            curr_node.set_select_color(1, 0, 0)
+#         if GlobalConsts.PATH_SHOW_SEARCH and curr_node.is_pathable():
+#             curr_node.set_select_color(1, 0, 0)
 
-        open_list.remove(curr_node)
-        closed_list.append(curr_node)
+#         open_list.remove(curr_node)
+#         closed_list.append(curr_node)
 
-        for direction, neighbor in curr_node.get_neighbors().items():
-            if neighbor not in closed_list:
-                parent_dict[neighbor] = curr_node
-                if neighbor.is_pathable():
-                    open_list.append(neighbor)
-                    cost_dict[neighbor]['g'] = get_g_cost(curr_node, neighbor) + cost_dict[curr_node]['g']
-                    cost_dict[neighbor]['h'] = get_h_cost(neighbor, goal_node)
-                    cost_dict[neighbor]['f'] = cost_dict[neighbor]['g'] + cost_dict[neighbor]['h']
-                else:
-                    closed_list.append(neighbor)
+#         for direction, neighbor in curr_node.get_neighbors().items():
+#             if neighbor not in closed_list:
+#                 parent_dict[neighbor] = curr_node
+#                 if neighbor.is_pathable():
+#                     open_list.append(neighbor)
+#                     cost_dict[neighbor]['g'] = get_g_cost(curr_node, neighbor) + cost_dict[curr_node]['g']
+#                     cost_dict[neighbor]['h'] = get_h_cost(neighbor, goal_node)
+#                     cost_dict[neighbor]['f'] = cost_dict[neighbor]['g'] + cost_dict[neighbor]['h']
+#                 else:
+#                     closed_list.append(neighbor)
 
-        min_f_node = open_list[0]
-        for node in open_list[1:]:
-            if cost_dict[node]['f'] < cost_dict[min_f_node]['f']:
-                min_f_node = node
+#         min_f_node = open_list[0]
+#         for node in open_list[1:]:
+#             if cost_dict[node]['f'] < cost_dict[min_f_node]['f']:
+#                 min_f_node = node
 
-        curr_node = min_f_node
+#         curr_node = min_f_node
 
-    return []
+#     return []
 
-def get_g_cost(start_node, end_node):
-    return end_node.get_slope() + 1
+# def get_g_cost(start_node, end_node):
+#     return end_node.get_slope() + 1
 
-def get_h_cost(start_node, end_node):
-    return dist_between(start_node, end_node)
+# def get_h_cost(start_node, end_node):
+#     return dist_between(start_node, end_node)
 
 ## Wraps all functions of a class in a try / catch
 ## forces exit on error

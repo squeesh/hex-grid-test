@@ -229,6 +229,8 @@ extern "C" {
 		    }
 		    PyList_SET_ITEM(hex_list, i, py_hex);   // reference to num stolen
 		}
+
+		delete hex_vec;
 		return hex_list;
 	}
 

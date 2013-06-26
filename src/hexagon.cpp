@@ -329,7 +329,9 @@ std::vector< Hexagon* >* Hexagon::find_path(Hexagon* start_hex, Hexagon* goal_he
         //    curr_node.set_select_color(1, 0, 0)
 
         remove_from_vector(&open_list, curr_hex);
-        closed_list.push_back(curr_hex);
+        if(!item_in_vector(&closed_list, curr_hex)) {
+        	closed_list.push_back(curr_hex);
+        }
 
         std::vector<Hexagon*>* neighbors = curr_hex->get_neighbors();
         for(int i = 0; i < neighbors->size(); i++) {
