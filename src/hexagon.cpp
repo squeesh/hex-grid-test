@@ -302,18 +302,114 @@ bool Hexagon::is_pathable() {
 
     return []
 */
-std::vector< Hexagon* >* Hexagon::find_path(Hexagon* start_hex, Hexagon* end_hex){
+std::vector< Hexagon* >* Hexagon::find_path(Hexagon* start_hex, Hexagon* goal_hex) {
 	/* A* path finding */
 	std::vector< Hexagon* > open_list = {start_hex};
 	std::vector< Hexagon* > closed_list;
 
-	std::map< Hexagon*, GLdouble > parent_map;
+	std::map< Hexagon*, Hexagon* > parent_map;
+
 	std::map< Hexagon*, GLdouble > g_score;
 	g_score[start_hex] = 0.0;
 
 	std::map< Hexagon*, GLdouble > h_score;
-	std::map< Hexagon*, GLdouble > f_score;
+	h_score[start_hex] = Hexagon::get_h_score(start_hex, goal_hex);
 
+	std::map< Hexagon*, GLdouble > f_score;
+	f_score[start_hex] = h_score[start_hex];
+
+	Hexagon* curr_hex = start_hex;
+
+	while(open_list.size() > 0) {
+        if(curr_hex == goal_hex) {
+        	return Hexagon::reconstruct_path(parent_map, goal_hex);
+        }
+
+        //if GlobalConsts.PATH_SHOW_SEARCH and curr_node.is_pathable():
+        //    curr_node.set_select_color(1, 0, 0)
+
+        remove_from_vector(&open_list, curr_hex);
+        closed_list.push_back(curr_hex);
+
+        std::vector<Hexagon*>* neighbors = curr_hex->get_neighbors();
+        for(int i = 0; i < neighbors->size(); i++) {
+        	Hexagon* curr_neighbor = neighbors->at(i);
+
+        	if(!item_in_vector(&closed_list, curr_neighbor)) {
+        		parent_map[curr_neighbor] = curr_hex;
+
+        		if(curr_neighbor->is_pathable()) {
+        			open_list.push_back(curr_neighbor);
+        			g_score[curr_neighbor] = Hexagon::get_g_score(curr_hex, curr_neighbor) + g_score[curr_hex];
+        			h_score[curr_neighbor] = Hexagon::get_h_score(curr_neighbor, goal_hex);
+        			f_score[curr_neighbor] = g_score[curr_neighbor] + h_score[curr_neighbor];
+        		} else {
+        			closed_list.push_back(curr_neighbor);
+        		}
+        	}
+        }
+
+        delete neighbors;
+
+        Hexagon* min_f_hex = open_list[0];
+        for(int i = 1; i < open_list.size(); i++) {
+        	if(f_score[open_list[i]] < f_score[min_f_hex]) {
+        		min_f_hex = open_list[i];
+        	}
+	    }
+
+	    curr_hex = min_f_hex;
+	}
+
+	return new std::vector< Hexagon* >();
+
+}
+
+GLdouble Hexagon::get_g_score(Hexagon* start_hex, Hexagon* end_hex) {
+    return end_hex->get_slope() + 1;
+}
+
+GLdouble Hexagon::get_h_score(Hexagon* start_hex, Hexagon* end_hex) {
+	return dist_between(start_hex, end_hex);
+}
+
+std::vector< Hexagon* >* Hexagon::reconstruct_path(std::map< Hexagon*, Hexagon* > parent_map, Hexagon* curr_hex) {
+	Hexagon* parent_hex = parent_map[curr_hex];
+	std::vector< Hexagon* >* output = NULL;
+
+    if(parent_hex) {
+        output = Hexagon::reconstruct_path(parent_map, parent_hex);
+    } else {
+    	output = new std::vector< Hexagon* >();
+	}
+
+	output->push_back(curr_hex);
+	return output;
+}
+
+GLdouble Hexagon::dist_between(Hexagon* hex_a, Hexagon* hex_b) {
+	GLdouble board_width  = GlobalConsts::BOARD_WIDTH  * 1.5 * GlobalConsts::COS_60;
+	GLdouble board_height = GlobalConsts::BOARD_HEIGHT * 1.0 * GlobalConsts::SIN_60;
+
+	GLdouble x_diff = hex_b->last_x - hex_a->last_x;
+	GLdouble y_diff = hex_b->last_y - hex_a->last_y;
+
+	GLdouble half_width  = board_width  / 2.0;
+    GLdouble half_height = board_height / 2.0;
+
+    if(x_diff > half_width) {
+        x_diff -= board_width;
+    } else if(x_diff < -half_width) {
+        x_diff += board_width;
+    }
+
+    if(y_diff > half_height) {
+        y_diff -= board_height;
+    } else if(y_diff < -half_height) {
+        y_diff += board_height;
+    }
+
+    return sqrt(pow(x_diff, 2.0) + pow(y_diff, 2.0));
 }
 
 
@@ -326,6 +422,15 @@ Hexagon* Hexagon::get_neighbor(const char* position) {
 	return this->neighbor_hexagons[position];
 }
 
+std::vector<Hexagon*>* Hexagon::get_neighbors() {
+    std::vector<Hexagon*>* output = new std::vector<Hexagon*>();
+
+    for(int i = 0; i < Hexagon::NEIGHBOR_DIRECTION->size(); i++) {
+    	output->push_back(this->get_neighbor(Hexagon::NEIGHBOR_DIRECTION->at(i)));
+    }
+
+    return output;
+}
 
 void Hexagon::render_for_select(GLdouble x, GLdouble y) {
 	glBegin(GL_TRIANGLE_FAN);

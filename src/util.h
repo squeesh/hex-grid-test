@@ -400,4 +400,37 @@ const int UniqueDataVector<T>::COLOR_OFFSET  = sizeof(T) * 3;
 
 class PythonException : public std::exception {};
 
+
+template <typename T>
+std::vector<T>* remove_from_vector(std::vector<T>* vec, T elem) {
+	int pos = -1;
+
+	for(int i = 0; i < vec->size(); i++) {
+		if(vec->at(i) == elem) {
+			pos = i;
+			break;
+		}
+	}
+
+	if(pos >= 0) {
+		vec->erase(vec->begin()+pos);
+	} else {
+		T temp = vec->at(-1);
+	}
+
+	return vec;
+}
+
+template <typename T>
+bool item_in_vector(std::vector<T>* vec, T elem) {
+	for(int i = 0; i < vec->size(); i++) {
+		if(vec->at(i) == elem) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
 #endif

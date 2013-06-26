@@ -151,8 +151,7 @@ def a_star_2(start_node, goal_node):
     return []
 
 def get_g_cost(start_node, end_node):
-    slope = end_node.get_slope() + 1
-    return (slope ** 10)
+    return end_node.get_slope() + 1
 
 def get_h_cost(start_node, end_node):
     return dist_between(start_node, end_node)

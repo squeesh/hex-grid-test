@@ -4,7 +4,7 @@ board_object_lib = cdll.LoadLibrary('./externs.so')
 board_object_lib.BoardObject_new.restype = c_long
 board_object_lib.BoardObject_is_selected.restype = c_bool
 
-from util import a_star_2 as a_star
+# from util import a_star_2 as a_star
 
 
 class BoardObject(object):
@@ -26,9 +26,12 @@ class BoardObject(object):
         board_object_lib.BoardObject_set_tex_data(self._c_pointer, self.text_data)
 
     def set_destination(self, dest_hex):
+        from hexagon import Hexagon
+
         start_hex = self.get_base_hex()
 
-        self.curr_path = a_star(start_hex, dest_hex)
+        # self.curr_path = a_star(start_hex, dest_hex)
+        self.curr_path = Hexagon.find_path(start_hex, dest_hex)
 
     @staticmethod
     def get_board_object(c_board_obj):

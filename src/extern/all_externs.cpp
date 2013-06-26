@@ -213,6 +213,25 @@ extern "C" {
 	    curr_hex->get_board_object();
 	}
 
+	PyObject* Hexagon_find_path(Hexagon* start_hex, Hexagon* goal_hex) {
+		std::vector< Hexagon* >* hex_vec = Hexagon::find_path(start_hex, goal_hex);
+
+		PyObject *hex_list = PyList_New(hex_vec->size());
+		if (!hex_list) {
+		    return NULL;
+		}
+
+		for(int i = 0; i < hex_vec->size(); i++) {
+		    PyObject *py_hex = PyInt_FromLong((GLlong)(hex_vec->at(i)));
+		    if (!py_hex) {
+		        Py_DECREF(py_hex);
+		        return NULL;
+		    }
+		    PyList_SET_ITEM(hex_list, i, py_hex);   // reference to num stolen
+		}
+		return hex_list;
+	}
+
 	/********************************************/
 
 	BoardObject* BoardObject_new(Hexagon* curr_hex) {
@@ -247,7 +266,7 @@ extern "C" {
 
 	/*************************************/
 
-	PyObject* Python_test() {
+	/*PyObject* Python_test() {
 		int array_len = 5;
 
 		PyObject *lst = PyList_New(array_len);
@@ -264,5 +283,5 @@ extern "C" {
 		    PyList_SET_ITEM(lst, i, num);   // reference to num stolen
 		}
 		return lst;
-	}
+	}*/
 }

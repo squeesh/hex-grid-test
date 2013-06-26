@@ -1,6 +1,6 @@
 from random import random
 
-from util import a_star_2 as a_star
+# from util import a_star_2 as a_star
 
 
 def add_mountain(center_seg, height, radius):
@@ -66,5 +66,8 @@ class MountainRangeGen(object):
 class RoadGen(object):
     @staticmethod
     def generate(start_seg, stop_seg):#, distance, height_range=(0, 2)):
-        for curr_seg in a_star(start_seg, stop_seg):
+        from hexagon import Hexagon
+
+        # for curr_seg in a_star(start_seg, stop_seg):
+        for curr_seg in Hexagon.find_path(start_seg, stop_seg):
             curr_seg.set_improvement('road', True)

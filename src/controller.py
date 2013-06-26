@@ -14,7 +14,7 @@ controller_lib.Controller_get_zoom.restype = c_double
 from itertools import cycle, islice
 from random import random
 
-from util import dist_between, a_star_2 as a_star
+# from util import dist_between, a_star_2 as a_star
 
 from global_consts import GlobalConsts
 from hexagon import Hexagon
@@ -127,6 +127,8 @@ class Controller(object):
         RoadGen.generate(
             curr_hex, curr_hex.get_neighbor('N').get_neighbor('N')
         )
+
+        Hexagon.find_path(curr_hex, curr_hex.get_neighbor('N').get_neighbor('N'))
 
         height_list = [hex.get_height() for hex in Hexagon.get_all_hexagons()]
 
@@ -343,12 +345,12 @@ class Controller(object):
         c_hex_obj = controller_lib.Controller_get_clicked_hex(c_int(x), c_int(y))
         return Hexagon.get_hexagon(c_hex_obj)
 
-    def find_path(self, start_hex, end_hex):
-        if GlobalConsts.PATH_SHOW_SEARCH:
-            for hex in Hexagon.get_all_hexagons():
-                if hex.is_pathable():
-                    hex.clear_select_color()
+    # def find_path(self, start_hex, end_hex):
+    #     if GlobalConsts.PATH_SHOW_SEARCH:
+    #         for hex in Hexagon.get_all_hexagons():
+    #             if hex.is_pathable():
+    #                 hex.clear_select_color()
 
-        for hex in a_star(start_hex, end_hex):
-            hex.set_select_color(0, 1, 1)
+    #     for hex in a_star(start_hex, end_hex):
+    #         hex.set_select_color(0, 1, 1)
 

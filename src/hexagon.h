@@ -18,6 +18,8 @@ class Hexagon {
 
 		static GLdouble get_g_score(Hexagon*, Hexagon*);
 		static GLdouble get_h_score(Hexagon*, Hexagon*);
+		static GLdouble dist_between(Hexagon*, Hexagon*);
+		static std::vector< Hexagon* >* reconstruct_path(std::map< Hexagon*, Hexagon* >, Hexagon*);
 
 	public:
 		static const RoundVector<const char*>* VERTEX_POSITIONS;
@@ -69,6 +71,7 @@ class Hexagon {
 
 		void set_neighbor(const char* position, Hexagon* neighbor_hex);
 		Hexagon* get_neighbor(const char* position);
+		std::vector<Hexagon*>* get_neighbors();
 
 		void render_for_select(GLdouble, GLdouble);
 

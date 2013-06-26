@@ -9,7 +9,8 @@ hexagon_lib.Hexagon_get_slope.restype = c_double
 hexagon_lib.Hexagon_get_last_x.restype = c_double
 hexagon_lib.Hexagon_get_last_y.restype = c_double
 hexagon_lib.Hexagon_is_pathable.restype = c_bool
-hexagon_lib.Python_test.restype = py_object
+hexagon_lib.Hexagon_find_path.restype = py_object
+# hexagon_lib.Python_test.restype = py_object
 
 from util import RoundList
 
@@ -34,8 +35,6 @@ class Hexagon(object):
     MAX_PATHABLE_SLOPE = 2.0
 
     def __init__(self, x, y):
-        print hexagon_lib.Python_test()
-
         self._c_pointer = hexagon_lib.Hexagon_new()
         #self.set_border_color(*color)
 
@@ -155,6 +154,10 @@ class Hexagon(object):
         from board_object import BoardObject
         c_pointer = hexagon_lib.Hexagon_get_board_object(self._c_pointer)
         return BoardObject.get_board_object(c_pointer)
+
+    @staticmethod
+    def find_path(hex_a, hex_b):
+        return [Hexagon.get_hexagon(hex_addr) for hex_addr in hexagon_lib.Hexagon_find_path(hex_a._c_pointer, hex_b._c_pointer)]
 
 
 class Vertex(object):

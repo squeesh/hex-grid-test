@@ -48,6 +48,8 @@ class GlobalConsts {
 
 		static const GLdouble MAX_PATHABLE_SLOPE;
 
+		//static const bool PATH_SHOW_SEARCH;
+
 		// TODO: this should be const...
 		static std::map< const char*, std::vector< GLdouble >*, cmp_str> RENDER_TRAY_COORDS;
 
