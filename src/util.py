@@ -73,12 +73,12 @@ def reconstruct_path(came_from, current_node):
 
 
 def heuristic_cost_estimate(curr_node, goal):
-    if curr_node.get_improvement('road'):
-        hex_cost = 0
-    else:
-        hex_cost = ((curr_node.get_slope()+1) ** 10)
+    # if curr_node.get_improvement('road'):
+    #     hex_cost = 0
+    # else:
+    #     hex_cost = ((curr_node.get_slope()+1) ** 10)
 
-    return dist_between(curr_node, goal) + hex_cost
+    return dist_between(curr_node, goal) + ((curr_node.get_slope()+1) ** 10)
 
 
 def dist_between(curr_node, neighbor):

@@ -165,12 +165,25 @@ class Controller(object):
             '/home/squoosh/Downloads/test_b.png',
         ]
 
-        for i in range(2):
+        for i in range(1):
             while True:
                 curr_hex = self.get_hexagon(int(random() * GlobalConsts.BOARD_WIDTH), int(random() * GlobalConsts.BOARD_HEIGHT))
                 if curr_hex.is_pathable():
                     board_obj = BoardObject(curr_hex, img_list[i])
                     break
+
+        # orig_hex = self.get_hexagon(int(random() * GlobalConsts.BOARD_WIDTH), int(random() * GlobalConsts.BOARD_HEIGHT))
+        # for i in range(10):
+        #     curr_hex = orig_hex
+        #     for j in range(13):
+        #         curr_hex.set_select_color(1, 0, 1)
+        #         k = 0.0
+        #         for neigh_hex in curr_hex.get_neighbors().values():
+        #             k += 1.0 / 6.0
+        #             neigh_hex.set_select_color(1, k, 0)
+        #         curr_hex = curr_hex.get_neighbor("N").get_neighbor("N").get_neighbor("N")
+
+        #     orig_hex = orig_hex.get_neighbor("NE").get_neighbor("SE").get_neighbor("NE").get_neighbor("SE")
 
         board_obj.set_selected(True)
 
@@ -308,15 +321,20 @@ class Controller(object):
 #        controller_lib.Controller_clear_selected_hex()
 
     def get_clicked_hex(self, x, y):
+        for hex in Hexagon.get_all_hexagons():
+            if hex.is_pathable():
+                hex.clear_select_color()
+
         x = int(x)
         y = int(y)
         c_hex_obj = controller_lib.Controller_get_clicked_hex(c_int(x), c_int(y))
         return Hexagon.get_hexagon(c_hex_obj)
 
     def find_path(self, start_hex, end_hex):
-        for hex in Hexagon.get_all_hexagons():
-            if hex.is_pathable():
-                hex.clear_select_color()
+        if GlobalConsts.PATH_SHOW_SEARCH:
+            for hex in Hexagon.get_all_hexagons():
+                if hex.is_pathable():
+                    hex.clear_select_color()
 
         for hex in a_star(start_hex, end_hex):
             hex.set_select_color(0, 1, 1)
