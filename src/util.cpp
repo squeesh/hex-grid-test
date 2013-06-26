@@ -23,7 +23,7 @@ PyObject* py_call_func(PyObject *py_obj, char* func_name) {
 
 PyObject* py_call_func(PyObject *py_obj, char* func_name, void* obj_arg_1) {
     try {
-        PyObject *py_obj_addr_1 = PyInt_FromLong((long)obj_arg_1);
+        PyObject *py_obj_addr_1 = PyInt_FromLong((GLlong)obj_arg_1);
 
         PyObject *py_func = PyObject_GetAttrString(py_obj, func_name);
         if(PyErr_Occurred()) {
@@ -46,8 +46,8 @@ PyObject* py_call_func(PyObject *py_obj, char* func_name, void* obj_arg_1) {
 
 PyObject* py_call_func(PyObject *py_obj, char* func_name, void* obj_arg_1, void* obj_arg_2) {
     try {
-        PyObject *py_obj_addr_1 = PyInt_FromLong((long)obj_arg_1);
-        PyObject *py_obj_addr_2 = PyInt_FromLong((long)obj_arg_2);
+        PyObject *py_obj_addr_1 = PyInt_FromLong((GLlong)obj_arg_1);
+        PyObject *py_obj_addr_2 = PyInt_FromLong((GLlong)obj_arg_2);
 
         PyObject *py_func = PyObject_GetAttrString(py_obj, func_name);
         if(PyErr_Occurred()) {
@@ -71,9 +71,9 @@ PyObject* py_call_func(PyObject *py_obj, char* func_name, void* obj_arg_1, void*
 
 PyObject* py_call_func(PyObject *py_obj, char* func_name, void* obj_arg_1, void* obj_arg_2, void* obj_arg_3) {
     try {
-        PyObject *py_obj_addr_1 = PyInt_FromLong((long)obj_arg_1);
-        PyObject *py_obj_addr_2 = PyInt_FromLong((long)obj_arg_2);
-        PyObject *py_obj_addr_3 = PyInt_FromLong((long)obj_arg_3);
+        PyObject *py_obj_addr_1 = PyInt_FromLong((GLlong)obj_arg_1);
+        PyObject *py_obj_addr_2 = PyInt_FromLong((GLlong)obj_arg_2);
+        PyObject *py_obj_addr_3 = PyInt_FromLong((GLlong)obj_arg_3);
 
         PyObject *py_func = PyObject_GetAttrString(py_obj, func_name);
         if(PyErr_Occurred()) {

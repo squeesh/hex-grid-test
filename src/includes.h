@@ -14,6 +14,8 @@
 #include <stdlib.h>
 
 
+#include "defines.h"
+
 #include "util.h"
 #include "global_consts.h"
 #include "render_controller.h"
@@ -24,5 +26,3 @@
 #include "gameboard.h"
 #include "player_input.h"
 #include "controller.h"
-
-

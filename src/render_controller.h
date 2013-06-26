@@ -28,14 +28,14 @@ class RenderController {
 	public:
 		static std::string print_string;
 
-		long width;
-		long height;
+		GLlong width;
+		GLlong height;
 
 		GLdouble x_offset;
 		GLdouble y_offset;
 
-		void init_gl(long, long);
-		void resize(long, long);
+		void init_gl(GLlong, GLlong);
+		void resize(GLlong, GLlong);
 
 		void tick();
 

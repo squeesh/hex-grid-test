@@ -232,7 +232,7 @@ template <typename T>
 T* UniqueDataVector<T>::at(int index) {
 	if(index < this->size()) {
 		// fun with pointers...
-		return (T*)((long)(this->data()) + (sizeof(T) * index * 3));
+		return (T*)((GLlong)(this->data()) + (sizeof(T) * index * 3));
 	} else {
 		// throw whatever error at() throws...
 		// TODO: QUIT BEING LAZY

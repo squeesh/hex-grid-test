@@ -4,7 +4,7 @@
 
 class GlobalConsts {
 	public:
-        static const long SLEEP_TIME;
+        static const GLlong SLEEP_TIME;
 
 		static const GLdouble COS_60;
 		static const GLdouble SIN_60;
@@ -30,13 +30,13 @@ class GlobalConsts {
         static const int RENDER_LINES;
         static const int RENDER_TRIANGLES;
 
-		static const long SCREEN_WIDTH;
-		static const long SCREEN_HEIGHT;
+		static const GLlong SCREEN_WIDTH;
+		static const GLlong SCREEN_HEIGHT;
 
-		static const long BOARD_WIDTH;
-		static const long BOARD_HEIGHT;
+		static const GLlong BOARD_WIDTH;
+		static const GLlong BOARD_HEIGHT;
 
-		static const long BOARD_CHUNK_SIZE;
+		static const GLlong BOARD_CHUNK_SIZE;
 
 		static const GLdouble MIN_ZOOM;
 		static const GLdouble MAX_ZOOM;

@@ -33,7 +33,7 @@ RenderController::RenderController() {
 }
 
 
-void RenderController::init_gl(long width, long height) {
+void RenderController::init_gl(GLlong width, GLlong height) {
 	this->width = width;
 	this->height = height;
 
@@ -71,7 +71,7 @@ void RenderController::init_gl(long width, long height) {
 
 }
 
-void RenderController::resize(long width, long height) {
+void RenderController::resize(GLlong width, GLlong height) {
         this->width = width;
 	this->height = height;
 
@@ -235,8 +235,8 @@ void RenderController::render_for_select() {
 
 Hexagon* RenderController::get_clicked_hex(GLdouble x, GLdouble y) {
 	GLuint buff[64] = {0};
-	GLint hits = 0;
-	GLint view[4];
+	int hits = 0;
+	int view[4];
 
 	glSelectBuffer(64, buff);
 

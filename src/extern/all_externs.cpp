@@ -51,12 +51,12 @@ extern "C" {
 		curr_ctrl->clear_scroll(direction);
 	}
 
-	/*void Controller_init_gl(long width, long height) {
+	/*void Controller_init_gl(GLlong width, GLlong height) {
 		Controller* curr_ctrl = Controller_get_controller();
 		curr_ctrl->init_gl(width, height);
 	}*/
 
-	/*void Controller_resize(long width, long height) {
+	/*void Controller_resize(GLlong width, GLlong height) {
 		Controller* curr_ctrl = Controller_get_controller();
 		curr_ctrl->resize(width, height);
 	}*/

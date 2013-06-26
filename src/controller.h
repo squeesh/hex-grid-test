@@ -23,7 +23,7 @@ class Controller {
 		void tick();
 
 		void push_hexagon(Hexagon*);
-		Hexagon* get_hex_by_name(long);
+		Hexagon* get_hex_by_name(GLlong);
 		Hexagon* get_hexagon(int, int);
 
 		std::set< Hexagon* >* get_neighbors_in_radius(Hexagon*, int);

@@ -110,7 +110,7 @@ void Controller::push_hexagon(Hexagon *hex) {
 }
 
 
-Hexagon* Controller::get_hex_by_name(long name) {
+Hexagon* Controller::get_hex_by_name(GLlong name) {
 	for(int i = 0; i < this->gameboard->get_hexagon_list()->size(); i++) {
 		for(int j = 0; j < this->gameboard->get_hexagon_list()->at(i)->size(); j++) {
 			Hexagon* curr_hex = this->gameboard->get_hexagon_list()->at(i)->at(j);

@@ -26,7 +26,7 @@ PyObject* get_py_attr(const char* attr_str) {
 	return py_attr;
 }
 
-long long_global_const_attr(const char* attr_str) {
+GLlong long_global_const_attr(const char* attr_str) {
 	bool py_needed_init = false;
 
 	if(!Py_IsInitialized() ) {
@@ -40,7 +40,7 @@ long long_global_const_attr(const char* attr_str) {
 		return NULL;
 	}
 
-	long output = PyInt_AsLong(py_attr);
+	GLlong output = PyInt_AsLong(py_attr);
 	Py_XDECREF(py_attr);
 
 	if(py_needed_init) {
@@ -131,7 +131,7 @@ std::map< const char*, std::vector< GLdouble >*, cmp_str> get_render_tray_coords
 }
 
 
-const long GlobalConsts::SLEEP_TIME = long_global_const_attr("SLEEP_TIME");
+const GLlong GlobalConsts::SLEEP_TIME = long_global_const_attr("SLEEP_TIME");
 
 const GLdouble GlobalConsts::COS_60 = double_global_const_attr("COS_60");
 const GLdouble GlobalConsts::SIN_60 = double_global_const_attr("SIN_60");
@@ -157,13 +157,13 @@ const int GlobalConsts::KEY_DOWN    = long_global_const_attr("KEY_DOWN");
 const int GlobalConsts::RENDER_LINES     = long_global_const_attr("RENDER_LINES");
 const int GlobalConsts::RENDER_TRIANGLES = long_global_const_attr("RENDER_TRIANGLES");
 
-const long GlobalConsts::SCREEN_WIDTH  = long_global_const_attr("SCREEN_WIDTH");
-const long GlobalConsts::SCREEN_HEIGHT = long_global_const_attr("SCREEN_HEIGHT");
+const GLlong GlobalConsts::SCREEN_WIDTH  = long_global_const_attr("SCREEN_WIDTH");
+const GLlong GlobalConsts::SCREEN_HEIGHT = long_global_const_attr("SCREEN_HEIGHT");
 
-const long GlobalConsts::BOARD_WIDTH  = long_global_const_attr("BOARD_WIDTH");
-const long GlobalConsts::BOARD_HEIGHT = long_global_const_attr("BOARD_HEIGHT");
+const GLlong GlobalConsts::BOARD_WIDTH  = long_global_const_attr("BOARD_WIDTH");
+const GLlong GlobalConsts::BOARD_HEIGHT = long_global_const_attr("BOARD_HEIGHT");
 
-const long GlobalConsts::BOARD_CHUNK_SIZE = long_global_const_attr("BOARD_CHUNK_SIZE");
+const GLlong GlobalConsts::BOARD_CHUNK_SIZE = long_global_const_attr("BOARD_CHUNK_SIZE");
 
 const GLdouble GlobalConsts::MIN_ZOOM = double_global_const_attr("MIN_ZOOM");
 const GLdouble GlobalConsts::MAX_ZOOM = double_global_const_attr("MAX_ZOOM");
