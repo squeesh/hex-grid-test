@@ -106,7 +106,7 @@ void RenderController::render() {
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	std::vector< GLfloat >* color = new std::vector< GLfloat >();
+	std::vector< GLdouble >* color = new std::vector< GLdouble >();
 	color->push_back(1);
 	color->push_back(1);
 	color->push_back(0);
@@ -284,7 +284,7 @@ Hexagon* RenderController::get_clicked_hex(GLdouble x, GLdouble y) {
 
 
 void RenderController::render_string(int x, int y, std::string curr_string) {
-	std::vector< GLfloat >* default_color = new std::vector< GLfloat >();
+	std::vector< GLdouble >* default_color = new std::vector< GLdouble >();
 	default_color->push_back(0);
 	default_color->push_back(0);
 	default_color->push_back(0);
@@ -294,16 +294,16 @@ void RenderController::render_string(int x, int y, std::string curr_string) {
 	delete default_color;
 }
 
-void RenderController::render_string(int x, int y, std::string curr_string, std::vector< GLfloat >* color) {
+void RenderController::render_string(int x, int y, std::string curr_string, std::vector< GLdouble >* color) {
 	glPushMatrix();
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
 			glLoadIdentity();
-			glOrtho(0, this->curr_rend_ctrl->width, 0, this->curr_rend_ctrl->height, -1.0f, 1.0f);
+			glOrtho(0, this->curr_rend_ctrl->width, 0, this->curr_rend_ctrl->height, -1.0, 1.0);
 			glMatrixMode(GL_MODELVIEW);
 			glPushMatrix();
 				glLoadIdentity();
-				glColor3fv(color->data());
+				glColor3dv(color->data());
 				glRasterPos2i(x, this->curr_rend_ctrl->height - y);
 				glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)curr_string.data());
 				glMatrixMode(GL_PROJECTION);

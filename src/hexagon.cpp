@@ -285,7 +285,7 @@ void Hexagon::render_for_select(GLdouble x, GLdouble y) {
 }
 
 
-void Hexagon::generate_vertex_data(GLdouble x, GLdouble y, UniqueDataVector< GLfloat >* vertex_data) {
+void Hexagon::generate_vertex_data(GLdouble x, GLdouble y, UniqueDataVector< GLdouble >* vertex_data) {
 	Vertex* curr_vert = NULL;
 	std::vector< GLdouble >* curr_color = NULL;
 
@@ -320,7 +320,7 @@ void Hexagon::generate_vertex_data(GLdouble x, GLdouble y, UniqueDataVector< GLf
 }
 
 
-void Hexagon::generate_select_data(GLdouble x, GLdouble y, UniqueDataVector< GLfloat >* select_data) {
+void Hexagon::generate_select_data(GLdouble x, GLdouble y, UniqueDataVector< GLdouble >* select_data) {
 	Vertex* curr_vert = NULL;
 	std::vector< GLdouble >* curr_color = this->get_select_color();
 
@@ -347,7 +347,7 @@ void Hexagon::generate_select_data(GLdouble x, GLdouble y, UniqueDataVector< GLf
 }
 
 
-/*void Hexagon::generate_object_data(GLdouble x, GLdouble y, UniqueDataVector< GLfloat >* object_data) {
+/*void Hexagon::generate_object_data(GLdouble x, GLdouble y, UniqueDataVector< GLdouble >* object_data) {
 	Controller* curr_ctrl = Controller::get_controller();
 
 	std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(curr_ctrl->gameboard->board_object_map);
@@ -357,8 +357,8 @@ void Hexagon::generate_select_data(GLdouble x, GLdouble y, UniqueDataVector< GLf
     BoardObject* curr_board_object = curr_board_object_map[this];
 
 	if(curr_board_object) {
-        std::vector< GLfloat > curr_xyz;
-        std::vector< GLfloat >* curr_color = NULL;
+        std::vector< GLdouble > curr_xyz;
+        std::vector< GLdouble >* curr_color = NULL;
 
 	    if(curr_board_object->get_selected()) {
             curr_color = curr_board_object->selected_color;

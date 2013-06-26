@@ -7,9 +7,9 @@ class GameboardChunk {
 	private:
 		Hexagon* base_hex;
 
-		UniqueDataVector< GLfloat >* board_terrain_data;
-		UniqueDataVector< GLfloat >* board_select_data;
-		//UniqueDataVector< GLfloat >* board_object_data;
+		UniqueDataVector< GLdouble >* board_terrain_data;
+		UniqueDataVector< GLdouble >* board_select_data;
+		//UniqueDataVector< GLdouble >* board_object_data;
 
 		void clear_terrain();
 		void clear_select();

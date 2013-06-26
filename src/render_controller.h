@@ -46,7 +46,7 @@ class RenderController {
 		Hexagon* get_clicked_hex(GLdouble, GLdouble);
 
 		void render_string(int, int, std::string);
-		void render_string(int, int, std::string, std::vector< GLfloat >*);
+		void render_string(int, int, std::string, std::vector< GLdouble >*);
 
 		void set_scroll(char);
 		void clear_scroll(char);

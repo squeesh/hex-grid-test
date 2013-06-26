@@ -12,8 +12,8 @@ class BoardObject: public Renderable  {
 
 	public:
 		Hexagon* base_hex;
-		std::vector< GLfloat >* color;
-		std::vector< GLfloat >* selected_color;
+		std::vector< GLdouble >* color;
+		std::vector< GLdouble >* selected_color;
 
 		BoardObject(Hexagon*);
 

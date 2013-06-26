@@ -31,7 +31,7 @@ void GameboardChunk::clear_terrain() {
 		delete this->board_terrain_data;
 	}
 
-	this->board_terrain_data = new UniqueDataVector< GLfloat >();
+	this->board_terrain_data = new UniqueDataVector< GLdouble >();
 	this->regenerate_terrain = true;
 }
 
@@ -41,7 +41,7 @@ void GameboardChunk::clear_select() {
 		delete this->board_select_data;
 	}
 
-	this->board_select_data = new UniqueDataVector< GLfloat >();
+	this->board_select_data = new UniqueDataVector< GLdouble >();
 	this->regenerate_select = true;
 }
 
@@ -50,7 +50,7 @@ void GameboardChunk::clear_select() {
 		delete this->board_object_data;
 	}
 
-	this->board_object_data = new UniqueDataVector< GLfloat >();
+	this->board_object_data = new UniqueDataVector< GLdouble >();
 	this->regenerate_object = true;
 }*/
 
@@ -153,7 +153,7 @@ void GameboardChunk::render() {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 
-	this->board_terrain_data->bind_for_draw(GL_FLOAT);
+	this->board_terrain_data->bind_for_draw(GL_DOUBLE);
 
 	// front facing polys
 	glDrawElements(GL_TRIANGLES, this->board_terrain_data->indicies_size(), GL_UNSIGNED_INT, 0);
@@ -174,7 +174,7 @@ void GameboardChunk::render() {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 
-	this->board_select_data->bind_for_draw(GL_FLOAT);
+	this->board_select_data->bind_for_draw(GL_DOUBLE);
 
 	glDrawElements(GL_TRIANGLES, this->board_select_data->indicies_size(), GL_UNSIGNED_INT, 0);
 
@@ -187,7 +187,7 @@ void GameboardChunk::render() {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 
-	this->board_object_data->bind_for_draw(GL_FLOAT);
+	this->board_object_data->bind_for_draw(GL_DOUBLE);
 
 	glDrawElements(GL_TRIANGLES, this->board_object_data->indicies_size(), GL_UNSIGNED_INT, 0);
 

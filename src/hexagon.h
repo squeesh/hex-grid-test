@@ -66,9 +66,9 @@ class Hexagon {
 
 		void render_for_select(GLdouble, GLdouble);
 
-		void generate_vertex_data(GLdouble, GLdouble, UniqueDataVector< GLfloat >*);
-		void generate_select_data(GLdouble, GLdouble, UniqueDataVector< GLfloat >*);
-		//void generate_object_data(GLdouble, GLdouble, UniqueDataVector< GLfloat >*);
+		void generate_vertex_data(GLdouble, GLdouble, UniqueDataVector< GLdouble >*);
+		void generate_select_data(GLdouble, GLdouble, UniqueDataVector< GLdouble >*);
+		//void generate_object_data(GLdouble, GLdouble, UniqueDataVector< GLdouble >*);
 
 		BoardObject* get_board_object();
 };

@@ -5,12 +5,12 @@ BoardObject::BoardObject(Hexagon* base_hex) {
     this->base_hex = NULL;
     this->base_hex = curr_ctrl->add_object_to_board(this, base_hex);
 
-	this->color = new std::vector< GLfloat >();
+	this->color = new std::vector< GLdouble >();
 	this->color->push_back(0);
 	this->color->push_back(0);
 	this->color->push_back(1);
 
-    this->selected_color = new std::vector< GLfloat >();
+    this->selected_color = new std::vector< GLdouble >();
     this->selected_color->push_back(1);
     this->selected_color->push_back(0);
     this->selected_color->push_back(1);
