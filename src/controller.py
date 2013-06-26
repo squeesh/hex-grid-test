@@ -20,7 +20,7 @@ from global_consts import GlobalConsts
 from hexagon import Hexagon
 from board_object import BoardObject
 
-from land_generation import RollingHills, MountainRange, Road
+from land_generation import RollingHillsGen, MountainRangeGen, RoadGen
 
 
 class Controller(object):
@@ -80,8 +80,8 @@ class Controller(object):
                 print '.',
                 x_start = int(random() * GlobalConsts.BOARD_WIDTH)
                 y_start = int(random() * GlobalConsts.BOARD_WIDTH)
-                RollingHills.generate(self.get_hexagon(x_start, y_start), 750 * (GlobalConsts.BOARD_WIDTH / 100.0), height_range=(0,  0.015))
-                RollingHills.generate(self.get_hexagon(x_start, y_start), 750 * (GlobalConsts.BOARD_WIDTH / 100.0), height_range=(0, -0.0225))
+                RollingHillsGen.generate(self.get_hexagon(x_start, y_start), 750 * (GlobalConsts.BOARD_WIDTH / 100.0), height_range=(0,  0.015))
+                RollingHillsGen.generate(self.get_hexagon(x_start, y_start), 750 * (GlobalConsts.BOARD_WIDTH / 100.0), height_range=(0, -0.0225))
             print
 
         if GlobalConsts.GENERATE_MOUNTAINS:
@@ -90,17 +90,29 @@ class Controller(object):
                 print '.',
                 x_start = int(random() * GlobalConsts.BOARD_WIDTH)
                 y_start = int(random() * GlobalConsts.BOARD_WIDTH)
-                MountainRange.generate(
+                MountainRangeGen.generate(
                     self.get_hexagon(x_start, y_start),
                     Hexagon.NEIGHBOR_DIRECTION[int(random() * len(Hexagon.NEIGHBOR_DIRECTION))],
                     60 * (GlobalConsts.BOARD_WIDTH / 100.0), 2, height_range=(0.25, 1.0)
                 )
             print
 
-        x_start = int(random() * GlobalConsts.BOARD_WIDTH)
-        y_start = int(random() * GlobalConsts.BOARD_WIDTH)
-        Road.generate(
-            self.get_hexagon(x_start, y_start)
+        road_hexagons = []
+        for i in range(3):
+            while True:
+                curr_hex = self.get_hexagon(int(random() * GlobalConsts.BOARD_WIDTH), int(random() * GlobalConsts.BOARD_HEIGHT))
+                if curr_hex.is_pathable():
+                    road_hexagons.append(curr_hex)
+                    break
+
+        RoadGen.generate(
+            road_hexagons[0], road_hexagons[1]
+        )
+        RoadGen.generate(
+            road_hexagons[1], road_hexagons[2]
+        )
+        RoadGen.generate(
+            road_hexagons[2], road_hexagons[0]
         )
 
         height_list = [hex.get_height() for hex in Hexagon.get_all_hexagons()]
@@ -155,10 +167,7 @@ class Controller(object):
 
         for i in range(2):
             while True:
-                x = int(random() * GlobalConsts.BOARD_WIDTH)
-                y = int(random() * GlobalConsts.BOARD_HEIGHT)
-
-                curr_hex = self.get_hexagon(x, y)
+                curr_hex = self.get_hexagon(int(random() * GlobalConsts.BOARD_WIDTH), int(random() * GlobalConsts.BOARD_HEIGHT))
                 if curr_hex.is_pathable():
                     board_obj = BoardObject(curr_hex, img_list[i])
                     break

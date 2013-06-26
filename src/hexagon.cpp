@@ -254,7 +254,7 @@ GLdouble Hexagon::get_slope() {
 		}
 	}
 
-	return max_height - min_height;
+	return abs(max_height - min_height);
 }
 
 bool Hexagon::is_pathable() {

@@ -1,5 +1,7 @@
 from random import random
 
+from util import a_star
+
 
 def add_mountain(center_seg, height, radius):
     if radius > 1:
@@ -8,7 +10,7 @@ def add_mountain(center_seg, height, radius):
 
     center_seg.add_height(height)
 
-class RollingHills(object):
+class RollingHillsGen(object):
     @staticmethod
     def generate(start_segment, distance, height_range=(0, 2)):
         distance = int(distance)
@@ -25,7 +27,7 @@ class RollingHills(object):
             curr_seg = curr_seg.get_neighbor(curr_seg.NEIGHBOR_DIRECTION[curr_dir])
             effected_radius = random() * 3 + 1
 
-class MountainRange(object):
+class MountainRangeGen(object):
     distance_range = (1, 1)
 
     @staticmethod
@@ -45,7 +47,7 @@ class MountainRange(object):
 #
 #        print distance
         if distance > 1:
-            MountainRange.generate(curr_seg, curr_seg.NEIGHBOR_DIRECTION[curr_dir], total_dist-1, distance-1, orig_dir=orig_dir)
+            MountainRangeGen.generate(curr_seg, curr_seg.NEIGHBOR_DIRECTION[curr_dir], total_dist-1, distance-1, orig_dir=orig_dir)
         else:
             curr_dir = curr_dir + int(random() * 3) - 1
 
@@ -57,14 +59,12 @@ class MountainRange(object):
 #            print curr_seg.NEIGHBOR_DIRECTION[curr_dir]
 #            print curr_seg.NEIGHBOR_DIRECTION[curr_dir], '|', curr_dir
 
-            distance = (random() * MountainRange.distance_range[1]) + MountainRange.distance_range[0]
+            distance = (random() * MountainRangeGen.distance_range[1]) + MountainRangeGen.distance_range[0]
 
-            MountainRange.generate(curr_seg, curr_seg.NEIGHBOR_DIRECTION[curr_dir], total_dist-1, distance, orig_dir=orig_dir)
+            MountainRangeGen.generate(curr_seg, curr_seg.NEIGHBOR_DIRECTION[curr_dir], total_dist-1, distance, orig_dir=orig_dir)
 
-class Road(object):
+class RoadGen(object):
     @staticmethod
-    def generate(curr_seg):#, distance, height_range=(0, 2)):
-        for i in range(5):
+    def generate(start_seg, stop_seg):#, distance, height_range=(0, 2)):
+        for curr_seg in a_star(start_seg, stop_seg):
             curr_seg.set_improvement('road', True)
-            curr_seg = curr_seg.get_neighbor('N')
-

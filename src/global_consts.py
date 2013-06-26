@@ -37,7 +37,7 @@ class GlobalConsts(object):
     START_ROTATION  = -30.0
     START_VIEW_RANGE = BOARD_WIDTH * 1.5
 
-    MAX_PATHABLE_SLOPE = 2.0
+    MAX_PATHABLE_SLOPE = 1
 
 
     ####################################
