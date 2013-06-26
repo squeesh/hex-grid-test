@@ -65,8 +65,8 @@ void BoardObject::render(Controller* curr_ctrl, int x_start, int x_stop, int y_s
                 curr_hex = hex_list->at(i)->at(j);
 
                 if(curr_hex == this->base_hex) {
-                    double x = i * 1.5 * GlobalConsts::COS_60;
-                    double y = j * 1.0 * GlobalConsts::SIN_60;
+                    GLdouble x = i * 1.5 * GlobalConsts::COS_60;
+                    GLdouble y = j * 1.0 * GlobalConsts::SIN_60;
 
                     if(i % 2 != 0) {
                         y += 0.5 * GlobalConsts::SIN_60;

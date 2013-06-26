@@ -3,8 +3,8 @@
 
 int Hexagon::name_count = 0;
 
-RoundVector< RoundVector<double>* >* get_rot_coords() {
-	double rot_data[][2] = {
+RoundVector< RoundVector<GLdouble>* >* get_rot_coords() {
+	GLdouble rot_data[][2] = {
 		{-0.5,   0.0},
 		{-0.25,  0.433012701892},
 		{ 0.25,  0.433012701892},
@@ -13,10 +13,10 @@ RoundVector< RoundVector<double>* >* get_rot_coords() {
 		{-0.25, -0.433012701892}
 	};
 
-	RoundVector< RoundVector<double>* >* output = new RoundVector< RoundVector<double>* >();
-	RoundVector<double>* row;
+	RoundVector< RoundVector<GLdouble>* >* output = new RoundVector< RoundVector<GLdouble>* >();
+	RoundVector<GLdouble>* row;
 	for(int i = 0; i < 6; i++) {
-		row = new RoundVector<double>();
+		row = new RoundVector<GLdouble>();
 		row->push_back(rot_data[i][0]);
 		row->push_back(rot_data[i][1]);
 		output->push_back(row);
@@ -25,7 +25,7 @@ RoundVector< RoundVector<double>* >* get_rot_coords() {
 	return output;
 }
 
-const RoundVector< RoundVector<double>* >* Hexagon::ROT_COORDS = get_rot_coords();
+const RoundVector< RoundVector<GLdouble>* >* Hexagon::ROT_COORDS = get_rot_coords();
 
 
 const RoundVector<const char*>* init_vert_pos() {
@@ -98,13 +98,13 @@ Vertex* Hexagon::get_vertex(const char* position) {
 	return this->verticies[position];
 }
 
-/*void Hexagon::set_border_color(double red, double green, double blue) {
+/*void Hexagon::set_border_color(GLdouble red, GLdouble green, GLdouble blue) {
 	for(int i = 0; i < 6; i++) {
 		this->verticies[this->VERTEX_POSITIONS->at(i)]->set_color(red, green, blue);
 	}
 }
 
-void Hexagon::set_border_color(std::vector<double> rgb) {
+void Hexagon::set_border_color(std::vector<GLdouble> rgb) {
 	for(int i = 0; i < 6; i++) {
 		this->verticies[this->VERTEX_POSITIONS->at(i)]->set_color(rgb);
 	}
@@ -118,11 +118,11 @@ bool Hexagon::get_improvement(const char* key){
 	return this->improvements[key];
 }
 
-void Hexagon::set_select_color(double red, double green, double blue) {
+void Hexagon::set_select_color(GLdouble red, GLdouble green, GLdouble blue) {
 	bool changed = false;
 
 	if(!this->select_color) {
-		this->select_color = new std::vector< double >();
+		this->select_color = new std::vector< GLdouble >();
 		changed = true;
 	} else {
 		// assume this will be 3 in length if we have a pointer...
@@ -164,9 +164,9 @@ void Hexagon::clear_select() {
     }
 }
 
-void Hexagon::set_select_color(std::vector<double> rgb) {
+void Hexagon::set_select_color(std::vector<GLdouble> rgb) {
 	if(!this->select_color) {
-		this->select_color = new std::vector< double >();
+		this->select_color = new std::vector< GLdouble >();
 	}
 
 	this->set_select_color(rgb[0], rgb[1], rgb[2]);
@@ -187,13 +187,13 @@ void Hexagon::clear_select_color() {
 	}
 }
 
-std::vector<double>* Hexagon::get_select_color() {
+std::vector<GLdouble>* Hexagon::get_select_color() {
 	return this->select_color;
 }
 
-void Hexagon::set_hex_color(double red, double green, double blue) {
+void Hexagon::set_hex_color(GLdouble red, GLdouble green, GLdouble blue) {
 	if(!this->hex_color) {
-		this->hex_color = new std::vector< double >();
+		this->hex_color = new std::vector< GLdouble >();
 	}
 
 	this->hex_color->clear();
@@ -206,33 +206,33 @@ void Hexagon::set_hex_color(double red, double green, double blue) {
 	}*/
 }
 
-void Hexagon::set_hex_color(std::vector<double> rgb) {
+void Hexagon::set_hex_color(std::vector<GLdouble> rgb) {
 	if(!this->hex_color) {
-		this->hex_color = new std::vector< double >();
+		this->hex_color = new std::vector< GLdouble >();
 	}
 
 	this->set_hex_color(rgb[0], rgb[1], rgb[2]);
 }
 
-std::vector<double>* Hexagon::get_hex_color() {
+std::vector<GLdouble>* Hexagon::get_hex_color() {
 	return this->hex_color;
 }
 
-void Hexagon::set_height(double height) {
+void Hexagon::set_height(GLdouble height) {
 	for(int i = 0; i < 6; i++) {
 		this->verticies[this->VERTEX_POSITIONS->at(i)]->set_height(height);
 	}
 }
 
-void Hexagon::add_height(double height) {
+void Hexagon::add_height(GLdouble height) {
 	for(int i = 0; i < 6; i++) {
 		Vertex* curr_vert = this->verticies[this->VERTEX_POSITIONS->at(i)];
 		curr_vert->set_height(curr_vert->get_height() + height);
 	}
 }
 
-double Hexagon::get_height() {
-	double output = 0;
+GLdouble Hexagon::get_height() {
+	GLdouble output = 0;
 
 	for(int i = 0; i < 6; i++) {
 		output += this->verticies[this->VERTEX_POSITIONS->at(i)]->get_height();
@@ -241,12 +241,12 @@ double Hexagon::get_height() {
 	return output / 6.0;
 }
 
-double Hexagon::get_slope() {
-	double min_height = this->verticies[this->VERTEX_POSITIONS->at(0)]->get_height();
-	double max_height = this->verticies[this->VERTEX_POSITIONS->at(0)]->get_height();
+GLdouble Hexagon::get_slope() {
+	GLdouble min_height = this->verticies[this->VERTEX_POSITIONS->at(0)]->get_height();
+	GLdouble max_height = this->verticies[this->VERTEX_POSITIONS->at(0)]->get_height();
 
 	for(int i = 1; i < 6; i++) {
-		double curr_height = this->verticies[this->VERTEX_POSITIONS->at(i)]->get_height();
+		GLdouble curr_height = this->verticies[this->VERTEX_POSITIONS->at(i)]->get_height();
 		if(curr_height < min_height) {
 			min_height = curr_height;
 		} else if (curr_height > max_height) {
@@ -272,7 +272,7 @@ Hexagon* Hexagon::get_neighbor(const char* position) {
 }
 
 
-void Hexagon::render_for_select(double x, double y) {
+void Hexagon::render_for_select(GLdouble x, GLdouble y) {
 	glBegin(GL_TRIANGLE_FAN);
 		for(int i = 0; i < 6; i++) {
 			Vertex* curr_vert = this->verticies[this->VERTEX_POSITIONS->at(i)];
@@ -285,9 +285,9 @@ void Hexagon::render_for_select(double x, double y) {
 }
 
 
-void Hexagon::generate_vertex_data(double x, double y, UniqueDataVector< GLfloat >* vertex_data) {
+void Hexagon::generate_vertex_data(GLdouble x, GLdouble y, UniqueDataVector< GLfloat >* vertex_data) {
 	Vertex* curr_vert = NULL;
-	std::vector< double >* curr_color = NULL;
+	std::vector< GLdouble >* curr_color = NULL;
 
 	if(this->improvements["road"]) {
 		curr_color = &GlobalConsts::COLOR_GREY;
@@ -320,9 +320,9 @@ void Hexagon::generate_vertex_data(double x, double y, UniqueDataVector< GLfloat
 }
 
 
-void Hexagon::generate_select_data(double x, double y, UniqueDataVector< GLfloat >* select_data) {
+void Hexagon::generate_select_data(GLdouble x, GLdouble y, UniqueDataVector< GLfloat >* select_data) {
 	Vertex* curr_vert = NULL;
-	std::vector< double >* curr_color = this->get_select_color();
+	std::vector< GLdouble >* curr_color = this->get_select_color();
 
         for(int i = 2; i < 6; i++) {
 		curr_vert = this->verticies[this->VERTEX_POSITIONS->at(i)];
@@ -347,11 +347,11 @@ void Hexagon::generate_select_data(double x, double y, UniqueDataVector< GLfloat
 }
 
 
-/*void Hexagon::generate_object_data(double x, double y, UniqueDataVector< GLfloat >* object_data) {
+/*void Hexagon::generate_object_data(GLdouble x, GLdouble y, UniqueDataVector< GLfloat >* object_data) {
 	Controller* curr_ctrl = Controller::get_controller();
 
 	std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(curr_ctrl->gameboard->board_object_map);
-    //std::vector< double > curr_rbg;
+    //std::vector< GLdouble > curr_rbg;
     //std::vector<int> v { 34,23 };
 
     BoardObject* curr_board_object = curr_board_object_map[this];

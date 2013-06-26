@@ -9,8 +9,8 @@ class Hexagon {
 	private:
 		std::map<const char*, Hexagon*, cmp_str> neighbor_hexagons;
 
-		std::vector< double >* select_color;
-		std::vector< double >* hex_color;
+		std::vector< GLdouble >* select_color;
+		std::vector< GLdouble >* hex_color;
 
 		std::map< const char*, bool, cmp_str > improvements;
 
@@ -19,7 +19,7 @@ class Hexagon {
 		static const RoundVector<const char*>* VERTEX_POSITIONS;
 		static const RoundVector<const char*>* NEIGHBOR_DIRECTION;
 
-		static const RoundVector< RoundVector<double>* >* ROT_COORDS;
+		static const RoundVector< RoundVector<GLdouble>* >* ROT_COORDS;
 
 		int name;
 		static int name_count;
@@ -28,47 +28,47 @@ class Hexagon {
 
 		std::map<const char*, Vertex*, cmp_str> verticies;
 
-		double last_x;
-		double last_y;
+		GLdouble last_x;
+		GLdouble last_y;
 
 		Hexagon();
 
 		void set_vertex(const char* position, Vertex* vertex);
 		Vertex* get_vertex(const char* position);
 
-		/*void set_border_color(double red, double green, double blue);
-		void set_border_color(std::vector< double > rgb);*/
+		/*void set_border_color(GLdouble red, GLdouble green, GLdouble blue);
+		void set_border_color(std::vector< GLdouble > rgb);*/
 
 		void set_improvement(const char*, bool);
 		bool get_improvement(const char*);
 
-		void set_hex_color(double red, double green, double blue);
-		void set_hex_color(std::vector< double > rgb);
-		std::vector< double >* get_hex_color();
+		void set_hex_color(GLdouble red, GLdouble green, GLdouble blue);
+		void set_hex_color(std::vector< GLdouble > rgb);
+		std::vector< GLdouble >* get_hex_color();
 
 		void set_select();
 		void clear_select();
 
-		void set_select_color(double red, double green, double blue);
-		void set_select_color(std::vector< double > rgb);
+		void set_select_color(GLdouble red, GLdouble green, GLdouble blue);
+		void set_select_color(std::vector< GLdouble > rgb);
 		void clear_select_color();
-		std::vector< double >* get_select_color();
+		std::vector< GLdouble >* get_select_color();
 
-		void set_height(double height);
-		void add_height(double height);
-		double get_height();
+		void set_height(GLdouble height);
+		void add_height(GLdouble height);
+		GLdouble get_height();
 
-		double get_slope();
+		GLdouble get_slope();
 		bool is_pathable();
 
 		void set_neighbor(const char* position, Hexagon* neighbor_hex);
 		Hexagon* get_neighbor(const char* position);
 
-		void render_for_select(double, double);
+		void render_for_select(GLdouble, GLdouble);
 
-		void generate_vertex_data(double, double, UniqueDataVector< GLfloat >*);
-		void generate_select_data(double, double, UniqueDataVector< GLfloat >*);
-		//void generate_object_data(double, double, UniqueDataVector< GLfloat >*);
+		void generate_vertex_data(GLdouble, GLdouble, UniqueDataVector< GLfloat >*);
+		void generate_select_data(GLdouble, GLdouble, UniqueDataVector< GLfloat >*);
+		//void generate_object_data(GLdouble, GLdouble, UniqueDataVector< GLfloat >*);
 
 		BoardObject* get_board_object();
 };

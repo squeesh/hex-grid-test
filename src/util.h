@@ -21,8 +21,8 @@ struct cmp_coord {
 };
 
 
-bool color_changed(std::vector< double >* color_a, std::vector< double >* color_b);
-bool color_changed(double red_a, double green_a, double blue_a, double red_b, double green_b, double blue_b);
+bool color_changed(std::vector< GLdouble >* color_a, std::vector< GLdouble >* color_b);
+bool color_changed(GLdouble red_a, GLdouble green_a, GLdouble blue_a, GLdouble red_b, GLdouble green_b, GLdouble blue_b);
 
 
 template <typename T>
@@ -293,13 +293,13 @@ GLuint UniqueDataVector<T>::push_back(std::vector<T>* vec_xyz, std::vector<T>* v
 	return this->push_back(vec_xyz->at(0), vec_xyz->at(1), vec_xyz->at(2), vec_rgb->at(0), vec_rgb->at(1), vec_rgb->at(2));
 }
 
-/*void UniqueDataVector::set(int index, double x, double y, double z) {
+/*void UniqueDataVector::set(int index, GLdouble x, GLdouble y, GLdouble z) {
 	this->data[index] = x;
 	this->data[index+1] = y;
 	this->data[index+2] = z;
 }*/
 
-/*void UniqueDataVector::set(int index, double x, double y, double z) {
+/*void UniqueDataVector::set(int index, GLdouble x, GLdouble y, GLdouble z) {
 	this->data[index] = x;
 	this->data[index+1] = y;
 	this->data[index+2] = z;

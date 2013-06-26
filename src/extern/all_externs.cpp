@@ -16,27 +16,27 @@ extern "C" {
 		return curr_ctrl->get_hexagon(i, j);
 	}
 
-	void Controller_zoom_map(double zoom) {
+	void Controller_zoom_map(GLdouble zoom) {
 		RenderController* curr_ctrl = RenderController::get_render_controller();
 		curr_ctrl->zoom_map(zoom);
 	}
 
-	void Controller_set_rotation(double rotation) {
+	void Controller_set_rotation(GLdouble rotation) {
 		RenderController* curr_ctrl = RenderController::get_render_controller();
 		curr_ctrl->set_rotation(rotation);
 	}
 
-	double Controller_get_rotation() {
+	GLdouble Controller_get_rotation() {
 		RenderController* curr_ctrl = RenderController::get_render_controller();
 		return curr_ctrl->get_rotation();
 	}
 
-	void Controller_add_x_offset(double x_offset) {
+	void Controller_add_x_offset(GLdouble x_offset) {
 		RenderController* curr_rend_ctrl = RenderController::get_render_controller();
 		curr_rend_ctrl->x_offset += x_offset;
 	}
 
-	void Controller_add_y_offset(double y_offset) {
+	void Controller_add_y_offset(GLdouble y_offset) {
 		RenderController* curr_rend_ctrl = RenderController::get_render_controller();
 		curr_rend_ctrl->y_offset += y_offset;
 	}
@@ -71,27 +71,27 @@ extern "C" {
 		curr_ctrl->render();
 	}*/
 
-	/*double Controller_COS_60() {
+	/*GLdouble Controller_COS_60() {
 		Controller* curr_ctrl = Controller_get_controller();
 		return curr_ctrl->COS_60;
 	}
 
-	double Controller_SIN_60() {
+	GLdouble Controller_SIN_60() {
 		Controller* curr_ctrl = Controller_get_controller();
 		return curr_ctrl->SIN_60;
 	}*/
 
-	double Controller_get_width() {
+	GLdouble Controller_get_width() {
 		RenderController* curr_ctrl = RenderController::get_render_controller();
         return curr_ctrl->width;
     }
 
-    double Controller_get_height() {
+    GLdouble Controller_get_height() {
     	RenderController* curr_ctrl = RenderController::get_render_controller();
         return curr_ctrl->height;
     }
 
-    double Controller_get_zoom() {
+    GLdouble Controller_get_zoom() {
     	RenderController* curr_ctrl = RenderController::get_render_controller();
         return curr_ctrl->get_zoom();
     }
@@ -149,31 +149,31 @@ extern "C" {
 		return curr_hex->get_improvement(key);
 	}
 
-	void Hexagon_set_last_x(Hexagon *curr_hex, double last_x) {
+	void Hexagon_set_last_x(Hexagon *curr_hex, GLdouble last_x) {
 		curr_hex->last_x = last_x;
 	}
 
-	void Hexagon_set_last_y(Hexagon *curr_hex, double last_y) {
+	void Hexagon_set_last_y(Hexagon *curr_hex, GLdouble last_y) {
 		curr_hex->last_y = last_y;
 	}
 
-	double Hexagon_get_last_x(Hexagon *curr_hex) {
+	GLdouble Hexagon_get_last_x(Hexagon *curr_hex) {
 		return curr_hex->last_x;
 	}
 
-	double Hexagon_get_last_y(Hexagon *curr_hex) {
+	GLdouble Hexagon_get_last_y(Hexagon *curr_hex) {
 		return curr_hex->last_y;
 	}
 
-	/*void Hexagon_set_border_color(Hexagon *curr_hex, double red, double green, double blue) {
+	/*void Hexagon_set_border_color(Hexagon *curr_hex, GLdouble red, GLdouble green, GLdouble blue) {
 		curr_hex->set_border_color(red, green, blue);
 	}*/
 
-	void Hexagon_set_hex_color(Hexagon *curr_hex, double red, double green, double blue) {
+	void Hexagon_set_hex_color(Hexagon *curr_hex, GLdouble red, GLdouble green, GLdouble blue) {
 		curr_hex->set_hex_color(red, green, blue);
 	}
 
-	void Hexagon_set_select_color(Hexagon *curr_hex, double red, double green, double blue) {
+	void Hexagon_set_select_color(Hexagon *curr_hex, GLdouble red, GLdouble green, GLdouble blue) {
 		curr_hex->set_select_color(red, green, blue);
 	}
 
@@ -181,19 +181,19 @@ extern "C" {
 		curr_hex->clear_select_color();
 	}
 
-	void Hexagon_set_height(Hexagon *curr_hex, double height) {
+	void Hexagon_set_height(Hexagon *curr_hex, GLdouble height) {
 		curr_hex->set_height(height);
 	}
 
-	void Hexagon_add_height(Hexagon *curr_hex, double height) {
+	void Hexagon_add_height(Hexagon *curr_hex, GLdouble height) {
 		curr_hex->add_height(height);
 	}
 
-	double Hexagon_get_height(Hexagon *curr_hex) {
+	GLdouble Hexagon_get_height(Hexagon *curr_hex) {
 		return curr_hex->get_height();
 	}
 
-	double Hexagon_get_slope(Hexagon *curr_hex) {
+	GLdouble Hexagon_get_slope(Hexagon *curr_hex) {
 		return curr_hex->get_slope();
 	}
 

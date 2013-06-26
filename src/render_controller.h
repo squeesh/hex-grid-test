@@ -16,9 +16,9 @@ class RenderController {
 	private:
 		static RenderController* curr_rend_ctrl;
 
-		double zoom;
-		double view_range;
-		double rotation;
+		GLdouble zoom;
+		GLdouble view_range;
+		GLdouble rotation;
 
 		std::map<char, bool> scroll_map;
 
@@ -31,8 +31,8 @@ class RenderController {
 		long width;
 		long height;
 
-		double x_offset;
-		double y_offset;
+		GLdouble x_offset;
+		GLdouble y_offset;
 
 		void init_gl(long, long);
 		void resize(long, long);
@@ -43,7 +43,7 @@ class RenderController {
 		void register_renderable(Renderable*);
 		void render();
 		void render_for_select();
-		Hexagon* get_clicked_hex(double, double);
+		Hexagon* get_clicked_hex(GLdouble, GLdouble);
 
 		void render_string(int, int, std::string);
 		void render_string(int, int, std::string, std::vector< GLfloat >*);
@@ -51,11 +51,11 @@ class RenderController {
 		void set_scroll(char);
 		void clear_scroll(char);
 
-		void zoom_map(double);
-		double get_zoom();
+		void zoom_map(GLdouble);
+		GLdouble get_zoom();
 
-		void set_rotation(double);
-		double get_rotation();
+		void set_rotation(GLdouble);
+		GLdouble get_rotation();
 };
 
 

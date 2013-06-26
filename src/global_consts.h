@@ -6,8 +6,8 @@ class GlobalConsts {
 	public:
         static const long SLEEP_TIME;
 
-		static const double COS_60;
-		static const double SIN_60;
+		static const GLdouble COS_60;
+		static const GLdouble SIN_60;
 
 		static const char LEFT;
 		static const char RIGHT;
@@ -38,20 +38,20 @@ class GlobalConsts {
 
 		static const long BOARD_CHUNK_SIZE;
 
-		static const double MIN_ZOOM;
-		static const double MAX_ZOOM;
-		static const double START_ZOOM;
+		static const GLdouble MIN_ZOOM;
+		static const GLdouble MAX_ZOOM;
+		static const GLdouble START_ZOOM;
 
-		static const double START_ROTATION;
+		static const GLdouble START_ROTATION;
 
-		static const double START_VIEW_RANGE;
+		static const GLdouble START_VIEW_RANGE;
 
-		static const double MAX_PATHABLE_SLOPE;
+		static const GLdouble MAX_PATHABLE_SLOPE;
 
 		// TODO: this should be const...
-		static std::map< const char*, std::vector< double >*, cmp_str> RENDER_TRAY_COORDS;
+		static std::map< const char*, std::vector< GLdouble >*, cmp_str> RENDER_TRAY_COORDS;
 
-		static std::vector< double > COLOR_GREY;
+		static std::vector< GLdouble > COLOR_GREY;
 };
 
 

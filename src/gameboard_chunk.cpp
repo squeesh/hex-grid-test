@@ -54,7 +54,7 @@ void GameboardChunk::clear_select() {
 	this->regenerate_object = true;
 }*/
 
-void GameboardChunk::generate_render_data(Hexagon* curr_hex, double x, double y) {
+void GameboardChunk::generate_render_data(Hexagon* curr_hex, GLdouble x, GLdouble y) {
 	// TODO: I don't like this logic being here.. this should be moved out...
 	if(this->regenerate_terrain) {
 		curr_hex->generate_vertex_data(x, y, this->board_terrain_data);
@@ -73,13 +73,13 @@ void GameboardChunk::generate_render_data(Hexagon* curr_hex, double x, double y)
 
 
 void GameboardChunk::generate_chunk_data() {
-	double base_x = 0;
-	double base_y = 0;
+	GLdouble base_x = 0;
+	GLdouble base_y = 0;
 
 	//std::cout << "Gameboard::generating: " << this->base_hex << std::endl;
 
-	double x = base_x;
-	double y = base_y;
+	GLdouble x = base_x;
+	GLdouble y = base_y;
 
 	const char* dir_ary[] = {"SE", "NE"};
 
@@ -87,16 +87,16 @@ void GameboardChunk::generate_chunk_data() {
 
 	for(int i = 0; i < GlobalConsts::BOARD_CHUNK_SIZE; i++) {
 		const char* direction = dir_ary[i%2];
-		std::vector< double >* x_y_diff = GlobalConsts::RENDER_TRAY_COORDS[direction];
+		std::vector< GLdouble >* x_y_diff = GlobalConsts::RENDER_TRAY_COORDS[direction];
 		Hexagon* temp_hex = curr_hex;
-		double temp_x = x;
-		double temp_y = y;
+		GLdouble temp_x = x;
+		GLdouble temp_y = y;
 
 		for(int j = 0; j < GlobalConsts::BOARD_CHUNK_SIZE; j++) {
 			this->generate_render_data(temp_hex, temp_x, temp_y);
 
 			temp_hex = temp_hex->get_neighbor("N");
-			std::vector< double >* temp_x_y_diff = GlobalConsts::RENDER_TRAY_COORDS["N"];
+			std::vector< GLdouble >* temp_x_y_diff = GlobalConsts::RENDER_TRAY_COORDS["N"];
 			temp_x += temp_x_y_diff->at(0);
 			temp_y += temp_x_y_diff->at(1);
 		}

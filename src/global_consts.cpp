@@ -76,7 +76,7 @@ char char_global_const_attr(const char* attr_str) {
 }
 
 
-double double_global_const_attr(const char* attr_str) {
+GLdouble double_global_const_attr(const char* attr_str) {
 	bool py_needed_init = false;
 
 	if(!Py_IsInitialized() ) {
@@ -90,7 +90,7 @@ double double_global_const_attr(const char* attr_str) {
 		return NULL;
 	}
 
-	double output = PyFloat_AsDouble(py_attr);
+	GLdouble output = PyFloat_AsDouble(py_attr);
 	Py_XDECREF(py_attr);
 
 	if(py_needed_init) {
@@ -100,30 +100,30 @@ double double_global_const_attr(const char* attr_str) {
 	return output;
 }
 
-std::map< const char*, std::vector< double >*, cmp_str> get_render_tray_coords() {
-	std::map< const char*, std::vector< double >*, cmp_str> output;
+std::map< const char*, std::vector< GLdouble >*, cmp_str> get_render_tray_coords() {
+	std::map< const char*, std::vector< GLdouble >*, cmp_str> output;
 
-	output["N"] = new std::vector< double >();
+	output["N"] = new std::vector< GLdouble >();
 	output["N"]->push_back( 0);
 	output["N"]->push_back( 1.0 * GlobalConsts::SIN_60);
 
-	output["NE"] = new std::vector< double >();
+	output["NE"] = new std::vector< GLdouble >();
 	output["NE"]->push_back( 1.5 * GlobalConsts::COS_60);
 	output["NE"]->push_back( 0.5 * GlobalConsts::SIN_60);
 
-	output["SE"] = new std::vector< double >();
+	output["SE"] = new std::vector< GLdouble >();
 	output["SE"]->push_back( 1.5 * GlobalConsts::COS_60);
 	output["SE"]->push_back(-0.5 * GlobalConsts::SIN_60);
 
-	output["S"] = new std::vector< double >();
+	output["S"] = new std::vector< GLdouble >();
 	output["S"]->push_back( 0);
 	output["S"]->push_back(-1.0 * GlobalConsts::SIN_60);
 
-	output["SW"] = new std::vector< double >();
+	output["SW"] = new std::vector< GLdouble >();
 	output["SW"]->push_back(-1.5 * GlobalConsts::COS_60);
 	output["SW"]->push_back(-0.5 * GlobalConsts::SIN_60);
 
-	output["NW"] = new std::vector< double >();
+	output["NW"] = new std::vector< GLdouble >();
 	output["NW"]->push_back(-1.5 * GlobalConsts::COS_60);
 	output["NW"]->push_back( 0.5 * GlobalConsts::SIN_60);
 
@@ -133,8 +133,8 @@ std::map< const char*, std::vector< double >*, cmp_str> get_render_tray_coords()
 
 const long GlobalConsts::SLEEP_TIME = long_global_const_attr("SLEEP_TIME");
 
-const double GlobalConsts::COS_60 = double_global_const_attr("COS_60");
-const double GlobalConsts::SIN_60 = double_global_const_attr("SIN_60");
+const GLdouble GlobalConsts::COS_60 = double_global_const_attr("COS_60");
+const GLdouble GlobalConsts::SIN_60 = double_global_const_attr("SIN_60");
 
 const char GlobalConsts::LEFT  = char_global_const_attr("LEFT");
 const char GlobalConsts::RIGHT = char_global_const_attr("RIGHT");
@@ -165,18 +165,18 @@ const long GlobalConsts::BOARD_HEIGHT = long_global_const_attr("BOARD_HEIGHT");
 
 const long GlobalConsts::BOARD_CHUNK_SIZE = long_global_const_attr("BOARD_CHUNK_SIZE");
 
-const double GlobalConsts::MIN_ZOOM = double_global_const_attr("MIN_ZOOM");
-const double GlobalConsts::MAX_ZOOM = double_global_const_attr("MAX_ZOOM");
-const double GlobalConsts::START_ZOOM = double_global_const_attr("START_ZOOM");
+const GLdouble GlobalConsts::MIN_ZOOM = double_global_const_attr("MIN_ZOOM");
+const GLdouble GlobalConsts::MAX_ZOOM = double_global_const_attr("MAX_ZOOM");
+const GLdouble GlobalConsts::START_ZOOM = double_global_const_attr("START_ZOOM");
 
-const double GlobalConsts::START_ROTATION = double_global_const_attr("START_ROTATION");
+const GLdouble GlobalConsts::START_ROTATION = double_global_const_attr("START_ROTATION");
 
-const double GlobalConsts::START_VIEW_RANGE = double_global_const_attr("START_VIEW_RANGE");
+const GLdouble GlobalConsts::START_VIEW_RANGE = double_global_const_attr("START_VIEW_RANGE");
 
-const double GlobalConsts::MAX_PATHABLE_SLOPE = double_global_const_attr("MAX_PATHABLE_SLOPE");
+const GLdouble GlobalConsts::MAX_PATHABLE_SLOPE = double_global_const_attr("MAX_PATHABLE_SLOPE");
 
-std::map< const char*, std::vector< double >*, cmp_str>  GlobalConsts::RENDER_TRAY_COORDS = get_render_tray_coords();
-std::vector< double > GlobalConsts::COLOR_GREY = {0.5, 0.5, 0.5};
+std::map< const char*, std::vector< GLdouble >*, cmp_str>  GlobalConsts::RENDER_TRAY_COORDS = get_render_tray_coords();
+std::vector< GLdouble > GlobalConsts::COLOR_GREY = {0.5, 0.5, 0.5};
 
 
 

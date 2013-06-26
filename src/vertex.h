@@ -4,19 +4,19 @@
 
 class Vertex {
 	private:
-		//std::vector< double >* color;
-		double height;
+		//std::vector< GLdouble >* color;
+		GLdouble height;
 
 	public:
-		//Vertex(double red, double green, double blue, double height);
-		Vertex(double height);
+		//Vertex(GLdouble red, GLdouble green, GLdouble blue, GLdouble height);
+		Vertex(GLdouble height);
 
-		//void set_color(double red, double green, double blue);
-		//void set_color(std::vector<double> rgb);
-		//std::vector<double>* get_color();
+		//void set_color(GLdouble red, GLdouble green, GLdouble blue);
+		//void set_color(std::vector<GLdouble> rgb);
+		//std::vector<GLdouble>* get_color();
 
-		void set_height(double height);
-		double get_height();
+		void set_height(GLdouble height);
+		GLdouble get_height();
 
 };
 

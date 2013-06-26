@@ -53,7 +53,7 @@ void RenderController::init_gl(long width, long height) {
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45.0, this->width/((double) this->height),-1.0, 1000.0);
+	gluPerspective(45.0, this->width/((GLdouble) this->height),-1.0, 1000.0);
 	glMatrixMode(GL_MODELVIEW);
 
 	//glEnable(GL_LINE_SMOOTH);
@@ -82,7 +82,7 @@ void RenderController::resize(long width, long height) {
         glViewport(0, 0, this->width, this->height);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        gluPerspective(45.0, this->width/((double) this->height), 0.1, 1000.0);
+        gluPerspective(45.0, this->width/((GLdouble) this->height), 0.1, 1000.0);
         glMatrixMode(GL_MODELVIEW);
 }
 
@@ -115,8 +115,8 @@ void RenderController::render() {
 
 	glLoadIdentity();
 
-	double eye_x = this->x_offset * 1.5 * GlobalConsts::COS_60;
-	double eye_y = this->y_offset * 1.0 * GlobalConsts::SIN_60;
+	GLdouble eye_x = this->x_offset * 1.5 * GlobalConsts::COS_60;
+	GLdouble eye_y = this->y_offset * 1.0 * GlobalConsts::SIN_60;
 
 	gluLookAt(
 	    eye_x, eye_y, 15 * this->zoom,
@@ -185,8 +185,8 @@ void RenderController::render_for_select() {
 
 	glLoadIdentity();
 
-	double eye_x = this->x_offset * 1.5 * GlobalConsts::COS_60;
-	double eye_y = this->y_offset * 1.0 * GlobalConsts::SIN_60;
+	GLdouble eye_x = this->x_offset * 1.5 * GlobalConsts::COS_60;
+	GLdouble eye_y = this->y_offset * 1.0 * GlobalConsts::SIN_60;
 
 	gluLookAt(
 	    eye_x, eye_y, 15 * this->zoom,
@@ -211,8 +211,8 @@ void RenderController::render_for_select() {
                 Hexagon* curr_hex = curr_ctrl->gameboard->get_hexagon_list()->at(i)->at(j);
                 glLoadName(curr_hex->name);
 
-                double x = i * 1.5 * GlobalConsts::COS_60;
-                double y = j * 1.0 * GlobalConsts::SIN_60;
+                GLdouble x = i * 1.5 * GlobalConsts::COS_60;
+                GLdouble y = j * 1.0 * GlobalConsts::SIN_60;
 
                 if(i % 2 != 0) {
                     y += 0.5 * GlobalConsts::SIN_60;
@@ -233,7 +233,7 @@ void RenderController::render_for_select() {
 }
 
 
-Hexagon* RenderController::get_clicked_hex(double x, double y) {
+Hexagon* RenderController::get_clicked_hex(GLdouble x, GLdouble y) {
 	GLuint buff[64] = {0};
 	GLint hits = 0;
 	GLint view[4];
@@ -342,7 +342,7 @@ void RenderController::clear_scroll(char direction) {
 }
 
 
-void RenderController::zoom_map(double zoom_amount) {
+void RenderController::zoom_map(GLdouble zoom_amount) {
 	if(zoom_amount > 1) {
 		if(this->zoom < GlobalConsts::MAX_ZOOM) {
 			this->zoom *= zoom_amount;
@@ -357,16 +357,16 @@ void RenderController::zoom_map(double zoom_amount) {
 }
 
 
-double RenderController::get_zoom() {
+GLdouble RenderController::get_zoom() {
 	return this->zoom;
 }
 
 
-void RenderController::set_rotation(double rotation) {
+void RenderController::set_rotation(GLdouble rotation) {
 	this->rotation = rotation;
 }
 
-double RenderController::get_rotation() {
+GLdouble RenderController::get_rotation() {
 	return this->rotation;
 }
 
