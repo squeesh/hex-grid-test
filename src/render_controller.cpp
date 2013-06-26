@@ -174,7 +174,7 @@ void RenderController::render_for_select() {
 
 	glPushMatrix();
 
-	gluPerspective(45.0, float(this->width)/float(this->height), 0.1, 1000.0);
+	gluPerspective(45.0, ((GLdouble)this->width)/((GLdouble)this->height), 0.1, 1000.0);
 
 	glMatrixMode(GL_MODELVIEW);
 
