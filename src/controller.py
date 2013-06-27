@@ -179,8 +179,8 @@ class Controller(object):
                 hex.set_hex_color(0, 0.5, 0)
 
         img_list = [
-            '/home/squoosh/Downloads/test_a.png',
-            '/home/squoosh/Downloads/test_b.png',
+            'media/test_a.png',
+            'media/test_b.png',
         ]
 
         for i in range(1):
