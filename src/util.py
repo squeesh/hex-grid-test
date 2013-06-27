@@ -160,7 +160,7 @@ def get_g_cost(start_node, end_node):
     if end_node.get_improvement('road'):
         return 1
     else:
-        return (end_node.get_slope() + 1) ** 10
+        return (end_node.get_slope() + 1.1) ** 10
 
 def get_h_cost(start_node, end_node):
     return (dist_between(start_node, end_node) * 1.0 / 0.866025) * 1.5

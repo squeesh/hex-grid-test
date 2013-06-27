@@ -342,7 +342,7 @@ GLdouble Hexagon::get_g_score(Hexagon* start_hex, Hexagon* end_hex) {
     if(end_hex->get_improvement("road")) {
         return 1;
     } else {
-        return pow(end_hex->get_slope() + 1.0, 10);
+        return pow(end_hex->get_slope() + 1.1, 10);
     }
 }
 
