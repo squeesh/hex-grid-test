@@ -98,10 +98,10 @@ void BoardObject::render() {
     glColor3f(1, 1, 1);
 
     glBegin(GL_QUADS);
-        glTexCoord2d(1.0, 1.0); glVertex3f( 0.5, 0, 0.0); // The bottom right corner
-        glTexCoord2d(1.0, 0.0); glVertex3f( 0.5, 0, 1.0); // The top right corner
-        glTexCoord2d(0.0, 0.0); glVertex3f(-0.5, 0, 1.0); // The top left corner
-        glTexCoord2d(0.0, 1.0); glVertex3f(-0.5, 0, 0.0); // The bottom left corner
+        glTexCoord2d(1.0, 1.0); glVertex3f( 0.5, -0.5, 0.0); // The bottom right corner
+        glTexCoord2d(1.0, 0.0); glVertex3f( 0.5,  0.0, 1.0); // The top right corner
+        glTexCoord2d(0.0, 0.0); glVertex3f(-0.5,  0.0, 1.0); // The top left corner
+        glTexCoord2d(0.0, 1.0); glVertex3f(-0.5, -0.5, 0.0); // The bottom left corner
     glEnd();
 
     glDisable( GL_TEXTURE_2D );

@@ -260,53 +260,7 @@ GLdouble Hexagon::get_slope() {
 bool Hexagon::is_pathable() {
 	return this->get_slope() <= GlobalConsts::MAX_PATHABLE_SLOPE && this->get_board_object() == NULL;
 }
-/*
-    open_list = [start_node]
-    closed_list = []
-    cost_dict = defaultdict(dict)
-    parent_dict = {}
 
-    cost_dict[start_node]['g'] = 0.0
-    cost_dict[start_node]['h'] = get_h_cost(start_node, goal_node)
-    cost_dict[start_node]['f'] = cost_dict[start_node]['h']
-
-    curr_node = start_node
-
-    while open_list:
-        min_f_node = open_list[0]
-        for node in open_list[1:]:
-            if cost_dict[node]['f'] < cost_dict[min_f_node]['f']:
-                min_f_node = node
-
-        curr_node = min_f_node
-
-        if curr_node == goal_node:
-            return reconstruct_path(parent_dict, goal_node)
-
-        if GlobalConsts.PATH_SHOW_SEARCH and curr_node.is_pathable():
-            curr_node.set_select_color(1, 0, 0)
-
-        open_list.remove(curr_node)
-        closed_list.append(curr_node)
-
-        for neighbor in curr_node.get_neighbors().values():
-            if not neighbor.is_pathable() and neighbor not in closed_list:
-                closed_list.append(neighbor)
-
-            if neighbor in closed_list:
-                continue
-
-            tentative_g_score = cost_dict[curr_node]['g'] + get_h_cost(curr_node, neighbor)
-
-            if neighbor not in open_list or tentative_g_score < cost_dict[neighbor]['g']:
-                parent_dict[neighbor] = curr_node
-                open_list.append(neighbor)
-                cost_dict[neighbor]['g'] = get_g_cost(curr_node, neighbor) + cost_dict[curr_node]['g']
-                cost_dict[neighbor]['h'] = get_h_cost(neighbor, goal_node)
-                cost_dict[neighbor]['f'] = cost_dict[neighbor]['g'] + cost_dict[neighbor]['h']
-
-    return []
-*/
 std::vector< Hexagon* >* Hexagon::find_path(Hexagon* start_hex, Hexagon* goal_hex) {
 	/* A* path finding */
 	std::vector< Hexagon* > open_list = {start_hex};
@@ -347,22 +301,6 @@ std::vector< Hexagon* >* Hexagon::find_path(Hexagon* start_hex, Hexagon* goal_he
         	closed_list.push_back(curr_hex);
         }
 
-        /*for neighbor in curr_node.get_neighbors().values():
-            if not neighbor.is_pathable() and neighbor not in closed_list:
-                closed_list.append(neighbor)
-
-            if neighbor in closed_list:
-                continue
-
-            tentative_g_score = cost_dict[curr_node]['g'] + get_h_cost(curr_node, neighbor)
-
-            if neighbor not in open_list or tentative_g_score < cost_dict[neighbor]['g']:
-                parent_dict[neighbor] = curr_node
-                open_list.append(neighbor)
-                cost_dict[neighbor]['g'] = get_g_cost(curr_node, neighbor) + cost_dict[curr_node]['g']
-                cost_dict[neighbor]['h'] = get_h_cost(neighbor, goal_node)
-                cost_dict[neighbor]['f'] = cost_dict[neighbor]['g'] + cost_dict[neighbor]['h']*/
-
         std::vector<Hexagon*>* neighbors = curr_hex->get_neighbors();
         for(int i = 0; i < neighbors->size(); i++) {
         	Hexagon* curr_neighbor = neighbors->at(i);
@@ -394,11 +332,15 @@ std::vector< Hexagon* >* Hexagon::find_path(Hexagon* start_hex, Hexagon* goal_he
 }
 
 GLdouble Hexagon::get_g_score(Hexagon* start_hex, Hexagon* end_hex) {
-    return end_hex->get_slope() + 1;
+    if(end_hex->get_improvement("road")) {
+        return 1;
+    } else {
+        return pow(end_hex->get_slope() + 1.0, 10);
+    }
 }
 
 GLdouble Hexagon::get_h_score(Hexagon* start_hex, Hexagon* end_hex) {
-	return dist_between(start_hex, end_hex);
+	return (dist_between(start_hex, end_hex) * 1.0 / 0.866025) * 2.0; // one unit...
 }
 
 std::vector< Hexagon* >* Hexagon::reconstruct_path(std::map< Hexagon*, Hexagon* > parent_map, Hexagon* curr_hex) {

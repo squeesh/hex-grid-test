@@ -128,6 +128,11 @@ class Controller(object):
 
         # Hexagon.find_path(curr_hex, curr_hex.get_neighbor('N').get_neighbor('N'))
 
+        # from util import dist_between
+        # print dist_between(road_hexagons[0], road_hexagons[0].get_neighbor('N'))
+        # print 1 / dist_between(road_hexagons[0], road_hexagons[0].get_neighbor('S'))
+        # print dist_between(road_hexagons[0], road_hexagons[0].get_neighbor('NW'))
+
         height_list = [hex.get_height() for hex in Hexagon.get_all_hexagons()]
 
         max_height = max(height_list)
