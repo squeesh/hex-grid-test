@@ -113,6 +113,23 @@ class Controller(object):
             road_hexagons[2], road_hexagons[0]
         )
 
+
+        from timeit import Timer
+        from functools import partial
+
+        def get_execution_time(function, *args, **kwargs):
+            """Return the execution time of a function in seconds."""
+            numberOfExecTime = kwargs.pop('numberOfExecTime', 20)
+            return Timer(partial(function, *args, **kwargs)).timeit(numberOfExecTime)
+
+        from util import a_star
+        # return a_star(hex_a, hex_b)
+
+        for i in range(3):
+            print 'cpp:', get_execution_time(Hexagon.find_path, road_hexagons[i-1], road_hexagons[i])
+            print 'pyc:', get_execution_time(a_star, road_hexagons[i-1], road_hexagons[i])
+            print '---'
+
         # while True:
         #     curr_hex = self.get_hexagon(int(random() * GlobalConsts.BOARD_WIDTH), int(random() * GlobalConsts.BOARD_HEIGHT))
         #     if curr_hex.is_pathable():

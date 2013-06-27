@@ -215,19 +215,20 @@ extern "C" {
 
 	PyObject* Hexagon_find_path(Hexagon* start_hex, Hexagon* goal_hex) {
 		std::vector< Hexagon* >* hex_vec = Hexagon::find_path(start_hex, goal_hex);
+		int hex_vec_size = hex_vec->size();
 
-		PyObject *hex_list = PyList_New(hex_vec->size());
+		PyObject *hex_list = PyList_New(hex_vec_size);
 		if (!hex_list) {
 		    return NULL;
 		}
 
-		for(int i = 0; i < hex_vec->size(); i++) {
+		for(int i = 0; i < hex_vec_size; i++) {
 		    PyObject *py_hex = PyInt_FromLong((GLlong)(hex_vec->at(i)));
 		    if (!py_hex) {
 		        Py_DECREF(py_hex);
 		        return NULL;
 		    }
-		    PyList_SET_ITEM(hex_list, i, py_hex);   // reference to num stolen
+		    PyList_SET_ITEM(hex_list, i, py_hex);
 		}
 
 		delete hex_vec;

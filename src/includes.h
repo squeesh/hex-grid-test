@@ -12,7 +12,7 @@
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <algorithm>
 
 #include "defines.h"
 

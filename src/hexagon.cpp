@@ -278,10 +278,14 @@ std::vector< Hexagon* >* Hexagon::find_path(Hexagon* start_hex, Hexagon* goal_he
 	f_score[start_hex] = h_score[start_hex];
 
 	Hexagon* curr_hex = start_hex;
+    Hexagon* min_f_hex = NULL;
+    std::vector<Hexagon*>* neighbors = NULL;
 
 	while(open_list.size() > 0) {
-        Hexagon* min_f_hex = open_list[0];
-        for(int i = 1; i < open_list.size(); i++) {
+        min_f_hex = open_list[0];
+
+        int open_list_size = open_list.size();
+        for(int i = 1; i < open_list_size; i++) {
             if(f_score[open_list[i]] < f_score[min_f_hex]) {
                 min_f_hex = open_list[i];
             }
@@ -301,8 +305,9 @@ std::vector< Hexagon* >* Hexagon::find_path(Hexagon* start_hex, Hexagon* goal_he
         	closed_list.push_back(curr_hex);
         }
 
-        std::vector<Hexagon*>* neighbors = curr_hex->get_neighbors();
-        for(int i = 0; i < neighbors->size(); i++) {
+        neighbors = curr_hex->get_neighbors();
+        int neighbors_size = neighbors->size();
+        for(int i = 0; i < neighbors_size; i++) {
         	Hexagon* curr_neighbor = neighbors->at(i);
 
             if(!curr_neighbor->is_pathable() && !item_in_vector(&closed_list, curr_neighbor)) {
@@ -317,7 +322,9 @@ std::vector< Hexagon* >* Hexagon::find_path(Hexagon* start_hex, Hexagon* goal_he
 
         	if(!item_in_vector(&open_list, curr_neighbor) || tentative_g_score < g_score[curr_neighbor]) {
         		parent_map[curr_neighbor] = curr_hex;
-    			open_list.push_back(curr_neighbor);
+                if(!item_in_vector(&open_list, curr_neighbor)) {
+        			open_list.push_back(curr_neighbor);
+                }
     			g_score[curr_neighbor] = Hexagon::get_g_score(curr_hex, curr_neighbor) + g_score[curr_hex];
     			h_score[curr_neighbor] = Hexagon::get_h_score(curr_neighbor, goal_hex);
     			f_score[curr_neighbor] = g_score[curr_neighbor] + h_score[curr_neighbor];
@@ -340,7 +347,7 @@ GLdouble Hexagon::get_g_score(Hexagon* start_hex, Hexagon* end_hex) {
 }
 
 GLdouble Hexagon::get_h_score(Hexagon* start_hex, Hexagon* end_hex) {
-	return (dist_between(start_hex, end_hex) * 1.0 / 0.866025) * 2.0; // one unit...
+	return (dist_between(start_hex, end_hex) * 1.0 / 0.866025) * 1.5; // one unit...
 }
 
 std::vector< Hexagon* >* Hexagon::reconstruct_path(std::map< Hexagon*, Hexagon* > parent_map, Hexagon* curr_hex) {

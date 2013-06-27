@@ -15,8 +15,8 @@ class GlobalConsts(object):
     SCREEN_WIDTH  = 800
     SCREEN_HEIGHT = 600
 
-    # BOARD_HEIGHT = 40
-    # BOARD_WIDTH  = 40
+    # BOARD_HEIGHT = 20
+    # BOARD_WIDTH  = 20
 
     BOARD_HEIGHT = 80
     BOARD_WIDTH  = 120

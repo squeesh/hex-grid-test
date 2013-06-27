@@ -131,8 +131,8 @@ def a_star(start_node, goal_node):
         if curr_node == goal_node:
             return reconstruct_path(parent_dict, goal_node)
 
-        if GlobalConsts.PATH_SHOW_SEARCH and curr_node.is_pathable():
-            curr_node.set_select_color(1, 0, 0)
+        # if GlobalConsts.PATH_SHOW_SEARCH and curr_node.is_pathable():
+        #     curr_node.set_select_color(1, 0, 0)
 
         open_list.remove(curr_node)
         if curr_node not in closed_list:
@@ -163,7 +163,7 @@ def get_g_cost(start_node, end_node):
         return (end_node.get_slope() + 1) ** 10
 
 def get_h_cost(start_node, end_node):
-    return (dist_between(start_node, end_node) * 1.0 / 0.866025) * 2.0
+    return (dist_between(start_node, end_node) * 1.0 / 0.866025) * 1.5
 
 # Wraps all functions of a class in a try / catch
 # forces exit on error

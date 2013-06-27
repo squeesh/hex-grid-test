@@ -403,9 +403,13 @@ class PythonException : public std::exception {};
 
 template <typename T>
 std::vector<T>* remove_from_vector(std::vector<T>* vec, T elem) {
-	int pos = -1;
+	vec->erase(std::find(vec->begin(), vec->end(), elem));
 
-	for(int i = 0; i < vec->size(); i++) {
+	return vec;
+
+	/*int pos = -1;
+	int vec_size = vec->size();
+	for(int i = 0; i < vec_size; i++) {
 		if(vec->at(i) == elem) {
 			pos = i;
 			break;
@@ -418,18 +422,24 @@ std::vector<T>* remove_from_vector(std::vector<T>* vec, T elem) {
 		T temp = vec->at(-1);
 	}
 
-	return vec;
+	return vec;*/
 }
 
 template <typename T>
 bool item_in_vector(std::vector<T>* vec, T elem) {
-	for(int i = 0; i < vec->size(); i++) {
+	//std::sort(vec->begin(), vec->end());
+	//return std::binary_search(vec->begin(), vec->end(), elem);
+
+	return std::find(vec->begin(), vec->end(), elem) != vec->end();
+
+	/*int vec_size = vec->size();
+	for(int i = 0; i < vec_size; i++) {
 		if(vec->at(i) == elem) {
 			return true;
 		}
 	}
 
-	return false;
+	return false;*/
 }
 
 
