@@ -157,7 +157,10 @@ class Hexagon(object):
 
     @staticmethod
     def find_path(hex_a, hex_b):
-        return [Hexagon.get_hexagon(hex_addr) for hex_addr in hexagon_lib.Hexagon_find_path(hex_a._c_pointer, hex_b._c_pointer)]
+        # return [Hexagon.get_hexagon(hex_addr) for hex_addr in hexagon_lib.Hexagon_find_path(hex_a._c_pointer, hex_b._c_pointer)]
+
+        from util import a_star
+        return a_star(hex_a, hex_b)
 
 
 class Vertex(object):

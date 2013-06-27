@@ -62,15 +62,15 @@ class RoundList(list):
 #                 g_score[neighbor] = tentative_g_score
 #                 f_score[neighbor] = g_score[neighbor] + heuristic_cost_estimate(neighbor, goal)
 
-#     return []
+    # return []
 
 
-# def reconstruct_path(came_from, current_node):
-#     if current_node in came_from:
-#         p = reconstruct_path(came_from, came_from[current_node])
-#         return p + [current_node]
-#     else:
-#         return [current_node]
+def reconstruct_path(came_from, current_node):
+    if current_node in came_from:
+        p = reconstruct_path(came_from, came_from[current_node])
+        return p + [current_node]
+    else:
+        return [current_node]
 
 
 # def heuristic_cost_estimate(curr_node, goal):
@@ -79,7 +79,7 @@ class RoundList(list):
 #     # else:
 #     #     hex_cost = ((curr_node.get_slope()+1) ** 10)
 
-#     return dist_between(curr_node, goal) + ((curr_node.get_slope()+1) ** 10)
+#     return dist_between(curr_node, goal)
 
 
 def dist_between(curr_node, neighbor):
@@ -108,92 +108,98 @@ def dist_between(curr_node, neighbor):
 
     return math.sqrt(x_diff**2 + y_diff**2)
 
-# def a_star_2(start_node, goal_node):
-#     open_list = [start_node]
-#     closed_list = []
-#     cost_dict = defaultdict(dict)
-#     parent_dict = {}
+def a_star(start_node, goal_node):
+    open_list = [start_node]
+    closed_list = []
+    cost_dict = defaultdict(dict)
+    parent_dict = {}
 
-#     cost_dict[start_node]['g'] = 0.0
-#     cost_dict[start_node]['h'] = get_h_cost(start_node, goal_node)
-#     cost_dict[start_node]['f'] = cost_dict[start_node]['h']
+    cost_dict[start_node]['g'] = 0.0
+    cost_dict[start_node]['h'] = get_h_cost(start_node, goal_node)
+    cost_dict[start_node]['f'] = cost_dict[start_node]['h']
 
-#     curr_node = start_node
+    curr_node = start_node
 
-#     while open_list:
-#         if curr_node == goal_node:
-#             return reconstruct_path(parent_dict, goal_node)
+    while open_list:
+        min_f_node = open_list[0]
+        for node in open_list[1:]:
+            if cost_dict[node]['f'] < cost_dict[min_f_node]['f']:
+                min_f_node = node
 
-#         if GlobalConsts.PATH_SHOW_SEARCH and curr_node.is_pathable():
-#             curr_node.set_select_color(1, 0, 0)
+        curr_node = min_f_node
 
-#         open_list.remove(curr_node)
-#         closed_list.append(curr_node)
+        if curr_node == goal_node:
+            return reconstruct_path(parent_dict, goal_node)
 
-#         for direction, neighbor in curr_node.get_neighbors().items():
-#             if neighbor not in closed_list:
-#                 parent_dict[neighbor] = curr_node
-#                 if neighbor.is_pathable():
-#                     open_list.append(neighbor)
-#                     cost_dict[neighbor]['g'] = get_g_cost(curr_node, neighbor) + cost_dict[curr_node]['g']
-#                     cost_dict[neighbor]['h'] = get_h_cost(neighbor, goal_node)
-#                     cost_dict[neighbor]['f'] = cost_dict[neighbor]['g'] + cost_dict[neighbor]['h']
-#                 else:
-#                     closed_list.append(neighbor)
+        if GlobalConsts.PATH_SHOW_SEARCH and curr_node.is_pathable():
+            curr_node.set_select_color(1, 0, 0)
 
-#         min_f_node = open_list[0]
-#         for node in open_list[1:]:
-#             if cost_dict[node]['f'] < cost_dict[min_f_node]['f']:
-#                 min_f_node = node
+        open_list.remove(curr_node)
+        if curr_node not in closed_list:
+            closed_list.append(curr_node)
 
-#         curr_node = min_f_node
+        for neighbor in curr_node.get_neighbors().values():
+            if not neighbor.is_pathable() and neighbor not in closed_list:
+                closed_list.append(neighbor)
 
-#     return []
+            if neighbor in closed_list:
+                continue
 
-# def get_g_cost(start_node, end_node):
-#     return end_node.get_slope() + 1
+            tentative_g_score = get_g_cost(curr_node, neighbor) + cost_dict[curr_node]['g']
 
-# def get_h_cost(start_node, end_node):
-#     return dist_between(start_node, end_node)
+            if neighbor not in open_list or tentative_g_score < cost_dict[neighbor]['g']:
+                parent_dict[neighbor] = curr_node
+                open_list.append(neighbor)
+                cost_dict[neighbor]['g'] = get_g_cost(curr_node, neighbor) + cost_dict[curr_node]['g']
+                cost_dict[neighbor]['h'] = get_h_cost(neighbor, goal_node)
+                cost_dict[neighbor]['f'] = cost_dict[neighbor]['g'] + cost_dict[neighbor]['h']
 
-## Wraps all functions of a class in a try / catch
-## forces exit on error
-#def try_catch_funcs(curr_class):
-#    all_attrs = dir(curr_class)
-#    base_attrs = dir(object)
-#
-#    cls_attrs = list(set(all_attrs) - set(base_attrs))
-#
-#    for curr_attr_str in cls_attrs:
-#        curr_attr = getattr(curr_class, curr_attr_str)
-#        if hasattr(curr_attr, '__call__'):
-#            old_func = curr_attr
-#
-#            def get_func(curr_func):
-#                def _try_catch(*args, **kwargs):
-#                    try:
-#                        return curr_func(*args, **kwargs)
-#                    except Exception, e:
-#                        info = sys.exc_info()
-#                        traceback.print_exc()
-#
-#                        # force exit if python error...
-#                        util_lib.Util_force_exit()
-#
-#                return _try_catch
-#
-#            if isinstance(old_func, types.FunctionType):
-#                old_func = get_func(old_func)
-#
-#                old_func.__name__ = curr_attr_str
-#                old_func = staticmethod(old_func)
-#
-#            else:
-#                old_func = get_func(old_func)
-#
-#                old_func.__name__ = curr_attr_str
-#
-#            setattr(curr_class, curr_attr_str, old_func)
-#
-#    return curr_class
+    return []
+
+def get_g_cost(start_node, end_node):
+    return end_node.get_slope() + 1
+
+def get_h_cost(start_node, end_node):
+    return dist_between(start_node, end_node)
+
+# Wraps all functions of a class in a try / catch
+# forces exit on error
+def try_catch_funcs(curr_class):
+   all_attrs = dir(curr_class)
+   base_attrs = dir(object)
+
+   cls_attrs = list(set(all_attrs) - set(base_attrs))
+
+   for curr_attr_str in cls_attrs:
+       curr_attr = getattr(curr_class, curr_attr_str)
+       if hasattr(curr_attr, '__call__'):
+           old_func = curr_attr
+
+           def get_func(curr_func):
+               def _try_catch(*args, **kwargs):
+                   try:
+                       return curr_func(*args, **kwargs)
+                   except Exception, e:
+                       info = sys.exc_info()
+                       traceback.print_exc()
+
+                       # force exit if python error...
+                       util_lib.Util_force_exit()
+
+               return _try_catch
+
+           if isinstance(old_func, types.FunctionType):
+               old_func = get_func(old_func)
+
+               old_func.__name__ = curr_attr_str
+               old_func = staticmethod(old_func)
+
+           else:
+               old_func = get_func(old_func)
+
+               old_func.__name__ = curr_attr_str
+
+           setattr(curr_class, curr_attr_str, old_func)
+
+   return curr_class
 

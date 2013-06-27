@@ -273,6 +273,13 @@ bool Hexagon::is_pathable() {
     curr_node = start_node
 
     while open_list:
+        min_f_node = open_list[0]
+        for node in open_list[1:]:
+            if cost_dict[node]['f'] < cost_dict[min_f_node]['f']:
+                min_f_node = node
+
+        curr_node = min_f_node
+
         if curr_node == goal_node:
             return reconstruct_path(parent_dict, goal_node)
 
@@ -282,23 +289,21 @@ bool Hexagon::is_pathable() {
         open_list.remove(curr_node)
         closed_list.append(curr_node)
 
-        for direction, neighbor in curr_node.get_neighbors().items():
-            if neighbor not in closed_list:
+        for neighbor in curr_node.get_neighbors().values():
+            if not neighbor.is_pathable() and neighbor not in closed_list:
+                closed_list.append(neighbor)
+
+            if neighbor in closed_list:
+                continue
+
+            tentative_g_score = cost_dict[curr_node]['g'] + get_h_cost(curr_node, neighbor)
+
+            if neighbor not in open_list or tentative_g_score < cost_dict[neighbor]['g']:
                 parent_dict[neighbor] = curr_node
-                if neighbor.is_pathable():
-                    open_list.append(neighbor)
-                    cost_dict[neighbor]['g'] = get_g_cost(curr_node, neighbor) + cost_dict[curr_node]['g']
-                    cost_dict[neighbor]['h'] = get_h_cost(neighbor, goal_node)
-                    cost_dict[neighbor]['f'] = cost_dict[neighbor]['g'] + cost_dict[neighbor]['h']
-                else:
-                    closed_list.append(neighbor)
-
-        min_f_node = open_list[0]
-        for node in open_list[1:]:
-            if cost_dict[node]['f'] < cost_dict[min_f_node]['f']:
-                min_f_node = node
-
-        curr_node = min_f_node
+                open_list.append(neighbor)
+                cost_dict[neighbor]['g'] = get_g_cost(curr_node, neighbor) + cost_dict[curr_node]['g']
+                cost_dict[neighbor]['h'] = get_h_cost(neighbor, goal_node)
+                cost_dict[neighbor]['f'] = cost_dict[neighbor]['g'] + cost_dict[neighbor]['h']
 
     return []
 */
@@ -321,6 +326,15 @@ std::vector< Hexagon* >* Hexagon::find_path(Hexagon* start_hex, Hexagon* goal_he
 	Hexagon* curr_hex = start_hex;
 
 	while(open_list.size() > 0) {
+        Hexagon* min_f_hex = open_list[0];
+        for(int i = 1; i < open_list.size(); i++) {
+            if(f_score[open_list[i]] < f_score[min_f_hex]) {
+                min_f_hex = open_list[i];
+            }
+        }
+
+        curr_hex = min_f_hex;
+
         if(curr_hex == goal_hex) {
         	return Hexagon::reconstruct_path(parent_map, goal_hex);
         }
@@ -333,34 +347,46 @@ std::vector< Hexagon* >* Hexagon::find_path(Hexagon* start_hex, Hexagon* goal_he
         	closed_list.push_back(curr_hex);
         }
 
+        /*for neighbor in curr_node.get_neighbors().values():
+            if not neighbor.is_pathable() and neighbor not in closed_list:
+                closed_list.append(neighbor)
+
+            if neighbor in closed_list:
+                continue
+
+            tentative_g_score = cost_dict[curr_node]['g'] + get_h_cost(curr_node, neighbor)
+
+            if neighbor not in open_list or tentative_g_score < cost_dict[neighbor]['g']:
+                parent_dict[neighbor] = curr_node
+                open_list.append(neighbor)
+                cost_dict[neighbor]['g'] = get_g_cost(curr_node, neighbor) + cost_dict[curr_node]['g']
+                cost_dict[neighbor]['h'] = get_h_cost(neighbor, goal_node)
+                cost_dict[neighbor]['f'] = cost_dict[neighbor]['g'] + cost_dict[neighbor]['h']*/
+
         std::vector<Hexagon*>* neighbors = curr_hex->get_neighbors();
         for(int i = 0; i < neighbors->size(); i++) {
         	Hexagon* curr_neighbor = neighbors->at(i);
 
-        	if(!item_in_vector(&closed_list, curr_neighbor)) {
-        		parent_map[curr_neighbor] = curr_hex;
+            if(!curr_neighbor->is_pathable() && !item_in_vector(&closed_list, curr_neighbor)) {
+                closed_list.push_back(curr_neighbor);
+            }
 
-        		if(curr_neighbor->is_pathable()) {
-        			open_list.push_back(curr_neighbor);
-        			g_score[curr_neighbor] = Hexagon::get_g_score(curr_hex, curr_neighbor) + g_score[curr_hex];
-        			h_score[curr_neighbor] = Hexagon::get_h_score(curr_neighbor, goal_hex);
-        			f_score[curr_neighbor] = g_score[curr_neighbor] + h_score[curr_neighbor];
-        		} else {
-        			closed_list.push_back(curr_neighbor);
-        		}
+            if(item_in_vector(&closed_list, curr_neighbor)) {
+                continue;
+            }
+
+            GLdouble tentative_g_score =  Hexagon::get_g_score(curr_hex, curr_neighbor) + g_score[curr_hex];
+
+        	if(!item_in_vector(&open_list, curr_neighbor) || tentative_g_score < g_score[curr_neighbor]) {
+        		parent_map[curr_neighbor] = curr_hex;
+    			open_list.push_back(curr_neighbor);
+    			g_score[curr_neighbor] = Hexagon::get_g_score(curr_hex, curr_neighbor) + g_score[curr_hex];
+    			h_score[curr_neighbor] = Hexagon::get_h_score(curr_neighbor, goal_hex);
+    			f_score[curr_neighbor] = g_score[curr_neighbor] + h_score[curr_neighbor];
         	}
         }
 
         delete neighbors;
-
-        Hexagon* min_f_hex = open_list[0];
-        for(int i = 1; i < open_list.size(); i++) {
-        	if(f_score[open_list[i]] < f_score[min_f_hex]) {
-        		min_f_hex = open_list[i];
-        	}
-	    }
-
-	    curr_hex = min_f_hex;
 	}
 
 	return new std::vector< Hexagon* >();
