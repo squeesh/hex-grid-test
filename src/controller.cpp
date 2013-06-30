@@ -11,7 +11,27 @@ Controller::Controller() {
 	this->gameboard = new Gameboard();
 
 	this->print_flag = false;
+    this->kill_threads = false;
+
+    this->ready = false;
+    this->timer_thread = NULL;
 }
+
+Controller::~Controller() {
+    std::cout << "closing..." << std::endl;
+
+    curr_ctrl->kill_threads = true;
+    curr_ctrl->timer_thread->join();
+
+    delete curr_ctrl->timer_thread;
+    delete this->player_input;
+    delete this->gameboard;
+
+    Py_XDECREF(this->py_pointer);
+
+    Py_Finalize();
+}
+
 
 Controller* Controller::get_controller() {
 	if(!Controller::curr_ctrl) {
@@ -68,6 +88,7 @@ Controller* Controller::py_get_controller() {
 
 void Controller::init_board() {
 	py_call_func(this->py_pointer, "init_board");
+    this->ready = true;
 }
 
 

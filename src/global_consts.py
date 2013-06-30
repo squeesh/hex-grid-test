@@ -3,7 +3,7 @@
 #    You will get circular imports...
 
 class GlobalConsts(object):
-    SLEEP_TIME  = 30
+    SLEEP_TIME  = 100#30
 
     PATH_SHOW_SEARCH = True
 
@@ -15,11 +15,11 @@ class GlobalConsts(object):
     SCREEN_WIDTH  = 800
     SCREEN_HEIGHT = 600
 
-    # BOARD_HEIGHT = 20
-    # BOARD_WIDTH  = 20
+    BOARD_HEIGHT = 20
+    BOARD_WIDTH  = 20
 
-    BOARD_HEIGHT = 80
-    BOARD_WIDTH  = 120
+    # BOARD_HEIGHT = 80
+    # BOARD_WIDTH  = 120
 
    # BOARD_HEIGHT = 512
    # BOARD_WIDTH  = 512
