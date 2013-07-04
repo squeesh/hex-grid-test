@@ -1,4 +1,4 @@
-#include "includes.h"
+#include "../includes.h"
 
 BoardObject::BoardObject(Hexagon* base_hex) {
     Controller* curr_ctrl = Controller::get_controller();

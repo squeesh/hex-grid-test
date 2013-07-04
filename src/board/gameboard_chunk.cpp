@@ -1,4 +1,4 @@
-#include "includes.h"
+#include "../includes.h"
 
 GameboardChunk::GameboardChunk(Hexagon* base_hex) {
 	this->base_hex = base_hex;

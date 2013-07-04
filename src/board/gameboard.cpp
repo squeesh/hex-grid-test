@@ -1,4 +1,4 @@
-#include "includes.h"
+#include "../includes.h"
 
 
 GameboardBase::GameboardBase() {
