@@ -20,6 +20,7 @@
 #include "defines.h"
 
 #include "util.h"
+#include "mutex_manager.h"
 #include "global_consts.h"
 #include "render_controller.h"
 #include "vertex.h"

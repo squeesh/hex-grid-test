@@ -258,7 +258,9 @@ GLdouble Hexagon::get_slope() {
 }
 
 bool Hexagon::is_pathable() {
-	return this->get_slope() <= GlobalConsts::MAX_PATHABLE_SLOPE && this->get_board_object() == NULL;
+	bool output = this->get_slope() <= GlobalConsts::MAX_PATHABLE_SLOPE && this->get_board_object() == NULL;
+
+    return output;
 }
 
 std::vector< Hexagon* >* Hexagon::find_path(Hexagon* start_hex, Hexagon* goal_hex) {
@@ -529,6 +531,8 @@ void Hexagon::generate_select_data(GLdouble x, GLdouble y, UniqueDataVector< GLd
 BoardObject* Hexagon::get_board_object() {
     Controller* curr_ctrl = Controller::get_controller();
     std::map< Hexagon*, BoardObject* > &curr_board_object_map = *(curr_ctrl->gameboard->board_object_map);
-    return curr_board_object_map[this];
+    BoardObject* output = curr_board_object_map[this];
+
+    return output;
 }
 

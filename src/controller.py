@@ -338,22 +338,7 @@ class Controller(object):
             if board_obj.curr_path:
                 next_hex = board_obj.curr_path[0]
                 board_obj.curr_path = board_obj.curr_path[1:]
-#                self.set_selected_hex(next_hex)
                 board_obj.move_to_hex(next_hex)
-                #board_obj.set_selected(True)
-
-#    def mouse_down(self, x, y, button):
-#        controller_lib.Controller_mouse_down(c_double(x), c_double(y), 0)
-
-#    def get_selected_hex(self):
-#        c_hex_obj = controller_lib.Controller_get_selected_hex()
-#        return Hexagon.get_hexagon(c_hex_obj)
-#
-#    def set_selected_hex(self, curr_hex):
-#        controller_lib.Controller_set_selected_hex(curr_hex._c_pointer)
-#
-#    def clear_selected_hex(self):
-#        controller_lib.Controller_clear_selected_hex()
 
     def get_clicked_hex(self, x, y):
         for hex in Hexagon.get_all_hexagons():
@@ -364,13 +349,3 @@ class Controller(object):
         y = int(y)
         c_hex_obj = controller_lib.Controller_get_clicked_hex(c_int(x), c_int(y))
         return Hexagon.get_hexagon(c_hex_obj)
-
-    # def find_path(self, start_hex, end_hex):
-    #     if GlobalConsts.PATH_SHOW_SEARCH:
-    #         for hex in Hexagon.get_all_hexagons():
-    #             if hex.is_pathable():
-    #                 hex.clear_select_color()
-
-    #     for hex in a_star(start_hex, end_hex):
-    #         hex.set_select_color(0, 1, 1)
-
