@@ -1,5 +1,5 @@
 from ctypes import *
-hexagon_lib = cdll.LoadLibrary('./all_externs.so')
+hexagon_lib = cdll.LoadLibrary('./bin/all_externs.so')
 hexagon_lib.Hexagon_new.restype = c_long
 hexagon_lib.Hexagon_get_vertex.restype = c_long
 hexagon_lib.Hexagon_get_improvement.restype = c_bool
