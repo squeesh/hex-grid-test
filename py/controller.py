@@ -1,5 +1,5 @@
 from ctypes import *
-controller_lib = cdll.LoadLibrary('./externs.so')
+controller_lib = cdll.LoadLibrary('bin/externs.so')
 #controller_lib.Controller_COS_60.restype = c_double
 #controller_lib.Controller_SIN_60.restype = c_double
 controller_lib.Controller_get_rotation.restype = c_double

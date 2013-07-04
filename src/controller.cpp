@@ -49,7 +49,7 @@ Controller* Controller::py_get_controller() {
 		PyRun_SimpleString("sys.dont_write_bytecode = True");
 
 		try {
-            PyObject *py_name = PyString_FromString("src.controller");
+            PyObject *py_name = PyString_FromString("py.controller");
             if(PyErr_Occurred()) {
                 throw PythonException();
             }
