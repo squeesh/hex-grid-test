@@ -5,9 +5,9 @@
 class GlobalConsts(object):
     SLEEP_TIME  = 30
 
-    PATH_SHOW_SEARCH = True
+    PATH_SHOW_SEARCH = False
 
-    GENERATE_HILLS = True
+    GENERATE_HILLS = False
     GENERATE_MOUNTAINS = False
 
 #    GENERATE_MOUNTAINS = True
@@ -15,11 +15,11 @@ class GlobalConsts(object):
     SCREEN_WIDTH  = 800
     SCREEN_HEIGHT = 600
 
-    # BOARD_HEIGHT = 20
-    # BOARD_WIDTH  = 20
+    BOARD_HEIGHT = 20
+    BOARD_WIDTH  = 20
 
-    BOARD_HEIGHT = 80
-    BOARD_WIDTH  = 120
+    # BOARD_HEIGHT = 80
+    # BOARD_WIDTH  = 120
 
    # BOARD_HEIGHT = 512
    # BOARD_WIDTH  = 512

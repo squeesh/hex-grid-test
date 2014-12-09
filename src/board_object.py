@@ -1,6 +1,6 @@
 from PIL import Image
 from ctypes import *
-board_object_lib = cdll.LoadLibrary('./externs.so')
+board_object_lib = cdll.LoadLibrary('./all_externs.so')
 board_object_lib.BoardObject_new.restype = c_long
 board_object_lib.BoardObject_is_selected.restype = c_bool
 

@@ -1,5 +1,5 @@
 from ctypes import *
-input_lib = cdll.LoadLibrary('./externs.so')
+input_lib = cdll.LoadLibrary('./all_externs.so')
 input_lib.PlayerInput_new.restype = c_long
 
 from global_consts import GlobalConsts
