@@ -1,5 +1,5 @@
 from ctypes import cdll
-util_lib = cdll.LoadLibrary('./bin/all_externs.so')
+util_lib = cdll.LoadLibrary('./all_externs.so')
 
 from collections import defaultdict
 import math

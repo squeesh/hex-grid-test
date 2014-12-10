@@ -13,30 +13,26 @@ bool SHOW_FPS = true;
 time_t seconds = time(NULL);
 int fps = 0;
 void display() {
-    if(curr_ctrl->ready) {
-        time_t curr_seconds = time(NULL);
-    	if(SHOW_FPS) {
-    		if(curr_seconds > seconds) {
-    			//std::cout << "FPS: " << fps << std::endl;
+    time_t curr_seconds = time(NULL);
+	if(SHOW_FPS) {
+		if(curr_seconds > seconds) {
+			//std::cout << "FPS: " << fps << std::endl;
 
-    			RenderController::print_string.clear();
-    			RenderController::print_string += std::string("FPS: ");
-    			std::stringstream temp;
-    			temp << fps;
-    			RenderController::print_string += temp.str();
+			RenderController::print_string.clear();
+			RenderController::print_string += std::string("FPS: ");
+			std::stringstream temp;
+			temp << fps;
+			RenderController::print_string += temp.str();
 
-    			seconds = curr_seconds;
-    			fps = 0;
-    		}
+			seconds = curr_seconds;
+			fps = 0;
+		}
 
-    		fps++;
-    	}
+		fps++;
+	}
 
-    	curr_rend_ctrl->render();
-    	glutSwapBuffers();
-    } else {
-        std::cout << "not ready" << std::endl;
-    }
+	curr_rend_ctrl->render();
+	glutSwapBuffers();
 }
 
 void reshape(int width, int height) {
@@ -67,7 +63,12 @@ void mouse_drag(int x, int y) {
     curr_ctrl->mouse_event(GlobalConsts::MOUSE_DRAG, -1, x, y);
 }
 
-void timer() {
+void timer(int value) {
+    curr_ctrl->tick();
+    glutTimerFunc(GlobalConsts::SLEEP_TIME, timer, value);
+}
+
+/*void timer() {
     std::chrono::milliseconds dura(GlobalConsts::SLEEP_TIME);
 
     while(!curr_ctrl->kill_threads) {
@@ -79,7 +80,7 @@ void timer() {
     std::cout << "killing thread..." << std::endl;
 
     //glutTimerFunc(GlobalConsts::SLEEP_TIME, timer, value);
-}
+}*/
 
 
 void close_window() {
@@ -102,7 +103,7 @@ int main(int argc, char** argv) {
 
 	glutDisplayFunc(display);
 	glutIdleFunc(display);
-	//glutTimerFunc(GlobalConsts::SLEEP_TIME, timer, 0);
+	glutTimerFunc(GlobalConsts::SLEEP_TIME, timer, 0);
 
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(key_pressed);
@@ -115,7 +116,7 @@ int main(int argc, char** argv) {
 	curr_ctrl->init_board();
 	//curr_ctrl->init_board(BOARD_WIDTH, BOARD_HEIGHT);
 
-    curr_ctrl->timer_thread = new std::thread(timer);
+    //curr_ctrl->timer_thread = new std::thread(timer);
 
 	glutMainLoop();
 

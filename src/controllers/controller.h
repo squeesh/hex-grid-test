@@ -17,11 +17,11 @@ class Controller {
 		PlayerInput* player_input;
 		Gameboard* gameboard;
 
-		bool ready;
+		//bool ready;
 		bool print_flag;
-		bool kill_threads;
+		//bool kill_threads;
 
-		std::thread* timer_thread;
+		//std::thread* timer_thread;
 
 		static Controller* get_controller();
 		static Controller* py_get_controller();

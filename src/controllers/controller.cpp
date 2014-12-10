@@ -11,19 +11,19 @@ Controller::Controller() {
 	this->gameboard = new Gameboard();
 
 	this->print_flag = false;
-    this->kill_threads = false;
+    /*this->kill_threads = false;
 
     this->ready = false;
-    this->timer_thread = NULL;
+    this->timer_thread = NULL;*/
 }
 
 Controller::~Controller() {
     std::cout << "closing..." << std::endl;
 
-    curr_ctrl->kill_threads = true;
+    /*curr_ctrl->kill_threads = true;
     curr_ctrl->timer_thread->join();
 
-    delete curr_ctrl->timer_thread;
+    delete curr_ctrl->timer_thread;*/
     delete this->player_input;
     delete this->gameboard;
 
@@ -88,7 +88,7 @@ Controller* Controller::py_get_controller() {
 
 void Controller::init_board() {
 	py_call_func(this->py_pointer, "init_board");
-    this->ready = true;
+    //this->ready = true;
 }
 
 
@@ -119,12 +119,12 @@ void Controller::init_board() {
 
 
 void Controller::tick() {
-    MutexManager::get("controller_tick")->lock();
+    //MutexManager::get("controller_tick")->lock();
 	RenderController* curr_rend_ctrl = RenderController::get_render_controller();
 	curr_rend_ctrl->tick();
 
     py_call_func(this->py_pointer, "tick");
-    MutexManager::get("controller_tick")->unlock();
+    //MutexManager::get("controller_tick")->unlock();
 }
 
 
@@ -180,17 +180,17 @@ std::set<Hexagon*>* Controller::get_neighbors_in_radius(Hexagon* curr_hex, int r
 
 
 void Controller::mouse_event(int event_type, int button, int x, int y) {
-    MutexManager::get("controller_tick")->lock();
+    //MutexManager::get("controller_tick")->lock();
 	RenderController* curr_rend_ctrl = RenderController::get_render_controller();
     this->player_input->mouse_event(event_type, button, x, curr_rend_ctrl->height - y);
-    MutexManager::get("controller_tick")->unlock();
+    //MutexManager::get("controller_tick")->unlock();
 }
 
 void Controller::keyboard_event(int event_type, unsigned char key, int x, int y) {
-    MutexManager::get("controller_tick")->lock();
+    //MutexManager::get("controller_tick")->lock();
 	RenderController* curr_rend_ctrl = RenderController::get_render_controller();
     this->player_input->keyboard_event(event_type, key, x, curr_rend_ctrl->height - y);
-    MutexManager::get("controller_tick")->unlock();
+    //MutexManager::get("controller_tick")->unlock();
 }
 
 

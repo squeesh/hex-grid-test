@@ -13,14 +13,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <algorithm>
-#include <thread>
-#include <chrono>
-#include <mutex>
+//#include <thread>
+//#include <chrono>
+//#include <mutex>
 
 #include "defines.h"
 
 #include "util.h"
-#include "managers/mutex_manager.h"
+//#include "managers/mutex_manager.h"
 #include "global_consts.h"
 #include "controllers/render_controller.h"
 #include "board/vertex.h"
