@@ -6,11 +6,11 @@ PyObject* Controller::py_pointer = NULL;
 
 
 Controller::Controller() {
-	this->player_input = NULL;
+    this->player_input = NULL;
 
-	this->gameboard = new Gameboard();
+    this->gameboard = new Gameboard();
 
-	this->print_flag = false;
+    this->print_flag = false;
     /*this->kill_threads = false;
 
     this->ready = false;
@@ -34,21 +34,21 @@ Controller::~Controller() {
 
 
 Controller* Controller::get_controller() {
-	if(!Controller::curr_ctrl) {
-		std::cout << "Starting up..." << std::endl;
-		Controller::curr_ctrl = new Controller();
-	}
+    if(!Controller::curr_ctrl) {
+        std::cout << "Starting up..." << std::endl;
+        Controller::curr_ctrl = new Controller();
+    }
 
-	return Controller::curr_ctrl;
+    return Controller::curr_ctrl;
 }
 
 Controller* Controller::py_get_controller() {
-	if(!Controller::curr_ctrl) {
-		PyRun_SimpleString("import os, sys");
-		PyRun_SimpleString("sys.path.append(os.getcwd())");
-		PyRun_SimpleString("sys.dont_write_bytecode = True");
+    if(!Controller::curr_ctrl) {
+        PyRun_SimpleString("import os, sys");
+        PyRun_SimpleString("sys.path.append(os.getcwd())");
+        PyRun_SimpleString("sys.dont_write_bytecode = True");
 
-		try {
+        try {
             PyObject *py_name = PyString_FromString("py.controller");
             if(PyErr_Occurred()) {
                 throw PythonException();
@@ -76,18 +76,18 @@ Controller* Controller::py_get_controller() {
 
             // capture our python controller pointer and save it for future use
             Controller::curr_ctrl->py_pointer = py_ctrl_obj;
-		} catch(PythonException &e) {
-		    PyErr_Print();
-		    exit(0);
-		}
-	}
+        } catch(PythonException &e) {
+            PyErr_Print();
+            exit(0);
+        }
+    }
 
-	return Controller::curr_ctrl;
+    return Controller::curr_ctrl;
 }
 
 
 void Controller::init_board() {
-	py_call_func(this->py_pointer, "init_board");
+    py_call_func(this->py_pointer, "init_board");
     //this->ready = true;
 }
 
@@ -120,8 +120,8 @@ void Controller::init_board() {
 
 void Controller::tick() {
     //MutexManager::get("controller_tick")->lock();
-	RenderController* curr_rend_ctrl = RenderController::get_render_controller();
-	curr_rend_ctrl->tick();
+    RenderController* curr_rend_ctrl = RenderController::get_render_controller();
+    curr_rend_ctrl->tick();
 
     py_call_func(this->py_pointer, "tick");
     //MutexManager::get("controller_tick")->unlock();
@@ -129,22 +129,22 @@ void Controller::tick() {
 
 
 void Controller::push_hexagon(Hexagon *hex) {
-	this->gameboard->push_back(hex);
+    this->gameboard->push_back(hex);
 }
 
 
 Hexagon* Controller::get_hex_by_name(GLlong name) {
-	for(int i = 0; i < this->gameboard->get_hexagon_list()->size(); i++) {
-		for(int j = 0; j < this->gameboard->get_hexagon_list()->at(i)->size(); j++) {
-			Hexagon* curr_hex = this->gameboard->get_hexagon_list()->at(i)->at(j);
+    for(int i = 0; i < this->gameboard->get_hexagon_list()->size(); i++) {
+        for(int j = 0; j < this->gameboard->get_hexagon_list()->at(i)->size(); j++) {
+            Hexagon* curr_hex = this->gameboard->get_hexagon_list()->at(i)->at(j);
 
-			if(curr_hex->name == name) {
-				return curr_hex;
-			}
-		}
-	}
+            if(curr_hex->name == name) {
+                return curr_hex;
+            }
+        }
+    }
 
-	return NULL;
+    return NULL;
 }
 
 
@@ -154,41 +154,41 @@ Hexagon* Controller::get_hexagon(int i, int j) {
 
 
 std::set<Hexagon*>* Controller::get_neighbors_in_radius(Hexagon* curr_hex, int radius) {
-	std::set<Hexagon*>* output = new std::set<Hexagon*>();
-	this->get_neighbors_in_radius(curr_hex, radius, output);
+    std::set<Hexagon*>* output = new std::set<Hexagon*>();
+    this->get_neighbors_in_radius(curr_hex, radius, output);
 
-	return output;
+    return output;
 }
 
 std::set<Hexagon*>* Controller::get_neighbors_in_radius(Hexagon* curr_hex, int radius, std::set<Hexagon*>* curr_neighbors) {
-	if(radius > 0) {
-		Hexagon* neigh_hex = NULL;
+    if(radius > 0) {
+        Hexagon* neigh_hex = NULL;
 
-		curr_neighbors->insert(curr_hex);
+        curr_neighbors->insert(curr_hex);
 
-		for(int i = 0; i < 6; i++) {
-			neigh_hex = curr_hex->get_neighbor(Hexagon::NEIGHBOR_DIRECTION->at(i));
+        for(int i = 0; i < 6; i++) {
+            neigh_hex = curr_hex->get_neighbor(Hexagon::NEIGHBOR_DIRECTION->at(i));
 
-			//if(!curr_neighbors->count(neigh_hex)) {
-				this->get_neighbors_in_radius(neigh_hex, radius-1, curr_neighbors);
-			//}
-		}
-	}
+            //if(!curr_neighbors->count(neigh_hex)) {
+                this->get_neighbors_in_radius(neigh_hex, radius-1, curr_neighbors);
+            //}
+        }
+    }
 
-	return curr_neighbors;
+    return curr_neighbors;
 }
 
 
 void Controller::mouse_event(int event_type, int button, int x, int y) {
     //MutexManager::get("controller_tick")->lock();
-	RenderController* curr_rend_ctrl = RenderController::get_render_controller();
+    RenderController* curr_rend_ctrl = RenderController::get_render_controller();
     this->player_input->mouse_event(event_type, button, x, curr_rend_ctrl->height - y);
     //MutexManager::get("controller_tick")->unlock();
 }
 
 void Controller::keyboard_event(int event_type, unsigned char key, int x, int y) {
     //MutexManager::get("controller_tick")->lock();
-	RenderController* curr_rend_ctrl = RenderController::get_render_controller();
+    RenderController* curr_rend_ctrl = RenderController::get_render_controller();
     this->player_input->keyboard_event(event_type, key, x, curr_rend_ctrl->height - y);
     //MutexManager::get("controller_tick")->unlock();
 }
