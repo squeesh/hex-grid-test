@@ -5,29 +5,29 @@ class Controller;
 
 
 class GameboardBase {
-	protected:
-		RoundVector< RoundVector< Hexagon* >* >* hexagon_list;
+    protected:
+        RoundVector< RoundVector< Hexagon* >* >* hexagon_list;
 
-	public:
-		std::map< Hexagon*, BoardObject* >* board_object_map;
+    public:
+        std::map< Hexagon*, BoardObject* >* board_object_map;
 
-		GameboardBase();
+        GameboardBase();
 
-		void push_back(Hexagon*);
-		RoundVector< RoundVector< Hexagon* >* >* get_hexagon_list();
-		void bind_obj_hex(BoardObject*, Hexagon*);
+        void push_back(Hexagon*);
+        RoundVector< RoundVector< Hexagon* >* >* get_hexagon_list();
+        void bind_obj_hex(BoardObject*, Hexagon*);
 };
 
 
 class Gameboard: public GameboardBase, public Renderable {
-	private:
-		std::map< Hexagon*, GameboardChunk* >* chunk_map;
+    private:
+        std::map< Hexagon*, GameboardChunk* >* chunk_map;
 
-	public:
-		Gameboard();
+    public:
+        Gameboard();
 
-		GameboardChunk* get_chunk(Hexagon*);
-		virtual void render(Controller*, int, int, int, int);
+        GameboardChunk* get_chunk(Hexagon*);
+        virtual void render(Controller*, int, int, int, int);
 };
 
 

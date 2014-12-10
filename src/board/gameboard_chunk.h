@@ -4,33 +4,33 @@
 
 
 class GameboardChunk {
-	private:
-		Hexagon* base_hex;
+    private:
+        Hexagon* base_hex;
 
-		UniqueDataVector< GLdouble >* board_terrain_data;
-		UniqueDataVector< GLdouble >* board_select_data;
-		//UniqueDataVector< GLdouble >* board_object_data;
+        UniqueDataVector< GLdouble >* board_terrain_data;
+        UniqueDataVector< GLdouble >* board_select_data;
+        //UniqueDataVector< GLdouble >* board_object_data;
 
-		void clear_terrain();
-		void clear_select();
-		//void clear_object();
+        void clear_terrain();
+        void clear_select();
+        //void clear_object();
 
-		void generate_chunk_data();
-		void generate_render_data(Hexagon*, GLdouble, GLdouble);
+        void generate_chunk_data();
+        void generate_render_data(Hexagon*, GLdouble, GLdouble);
 
-		void write_VBO_data();
+        void write_VBO_data();
 
-	public:
-		bool regenerate_terrain;
-		bool regenerate_select;
-		//bool regenerate_object;
+    public:
+        bool regenerate_terrain;
+        bool regenerate_select;
+        //bool regenerate_object;
 
-		GameboardChunk(Hexagon*);
-		~GameboardChunk();
+        GameboardChunk(Hexagon*);
+        ~GameboardChunk();
 
-		void verify_render_data();
+        void verify_render_data();
 
-		void render();
+        void render();
 };
 
 #endif

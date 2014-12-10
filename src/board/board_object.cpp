@@ -5,17 +5,17 @@ BoardObject::BoardObject(Hexagon* base_hex) {
     this->base_hex = NULL;
     this->base_hex = curr_ctrl->add_object_to_board(this, base_hex);
 
-	this->color = new std::vector< GLdouble >();
-	this->color->push_back(0);
-	this->color->push_back(0);
-	this->color->push_back(1);
+    this->color = new std::vector< GLdouble >();
+    this->color->push_back(0);
+    this->color->push_back(0);
+    this->color->push_back(1);
 
     this->selected_color = new std::vector< GLdouble >();
     this->selected_color->push_back(1);
     this->selected_color->push_back(0);
     this->selected_color->push_back(1);
 
-	this->selected = false;
+    this->selected = false;
     this->tex_data = NULL;
 }
 
@@ -27,13 +27,13 @@ void BoardObject::move_to_hex(Hexagon* curr_hex) {
 
 
 void BoardObject::set_selected(bool selected) {
-	// TODO: only regenerate if val changes
-	this->selected = selected;
-	//this->base_hex->parent_chunk->regenerate_object = true;
+    // TODO: only regenerate if val changes
+    this->selected = selected;
+    //this->base_hex->parent_chunk->regenerate_object = true;
 }
 
 bool BoardObject::get_selected() {
-	return this->selected;
+    return this->selected;
 }
 
 void BoardObject::set_tex_data(GLvoid* new_tex_data) {
