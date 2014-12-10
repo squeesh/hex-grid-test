@@ -100,7 +100,7 @@ void PlayerInput::call_py_mouse_func(char* func_name, int x, int y){
 }
 
 void PlayerInput::key_down(unsigned char key, int x, int y) {
-    char key_str[2] = {key, '\0'};
+    char key_str[2] = {(char) key, '\0'};
     PyObject* py_str = PyString_FromString(key_str);
     PyObject* py_x = PyInt_FromLong(x);
     PyObject* py_y = PyInt_FromLong(y);
@@ -113,7 +113,7 @@ void PlayerInput::key_down(unsigned char key, int x, int y) {
 }
 
 void PlayerInput::key_up(unsigned char key, int x, int y) {
-    char key_str[2] = {key, '\0'};
+    char key_str[2] = {(char) key, '\0'};
     PyObject* py_str = PyString_FromString(key_str);
     PyObject* py_x = PyInt_FromLong(x);
     PyObject* py_y = PyInt_FromLong(y);
