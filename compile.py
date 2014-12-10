@@ -5,34 +5,33 @@ import re
 from subprocess import call
 import sys
 
-compiler_str = 'i686-w64-mingw32-g++'
-
-# if sys.platform == 'win32':
-# bin_tpl = '{} -std=c++0x -c -w -fPIC -IC:\\Python27\\include -LC:\\Python27\\libs -lpython27 {} {}'
-# shr_tpl = '{} -std=c++0x -shared -w {} build/*.o F:\\mingw\\lib\\libopengl32.a F:\\mingw\\lib\\libglu32.a -IC:\\Python27\\include -LC:\\Python27\\libs -lglew32 -lfreeglut -lpython27 {}'
-# exe_tpl = '{} -std=c++0x {} ./bin/all_externs.so F:\\mingw\\lib\\libopengl32.a F:\\mingw\\lib\\libglu32.a -IC:\\Python27\\include -LC:\\Python27\\libs -lglew32 -lfreeglut -lpython27 {}'
-
-# file_tpl = '{}/{}'
-# extra_args_tpl = '-o build/{}.o'
-# else:
-    # bin_tpl = '{} -std=c++0x -c  -w -fPIC -g -g3 -I/usr/include/python2.7 -L/usr/lib/python2.7 -lpython27 {} {}'
-    # shr_tpl = '{} -std=c++0x -shared -w -fPIC -g -g3 {} build/*.o -I/usr/include/python2.7 -L/usr/lib/python2.7 -lGL -lGLU -lGLEW -lpython2.7 -lglut {}'
-    # exe_tpl = '{} -std=c++0x -w -g -g3 {} ./bin/all_externs.so -I/usr/include/python2.7 -L/usr/lib/python2.7 -lGL -lGLU -lGLEW -lpython2.7 -lglut {}'
-
-    # file_tpl = '{}/{}'
-    # extra_args_tpl = '-o build/{}.o'
-
-bin_tpl = '{} -std=c++0x -c -w -fPIC -fpermissive -I/cygdrive/f/Python27/include -L/cygdrive/f/Python27/libs -lpython27 {} {}'
-shr_tpl = '{} -std=c++0x -shared -w {} build/*.o /cygdrive/f/mingw/lib/libopengl32.a /cygdrive/f/mingw/lib/libglu32.a -I/cygdrive/f/Python27/include -L/cygdrive/f/Python27/libs -lglew32 -lfreeglut -lpython27 {}'
-exe_tpl = '{} -std=c++0x {} ./bin/all_externs.so /cygdrive/f/mingw/lib/libopengl32.a /cygdrive/f/mingw/lib/libglu32.a -I/cygdrive/f/Python27/include -L/cygdrive/f/Python27/libs -lglew32 -lfreeglut -lpython27 {}'
-
-file_tpl = '{}/{}'
-extra_args_tpl = '-o build/{}.o'
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('os', help='Compliation env. ("linux", "windows")', choices=['linux', 'windows'])
+args = parser.parse_args()
 
 output_rename = {
     'src/extern/all_externs.cpp': '-o bin/all_externs.so',
-    'src/main.cpp': '-o main.o',
 }
+
+if args.os == 'linux':
+    compiler_str = 'g++'
+    bin_tpl = '{} -std=c++0x -c  -w -fPIC -g -g3 -I/usr/include/python2.7 -L/usr/lib/python2.7 -lpython27 {} {}'
+    shr_tpl = '{} -std=c++0x -shared -w -fPIC -g -g3 {} build/*.o -I/usr/include/python2.7 -L/usr/lib/python2.7 -lGL -lGLU -lGLEW -lpython2.7 -lglut {}'
+    exe_tpl = '{} -std=c++0x -w -g -g3 {} ./bin/all_externs.so -I/usr/include/python2.7 -L/usr/lib/python2.7 -lGL -lGLU -lGLEW -lpython2.7 -lglut {}'
+
+    file_tpl = '{}/{}'
+    extra_args_tpl = '-o build/{}.o'
+    output_rename['src/main.cpp'] = '-o main.o'
+else:
+    compiler_str = 'i686-w64-mingw32-g++'
+    bin_tpl = '{} -std=c++0x -c -w -fPIC -fpermissive -I/cygdrive/f/Python27/include -L/cygdrive/f/Python27/libs -lpython27 {} {}'
+    shr_tpl = '{} -std=c++0x -shared -w {} build/*.o /cygdrive/f/mingw/lib/libopengl32.a /cygdrive/f/mingw/lib/libglu32.a -I/cygdrive/f/Python27/include -L/cygdrive/f/Python27/libs -lglew32 -lfreeglut -lpython27 {}'
+    exe_tpl = '{} -std=c++0x {} ./bin/all_externs.so /cygdrive/f/mingw/lib/libopengl32.a /cygdrive/f/mingw/lib/libglu32.a -I/cygdrive/f/Python27/include -L/cygdrive/f/Python27/libs -lglew32 -lfreeglut -lpython27 {}'
+    output_rename['src/main.cpp'] = '-o main.exe'
+
+file_tpl = '{}/{}'
+extra_args_tpl = '-o build/{}.o'
 
 comp_shr = ['src/extern/all_externs.cpp']
 comp_exe = ['src/main.cpp']
