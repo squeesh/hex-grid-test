@@ -52,10 +52,14 @@ class RenderController {
         void clear_scroll(char);
 
         void zoom_map(GLdouble);
+        void set_zoom(GLdouble);
         GLdouble get_zoom();
 
         void set_rotation(GLdouble);
         GLdouble get_rotation();
+
+        void set_view_range(GLdouble);
+        GLdouble get_view_range();
 };
 
 

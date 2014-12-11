@@ -74,8 +74,8 @@ class PlayerInput(object):
 
         curr_ctrl = Controller.get_controller()
 
-        curr_ctrl.add_x_offset(-x_diff / 30.0 * curr_ctrl.get_zoom())
-        curr_ctrl.add_y_offset(-y_diff / 30.0 * curr_ctrl.get_zoom())
+        curr_ctrl.add_x_offset(-x_diff / 30.0 * curr_ctrl.zoom)
+        curr_ctrl.add_y_offset(-y_diff / 30.0 * curr_ctrl.zoom)
 
     def mouse_right_drag(self, x_diff, y_diff):
         pass

@@ -1,8 +1,5 @@
 from ctypes import *
 controller_lib = cdll.LoadLibrary('./all_externs.so')
-#controller_lib.Controller_COS_60.restype = c_double
-#controller_lib.Controller_SIN_60.restype = c_double
-controller_lib.Controller_get_rotation.restype = c_double
 controller_lib.Controller_get_controller.restype = c_long
 controller_lib.Controller_get_hexagon.restype = c_long
 #controller_lib.Controller_get_selected_hex.restype = c_long
@@ -10,6 +7,8 @@ controller_lib.Controller_get_clicked_hex.restype = c_long
 controller_lib.Controller_get_width.restype = c_double
 controller_lib.Controller_get_height.restype = c_double
 controller_lib.Controller_get_zoom.restype = c_double
+controller_lib.Controller_get_rotation.restype = c_double
+controller_lib.Controller_get_view_range.restype = c_double
 
 from itertools import cycle, islice
 from random import random
@@ -24,14 +23,6 @@ from land_generation import RollingHillsGen, MountainRangeGen, RoadGen
 class Controller(object):
     _curr_ctrl = None
     _c_pointer = None
-
-    view_range = GlobalConsts.BOARD_WIDTH * 1.25
-
-    #COS_60  = controller_lib.Controller_COS_60()
-    #SIN_60  = controller_lib.Controller_SIN_60()
-
-#    width   = None
-#    height  = None
 
     player_input = None
 
@@ -57,7 +48,7 @@ class Controller(object):
 
         self.zoom = GlobalConsts.START_ZOOM
         self.rotation = GlobalConsts.START_ROTATION
-        self.view_range = GlobalConsts.BOARD_WIDTH
+        self.view_range = GlobalConsts.START_VIEW_RANGE
 
         print 'Creating Board...'
         for j in range(GlobalConsts.BOARD_HEIGHT):
@@ -304,6 +295,14 @@ class Controller(object):
         controller_lib.Controller_zoom_map(c_double(zoom_amount))
 
     @property
+    def zoom(self):
+        return controller_lib.Controller_get_zoom()
+
+    @zoom.setter
+    def zoom(self, zoom):
+        return controller_lib.Controller_set_zoom(c_double(zoom))
+
+    @property
     def rotation(self):
         return controller_lib.Controller_get_rotation()
 
@@ -311,14 +310,19 @@ class Controller(object):
     def rotation(self, rotation):
         controller_lib.Controller_set_rotation(c_double(rotation))
 
+    @property
+    def view_range(self):
+        return controller_lib.Controller_get_view_range()
+
+    @view_range.setter
+    def view_range(self, view_range):
+        controller_lib.Controller_set_view_range(c_double(view_range))
+
     def get_width(self):
         return controller_lib.Controller_get_width()
 
     def get_height(self):
         return controller_lib.Controller_get_height()
-
-    def get_zoom(self):
-        return controller_lib.Controller_get_zoom()
 
     def add_x_offset(self, x_offset):
         controller_lib.Controller_add_x_offset(c_double(x_offset))

@@ -21,6 +21,16 @@ extern "C" {
         curr_ctrl->zoom_map(zoom);
     }
 
+    void Controller_set_zoom(GLdouble zoom) {
+        RenderController* curr_ctrl = RenderController::get_render_controller();
+        curr_ctrl->set_zoom(zoom);
+    }
+
+    GLdouble Controller_get_zoom() {
+        RenderController* curr_ctrl = RenderController::get_render_controller();
+        return curr_ctrl->get_zoom();
+    }
+
     void Controller_set_rotation(GLdouble rotation) {
         RenderController* curr_ctrl = RenderController::get_render_controller();
         curr_ctrl->set_rotation(rotation);
@@ -29,6 +39,16 @@ extern "C" {
     GLdouble Controller_get_rotation() {
         RenderController* curr_ctrl = RenderController::get_render_controller();
         return curr_ctrl->get_rotation();
+    }
+
+    void Controller_set_view_range(GLdouble view_range) {
+        RenderController* curr_ctrl = RenderController::get_render_controller();
+        curr_ctrl->set_view_range(view_range);
+    }
+
+    GLdouble Controller_get_view_range() {
+        RenderController* curr_ctrl = RenderController::get_render_controller();
+        return curr_ctrl->get_view_range();
     }
 
     void Controller_add_x_offset(GLdouble x_offset) {
@@ -89,11 +109,6 @@ extern "C" {
     GLdouble Controller_get_height() {
         RenderController* curr_ctrl = RenderController::get_render_controller();
         return curr_ctrl->height;
-    }
-
-    GLdouble Controller_get_zoom() {
-        RenderController* curr_ctrl = RenderController::get_render_controller();
-        return curr_ctrl->get_zoom();
     }
 
     /*void Controller_clear_selected_hex() {

@@ -27,9 +27,10 @@ RenderController::RenderController() {
 
     this->x_offset = 0.0;
     this->y_offset = 0.0;
+    // These are getting set twice...
     this->zoom = GlobalConsts::START_ZOOM;
+    this->rotation = GlobalConsts::START_ROTATION;
     this->view_range = GlobalConsts::START_VIEW_RANGE;
-    this->rotation   = GlobalConsts::START_ROTATION;
 }
 
 
@@ -342,6 +343,7 @@ void RenderController::clear_scroll(char direction) {
 
 
 void RenderController::zoom_map(GLdouble zoom_amount) {
+    // TODO: Kinda duplicate functionality with set_zoom here...
     if(zoom_amount > 1) {
         if(this->zoom < GlobalConsts::MAX_ZOOM) {
             this->zoom *= zoom_amount;
@@ -355,6 +357,17 @@ void RenderController::zoom_map(GLdouble zoom_amount) {
     }
 }
 
+void RenderController::set_zoom(GLdouble zoom) {
+    if(this->zoom < GlobalConsts::MAX_ZOOM && this->zoom >= GlobalConsts::MIN_ZOOM) {
+        this->zoom = zoom;
+    } else {
+        if (this->zoom >= GlobalConsts::MAX_ZOOM) {
+            this->zoom = GlobalConsts::MAX_ZOOM;
+        } else {
+            this->zoom = GlobalConsts::MIN_ZOOM;
+        }
+    }
+}
 
 GLdouble RenderController::get_zoom() {
     return this->zoom;
@@ -369,3 +382,11 @@ GLdouble RenderController::get_rotation() {
     return this->rotation;
 }
 
+
+void RenderController::set_view_range(GLdouble view_range) {
+    this->view_range = view_range;
+}
+
+GLdouble RenderController::get_view_range() {
+    return this->view_range;
+}
